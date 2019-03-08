@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "lib": [
+      "dom",
+      "esnext"
+    ],
+    "target":"es2015",
+    "allowJs": false,
+    "sourceMap": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "noUnusedParameters": true,
+    "noUnusedLocals": false,
+    "outDir": "./dist/",
+    "declaration": true,
+    "rootDir": ".",
+    "baseUrl": "."
+  },
+  "include": [
+    "./src/main.ts"
+  ]
+}
