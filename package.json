@@ -18,7 +18,10 @@
     "styles",
     "styling",
     "easy",
-    "structure"
+    "structure",
+    "strongly-typed",
+    "typescript",
+    "d.ts"
   ],
   "license": "MIT",
   "main": "dist/bundle.js",
@@ -38,7 +41,7 @@
     "prod:es": "cross-env NODE_ENV=production BUILD=es rollup -c",
     "prod": "npm run prod:es && npm run prod:cjs"
   },
-  "version": "0.0.1",
+  "version": "1.0.0",
   "ava": {
     "files": [
       "./test/specs/*.ts"

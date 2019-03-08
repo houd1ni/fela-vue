@@ -21,7 +21,7 @@ const defaultOpts = {
 }
 
 export default (
-  opts: Partial<Options>
+  opts: Partial<Options> = {}
 ) => {
   const { method, fdef } = { ...defaultOpts, ...opts }
   return {
