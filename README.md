@@ -24,7 +24,7 @@ Vue.mixin(felaVue({
   <div :class="f('wrapper')">
     <span :class="f('one')"> It's green! </span>
     <span :class="f('two')"> It's cyan! </span>
-    <span :class="f('three', {color: 'white'})"> you don't see me!</span>
+    <span :class="f('three', {color: 'white'})"> you don't see me! </span>
     <span :class="f({color: 'yellow'})"> I do it by myself! </span>
   </div>
 </template>
