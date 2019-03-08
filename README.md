@@ -5,10 +5,10 @@ Fela mixin for Vue designed for flexibility yet team-oriented.
 This is what I've created after combining vue's :style and :class attributes to make apps dynamically configured and easiest to write and maintain.**
 
 Included (but not in the bundle itself: you bundler & package manager should do it automatocally):
-fela
-fela-dom
-fela-preset-web
-fla-prset-dev (COMING SOON for only development ENV.)
+- fela
+- fela-dom
+- fela-preset-web
+- fela-preset-dev (COMING SOON for only development ENV.)
 
 Usage:
 
