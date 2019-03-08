@@ -8,6 +8,7 @@ Included (but not in the bundle itself: you bundler & package manager should do 
 fela
 fela-dom
 fela-preset-web
+fla-prset-dev (COMING SOON for only development ENV.)
 
 Usage:
 
