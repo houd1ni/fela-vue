@@ -12,16 +12,50 @@ Included (but not in the bundle itself: you bundler & package manager should do 
 
 Usage:
 
+## WITHOUT SSR
 **main.js**
 ```javascript
-import felaVue from 'fela-vue'
+import { Renderer } from 'fela-vue'
 
-Vue.mixin(felaVue({
-  fdef: () => defaultStylesObject // not required. Default styles to mix.
-  method: 'f' // not required. Name of styling method. Defaults to `f`.
-}))
+Vue.mixin(
+  (new Renderer({
+    fdef: () => defaultStylesObject // not required. Default styles to mix.
+    method: 'f' // not required. Name of styling method. Defaults to `f`.
+  })).mixin
+)
 ```
 
+## WITH SSR
+**entry.server.js**
+```javascript
+import { Renderer, getStyle } from 'fela-vue'
+// OR const { Renderer, getStyle } = require('fela-vue')
+
+const renderer = new Renderer({
+  fdef: () => defaultStylesObject // not required. Default styles to mix.
+  method: 'f', // not required. Name of styling method. Defaults to `f`.
+  ssr: true
+})
+
+Vue.mixin(renderer.mixin)
+
+// After all rendering put getStyle(renderer) output in your template's <head />.
+```
+
+**entry.client.js**
+```javascript
+import { Mixin } from 'fela-vue'
+
+Vue.mixin(
+  (new Mixin({
+    fdef: () => defaultStylesObject // not required. Default styles to mix.
+    method: 'f', // not required. Name of styling method. Defaults to `f`.
+    ssr: true
+  })).mixin
+)
+```
+
+## Component example
 **MyComponent.vue**
 ```vue
 <template>

@@ -4,6 +4,7 @@ interface AnyObject {
 interface Options {
     method: string;
     fdef: (vm: AnyObject) => AnyObject;
+    ssr: boolean;
 }
 declare const getStyle: () => any;
 declare const mixin: (opts?: Partial<Options>) => {
