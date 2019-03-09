@@ -6,14 +6,10 @@ interface Options {
     fdef: (vm: AnyObject) => AnyObject;
     ssr: boolean;
 }
-declare const getStyle: () => any;
-declare const mixin: (opts?: Partial<Options>) => {
-    methods: {
-        [x: string]: (propsOrRule: any, props?: AnyObject) => string;
-    };
-    computed: {
-        fdef(): AnyObject;
-    };
-};
-export default mixin;
-export { mixin, getStyle };
+declare class Renderer {
+    renderer: import("fela").IRenderer;
+    mixin: AnyObject;
+    constructor(opts?: Partial<Options>);
+}
+declare const getStyle: (mixin: Renderer) => any;
+export { Renderer, getStyle };

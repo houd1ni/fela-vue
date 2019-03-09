@@ -25,11 +25,12 @@ class Renderer {
   public mixin: AnyObject
   constructor(opts: Partial<Options> = {}) {
     const { method, fdef, ssr } = { ...defaultOpts, ...opts }
+    const { renderer } = this
     if(isBrowser) {
       if(ssr) {
-        require('fela-dom').rehydrate(this.renderer)
+        require('fela-dom').rehydrate(renderer)
       } else {
-        render(this.renderer)
+        render(renderer)
       }
     }
     this.mixin = {
@@ -46,7 +47,7 @@ class Renderer {
               } as any)[typeof rule] || ((props: AnyObject) => props)
             })()
           } as any)[typeof propsOrRule]
-          return this.renderer.renderRule(rule, props)
+          return renderer.renderRule(rule, props)
         }
       },
       computed: {
@@ -58,8 +59,8 @@ class Renderer {
   }
 }
 
-const getStyle = (mixin: Renderer) =>
-  require('fela-dom').renderToMarkup(mixin.renderer)
+const getStyle = (renderer: Renderer) =>
+  require('fela-dom').renderToMarkup(renderer.renderer)
 
 export {
   Renderer, getStyle
