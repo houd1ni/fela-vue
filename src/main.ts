@@ -20,6 +20,9 @@ const defaultOpts = {
   fdef: (_vm: AnyObject) => ({})
 }
 
+export const getStyle = () =>
+  require('fela-dom').renderToMarkup(renderer)
+
 export default (
   opts: Partial<Options> = {}
 ) => {
