@@ -38,9 +38,8 @@ const renderer = new Renderer({
 })
 
 Vue.mixin(renderer.mixin)
-
-// After all rendering put getStyle(renderer) output in your template's <head />.
 ```
+**After all rendering put getStyle(renderer) output in your template's <head />.**
 
 **entry.client.js**
 ```javascript
