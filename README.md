@@ -89,4 +89,5 @@ export default {
 </script>
 ```
 
-It's better to make this computed in the end of a component defenition or make a const variable at the bottom and return it from the computed prop.
+It's better to make this computed in the end of a component definition or make a const variable at the bottom and return it from the computed prop.
+Also, It's very handy to make snippets for adding style() {} to computed.

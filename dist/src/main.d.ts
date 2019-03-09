@@ -11,5 +11,5 @@ declare class Renderer {
     mixin: AnyObject;
     constructor(opts?: Partial<Options>);
 }
-declare const getStyle: (mixin: Renderer) => any;
+declare const getStyle: (renderer: Renderer) => any;
 export { Renderer, getStyle };
