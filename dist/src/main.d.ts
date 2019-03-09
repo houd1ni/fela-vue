@@ -5,7 +5,8 @@ interface Options {
     method: string;
     fdef: (vm: AnyObject) => AnyObject;
 }
-declare const _default: (opts: Partial<Options>) => {
+declare const getStyle: () => any;
+declare const mixin: (opts?: Partial<Options>) => {
     methods: {
         [x: string]: (propsOrRule: any, props?: AnyObject) => string;
     };
@@ -13,4 +14,5 @@ declare const _default: (opts: Partial<Options>) => {
         fdef(): AnyObject;
     };
 };
-export default _default;
+export default mixin;
+export { mixin, getStyle };
