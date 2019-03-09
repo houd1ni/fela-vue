@@ -44,10 +44,10 @@ Vue.mixin(renderer.mixin)
 
 **entry.client.js**
 ```javascript
-import { Mixin } from 'fela-vue'
+import { Renderer } from 'fela-vue'
 
 Vue.mixin(
-  (new Mixin({
+  (new Renderer({
     fdef: () => defaultStylesObject // not required. Default styles to mix.
     method: 'f', // not required. Name of styling method. Defaults to `f`.
     ssr: true
