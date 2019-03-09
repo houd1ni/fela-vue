@@ -20,10 +20,10 @@ const defaultOpts = {
   fdef: (_vm: AnyObject) => ({})
 }
 
-export const getStyle = () =>
+const getStyle = () =>
   require('fela-dom').renderToMarkup(renderer)
 
-export default (
+const mixin = (
   opts: Partial<Options> = {}
 ) => {
   const { method, fdef } = { ...defaultOpts, ...opts }
@@ -50,4 +50,10 @@ export default (
       }
     }
   }
+}
+
+export default mixin
+
+export {
+  mixin, getStyle
 }
