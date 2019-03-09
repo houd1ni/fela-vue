@@ -15,6 +15,8 @@ Usage:
 **main.js**
 ```javascript
 import felaVue from 'fela-vue'
+// or import { mixin, getStyle } from 'fela-vue'
+// then getStyle() returns rendered <style /> tag for SSR.
 
 Vue.mixin(felaVue({
   fdef: () => defaultStylesObject // not required. Default styles to mix.
