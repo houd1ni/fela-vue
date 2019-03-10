@@ -43,7 +43,7 @@ const renderer = new Renderer({
 
 Vue.mixin(renderer.mixin)
 ```
-**After all rendering put `renderer.style` output in your template's <head />.**
+**And just put `renderer.style` in your template's <head />.**
 
 **entry.client.js**
 ```javascript
