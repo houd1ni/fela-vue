@@ -6,7 +6,7 @@ Fela mixin for Vue designed for flexibility yet team-oriented.
 **[Fela](https://github.com/rofrischmann/fela) does the great job, but it has no idea how to cook it with Vue.
 This is what I've created after combining vue's :style and :class attributes to make apps dynamically configured and easiest to write and maintain.**
 
-Included (but not in the bundle itself: you bundler & package manager should do it automatocally):
+Included as deps:
 - [fela](https://github.com/rofrischmann/fela)
 - [fela-dom](https://github.com/rofrischmann/fela/tree/master/packages/fela-dom)
 - [fela-preset-web](https://github.com/rofrischmann/fela/tree/master/packages/fela-preset-web)
