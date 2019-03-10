@@ -8,7 +8,8 @@ Included (but not in the bundle itself: you bundler & package manager should do 
 - [fela](https://github.com/rofrischmann/fela)
 - [fela-dom](https://github.com/rofrischmann/fela/tree/master/packages/fela-dom)
 - [fela-preset-web](https://github.com/rofrischmann/fela/tree/master/packages/fela-preset-web)
-- [fela-preset-dev](https://github.com/rofrischmann/fela/tree/master/packages/fela-preset-dev) (COMING SOON for only development ENV.)
+- [fela-preset-dev](https://github.com/rofrischmann/fela/tree/master/packages/fela-preset-dev)
+
 
 Usage:
 
