@@ -20,7 +20,8 @@ import { Renderer } from 'fela-vue'
 Vue.mixin(
   (new Renderer({
     fdef: () => defaultStylesObject // not required. Default styles to mix.
-    method: 'f' // not required. Name of styling method. Defaults to `f`.
+    method: 'f', // not required. Name of styling method. Defaults to `f`.
+    plugins: []  // not required. Additional fela plugins.
   })).mixin
 )
 ```
@@ -28,18 +29,19 @@ Vue.mixin(
 ## WITH SSR
 **entry.server.js**
 ```javascript
-import { Renderer, getStyle } from 'fela-vue'
-// OR const { Renderer, getStyle } = require('fela-vue')
+import { Renderer } from 'fela-vue'
+// OR const { Renderer } = require('fela-vue')
 
 const renderer = new Renderer({
   fdef: () => defaultStylesObject // not required. Default styles to mix.
   method: 'f', // not required. Name of styling method. Defaults to `f`.
+  plugins: [],  // not required. Additional fela plugins.
   ssr: true
 })
 
 Vue.mixin(renderer.mixin)
 ```
-**After all rendering put getStyle(renderer) output in your template's <head />.**
+**After all rendering put `renderer.style` output in your template's <head />.**
 
 **entry.client.js**
 ```javascript
@@ -49,6 +51,7 @@ Vue.mixin(
   (new Renderer({
     fdef: () => defaultStylesObject // not required. Default styles to mix.
     method: 'f', // not required. Name of styling method. Defaults to `f`.
+    plugins: [],  // not required. Additional fela plugins.
     ssr: true
   })).mixin
 )

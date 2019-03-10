@@ -1,6 +1,6 @@
 
 import { createRenderer } from 'fela'
-import { render } from 'fela-dom'
+import { render, rehydrate, renderToMarkup } from 'fela-dom'
 import presetWeb from 'fela-preset-web'
 import * as isBrowser from 'is-browser'
 
@@ -11,29 +11,37 @@ interface AnyObject {
 interface Options {
   method: string,
   fdef: (vm: AnyObject) => AnyObject,
-  ssr: boolean
+  ssr: boolean,
+  plugins: any[]
 }
 
 const defaultOpts = {
   method: 'f',
   fdef: (_vm: AnyObject) => ({}),
-  ssr: false
+  ssr: false,
+  plugins: []
 }
 
 class Renderer {
-  public renderer = createRenderer({ plugins: [ ...presetWeb ] })
-  public mixin: AnyObject
+  private renderer: AnyObject
+  private _mixin: AnyObject
+  public get mixin(): AnyObject {
+    return Object.freeze(this._mixin)
+  }
+  public get style(): string {
+    return renderToMarkup(this.renderer)
+  }
   constructor(opts: Partial<Options> = {}) {
-    const { method, fdef, ssr } = { ...defaultOpts, ...opts }
-    const { renderer } = this
+    const { method, fdef, ssr, plugins } = { ...defaultOpts, ...opts }
+    const renderer = createRenderer({ plugins: [ ...presetWeb, ...plugins ] })
     if(isBrowser) {
       if(ssr) {
-        require('fela-dom').rehydrate(renderer)
+        rehydrate(renderer)
       } else {
         render(renderer)
       }
     }
-    this.mixin = {
+    this._mixin = {
       methods: {
         [method](propsOrRule: any, props: AnyObject = {}): string {
           const rule = ({
@@ -59,9 +67,6 @@ class Renderer {
   }
 }
 
-const getStyle = (renderer: Renderer) =>
-  require('fela-dom').renderToMarkup(renderer.renderer)
-
 export {
-  Renderer, getStyle
+  Renderer
 }
