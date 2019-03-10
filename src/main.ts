@@ -1,5 +1,5 @@
 
-import { createRenderer } from 'fela'
+import { createRenderer, IRenderer } from 'fela'
 import { render, rehydrate, renderToMarkup } from 'fela-dom'
 import presetWeb from 'fela-preset-web'
 import * as isBrowser from 'is-browser'
@@ -23,7 +23,7 @@ const defaultOpts = {
 }
 
 class Renderer {
-  private renderer: AnyObject
+  private renderer: IRenderer
   private _mixin: AnyObject
   public get mixin(): AnyObject {
     return Object.freeze(this._mixin)

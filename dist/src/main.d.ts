@@ -5,11 +5,13 @@ interface Options {
     method: string;
     fdef: (vm: AnyObject) => AnyObject;
     ssr: boolean;
+    plugins: any[];
 }
 declare class Renderer {
-    renderer: import("fela").IRenderer;
-    mixin: AnyObject;
+    private renderer;
+    private _mixin;
+    readonly mixin: AnyObject;
+    readonly style: string;
     constructor(opts?: Partial<Options>);
 }
-declare const getStyle: (renderer: Renderer) => any;
-export { Renderer, getStyle };
+export { Renderer };
