@@ -69,6 +69,11 @@ Vue.mixin(
     <span :class="f('two')"> It's cyan! </span>
     <span :class="f('three', {color: 'white'})"> you don't see me! </span>
     <span :class="f({color: 'yellow'})"> I do it by myself! </span>
+    <div v-for="i in [0,1,2]">
+      <span
+        :class="f((i) => ({color: ['green', 'blue', 'yellow'][i]}))"
+      > This way is OK too. </span>
+    </div>
   </div>
 </template>
 
