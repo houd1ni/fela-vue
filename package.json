@@ -41,12 +41,12 @@
     "prod:es": "cross-env NODE_ENV=production BUILD=es rollup -c",
     "prod": "npm run prod:es && npm run prod:cjs"
   },
-  "version": "1.3.6",
+  "version": "1.4.0",
   "ava": {
     "files": [
       "./test/specs/*.ts"
     ],
-    "serial": true,
+    "serial": false,
     "failFast": true,
     "timeout": "2m",
     "compileEnhancements": false,
@@ -64,8 +64,8 @@
     "is-browser": "^2.1.0"
   },
   "devDependencies": {
-    "@types/node": "^11.9.5",
-    "ava": "^1.2.1",
+    "@types/node": "^11.11.0",
+    "ava": "^1.3.1",
     "codecov": "^3.2.0",
     "cross-env": "^5.2.0",
     "nyc": "^13.3.0",

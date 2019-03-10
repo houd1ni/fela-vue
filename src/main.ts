@@ -2,7 +2,7 @@
 import { createRenderer, IRenderer } from 'fela'
 import { render, rehydrate, renderToMarkup } from 'fela-dom'
 import presetWeb from 'fela-preset-web'
-import * as isBrowser from 'is-browser'
+const isBrowser = require('is-browser')
 
 interface AnyObject {
   [key: string]: any
@@ -33,7 +33,8 @@ class Renderer {
   }
   constructor(opts: Partial<Options> = {}) {
     const { method, fdef, ssr, plugins } = { ...defaultOpts, ...opts }
-    const renderer = createRenderer({ plugins: [ ...presetWeb, ...plugins ] })
+    this.renderer = createRenderer({ plugins: [ ...presetWeb, ...plugins ] })
+    const { renderer } = this
     if(isBrowser) {
       if(ssr) {
         rehydrate(renderer)
