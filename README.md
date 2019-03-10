@@ -15,6 +15,7 @@ Usage:
 ## WITHOUT SSR
 **main.js**
 ```javascript
+import Vue from 'vue'
 import { Renderer } from 'fela-vue'
 
 Vue.mixin(
@@ -29,6 +30,7 @@ Vue.mixin(
 ## WITH SSR
 **entry.server.js**
 ```javascript
+import Vue from 'vue'
 import { Renderer } from 'fela-vue'
 // OR const { Renderer } = require('fela-vue')
 
@@ -45,6 +47,7 @@ Vue.mixin(renderer.mixin)
 
 **entry.client.js**
 ```javascript
+import Vue from 'vue'
 import { Renderer } from 'fela-vue'
 
 Vue.mixin(
