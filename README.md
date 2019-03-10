@@ -1,10 +1,12 @@
 # fela-vue
 Fela mixin for Vue designed for flexibility yet team-oriented.
 
+[![Build Status](https://circleci.com/gh/houd1ni/fela-vue/tree/master.svg?style=shield)](https://circleci.com/gh/houd1ni/fela-vue/tree/master) [![codecov](https://codecov.io/gh/houd1ni/fela-vue/branch/master/graph/badge.svg)](https://codecov.io/gh/houd1ni/fela-vue) [![bundlephobia](https://badgen.net/bundlephobia/minzip/fela-vue)](https://bundlephobia.com/result?p=fela-vue)  [![npm](https://badgen.net/npm/v/fela-vue)](https://www.npmjs.com/package/fela-vue) [![Deps](https://david-dm.org/houd1ni/fela-vue.svg)](https://david-dm.org/houd1ni/fela-vue) [![DevDeps](https://david-dm.org/houd1ni/fela-vue/dev-status.svg)](https://david-dm.org/houd1ni/fela-vue)
+
 **[Fela](https://github.com/rofrischmann/fela) does the great job, but it has no idea how to cook it with Vue.
 This is what I've created after combining vue's :style and :class attributes to make apps dynamically configured and easiest to write and maintain.**
 
-Included (but not in the bundle itself: you bundler & package manager should do it automatocally):
+Included as deps:
 - [fela](https://github.com/rofrischmann/fela)
 - [fela-dom](https://github.com/rofrischmann/fela/tree/master/packages/fela-dom)
 - [fela-preset-web](https://github.com/rofrischmann/fela/tree/master/packages/fela-preset-web)
