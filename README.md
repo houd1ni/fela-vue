@@ -22,11 +22,11 @@ Included as deps:
 const options = {
   // Not required. Default styles to mix. Does not mix if omitted.
   // Either pass a function (then key would be `fdef`):
-  defStyles: (componentInstance) => defaultStylesObject,
+  defStyles: (componentInstance) => ({ colors: { cyan: 'cyan' } }),
   // ... Or an object with your own key:
   defStyles: {
     key: 'fdef',
-    value: (componentInstance) => defaultStylesObject
+    value: (componentInstance) => ({ colors: { cyan: 'cyan' } })
   },
   // Not required. Name of styling method. Defaults to `f`.
   method: 'f',
@@ -103,14 +103,15 @@ Vue.mixin(renderer.mixin)
 export default {
   computed: {
     styles() {
-
+      // Or any other key in `options.defStyles.key`.
       const { colors } = this.fdef
+
       return {
         one: {
           color: 'green'
         },
         two: {
-          color: 'cyan'
+          color: colors.cyan
         },
         three: ({color}) => {
           fontWeight: 'bold',
