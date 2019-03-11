@@ -1,7 +1,10 @@
 
 import { createRenderer, IRenderer } from 'fela'
 import { render, rehydrate, renderToMarkup } from 'fela-dom'
-import presetWeb from 'fela-preset-web'
+import embedded from 'fela-plugin-embedded'
+import prefixer from 'fela-plugin-prefixer'
+import fallback from 'fela-plugin-fallback-value'
+import unit from 'fela-plugin-unit'
 const isBrowser = require('is-browser')
 
 interface AnyObject {
@@ -10,16 +13,21 @@ interface AnyObject {
 
 interface Options {
   method: string,
-  fdef: (vm: AnyObject) => AnyObject,
-  ssr: boolean,
+  defStyles?: ((vm: AnyObject) => AnyObject) | {
+    key: string
+    value: ((vm: AnyObject) => AnyObject)
+  }
+  preset: { unit: [string, AnyObject] | [] }
   plugins: any[]
+  ssr: boolean
 }
 
 const defaultOpts = {
   method: 'f',
-  fdef: (_vm: AnyObject) => ({}),
-  ssr: false,
-  plugins: []
+  defStyles: undefined,
+  plugins: [],
+  preset: { unit: [] },
+  ssr: false
 }
 
 class Renderer {
@@ -32,9 +40,37 @@ class Renderer {
     return renderToMarkup(this.renderer)
   }
   constructor(opts: Partial<Options> = {}) {
-    const { method, fdef, ssr, plugins } = { ...defaultOpts, ...opts }
-    this.renderer = createRenderer({ plugins: [ ...presetWeb, ...plugins ] })
+    const { method, ssr, plugins } = { ...defaultOpts, ...opts }
+    const preset = { ...defaultOpts.preset, ...(opts.preset || {}) }
+
+    if((opts as any).fdef) {
+      throw new Error('fela-vue: Change deprecated `fdef` to `defStyles`!')
+    }
+
+    // Fela renderer creation. 
+    this.renderer = createRenderer({
+      plugins: [
+        embedded(),
+        prefixer(),
+        fallback(),
+        unit(...preset.unit),
+        ...plugins
+      ]
+    })
     const { renderer } = this
+
+    // Default styles.
+    const fdef = opts.defStyles as any
+    let fdefKey: string, fdefValue: Function 
+
+    if(fdef) {
+      ;[fdefKey, fdefValue] = {
+        'object': [fdef.key, fdef.value],
+        'function': ['fdef', fdef]
+      }[typeof fdef]
+    }
+
+    // Fela mounting.
     if(isBrowser) {
       if(ssr) {
         rehydrate(renderer)
@@ -42,6 +78,8 @@ class Renderer {
         render(renderer)
       }
     }
+
+    // Mixin creation.
     this._mixin = {
       methods: {
         [method](propsOrRule: any, props: AnyObject = {}): string {
@@ -59,11 +97,11 @@ class Renderer {
           return renderer.renderRule(rule, props)
         }
       },
-      computed: {
-        fdef() {
-          return fdef(this)
+      computed: fdef ? {
+        [fdefKey]() {
+          return fdefValue(this)
         }
-      }
+      } : {}
     }
   }
 }

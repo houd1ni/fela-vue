@@ -13,8 +13,8 @@
     "noUnusedLocals": false,
     "outDir": "./dist/",
     "declaration": true,
-    "rootDir": ".",
-    "baseUrl": "."
+    "rootDir": "./src",
+    "baseUrl": "./src"
   },
   "include": [
     "./src/main.ts"

@@ -9,10 +9,51 @@ This is what I've created after combining vue's :style and :class attributes to 
 Included as deps:
 - [fela](https://github.com/rofrischmann/fela)
 - [fela-dom](https://github.com/rofrischmann/fela/tree/master/packages/fela-dom)
-- [fela-preset-web](https://github.com/rofrischmann/fela/tree/master/packages/fela-preset-web)
+- [fela-plugin-embedded](https://github.com/rofrischmann/fela/tree/master/packages/fela-plugin-embedded)
+- [fela-plugin-prefixer](https://github.com/rofrischmann/fela/tree/master/packages/fela-plugin-prefixer)
+- [fela-plugin-fallback-value](https://github.com/rofrischmann/fela/tree/master/packages/fela-plugin-fallback-value)
+- [fela-plugin-plugin-unit](https://github.com/rofrischmann/fela/tree/master/packages/fela-plugin-plugin-unit)
 
 
-Usage:
+## USAGE
+
+```javascript
+
+const options = {
+  // Not required. Default styles to mix. Does not mix if omitted.
+  // Either pass a function (then key would be `fdef`):
+  defStyles: (componentInstance) => defaultStylesObject,
+  // ... Or an object with your own key:
+  defStyles: {
+    key: 'fdef',
+    value: (componentInstance) => defaultStylesObject
+  },
+  // Not required. Name of styling method. Defaults to `f`.
+  method: 'f',
+  // Not required. Additional fela plugins.
+  plugins: [],
+  // Not required. Preset configurations.
+  preset: {
+    // Not required. Config for fela-plugin-plugin-unit. Same defaults ('px', {}).
+    unit: ['em', { margin: '%' }]
+  },
+  // SSR status.
+  ssr: false
+}
+
+const renderer = new Renderer(options)
+
+// Use globally
+Vue.mixin(renderer.mixin)
+// ... Or per module
+export default {
+  mixins: [ renderer.mixin ],
+  // ...
+}
+```
+
+## EXAMPLES
+** same `options` object as above **
 
 ## WITHOUT SSR
 **main.js**
@@ -20,47 +61,26 @@ Usage:
 import Vue from 'vue'
 import { Renderer } from 'fela-vue'
 
-Vue.mixin(
-  (new Renderer({
-    fdef: () => defaultStylesObject // not required. Default styles to mix.
-    method: 'f', // not required. Name of styling method. Defaults to `f`.
-    plugins: []  // not required. Additional fela plugins.
-  })).mixin
-)
+Vue.mixin( (new Renderer(options)).mixin )
 ```
 
 ## WITH SSR
-**entry.server.js**
+**`entry.server.js` is the same as `entry.client.js`**
 ```javascript
 import Vue from 'vue'
 import { Renderer } from 'fela-vue'
 // OR const { Renderer } = require('fela-vue')
 
 const renderer = new Renderer({
-  fdef: () => defaultStylesObject // not required. Default styles to mix.
-  method: 'f', // not required. Name of styling method. Defaults to `f`.
-  plugins: [],  // not required. Additional fela plugins.
+  ...options,
+  // SSR status to `true`.
   ssr: true
 })
 
 Vue.mixin(renderer.mixin)
 ```
-**And just put `renderer.style` in your template.**
+**Then just put `renderer.style` into your template.**
 
-**entry.client.js**
-```javascript
-import Vue from 'vue'
-import { Renderer } from 'fela-vue'
-
-Vue.mixin(
-  (new Renderer({
-    fdef: () => defaultStylesObject // not required. Default styles to mix.
-    method: 'f', // not required. Name of styling method. Defaults to `f`.
-    plugins: [],  // not required. Additional fela plugins.
-    ssr: true
-  })).mixin
-)
-```
 
 ## Component example
 **MyComponent.vue**
@@ -83,6 +103,8 @@ Vue.mixin(
 export default {
   computed: {
     styles() {
+
+      const { colors } = this.fdef
       return {
         one: {
           color: 'green'
@@ -102,4 +124,5 @@ export default {
 ```
 
 It's better to make this computed in the end of a component definition or make a const variable at the bottom and return it from the computed prop.
+
 Also, It's very handy to make snippets for adding style() {} to computed.
