@@ -12,7 +12,7 @@ const isBrowser = (() => {
   try {
     return isObject(window)
   } catch {
-    return isObject(global)
+    return false
   }
 })()
 

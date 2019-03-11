@@ -13,6 +13,7 @@ Included as deps:
 - [fela-plugin-prefixer](https://github.com/rofrischmann/fela/tree/master/packages/fela-plugin-prefixer)
 - [fela-plugin-fallback-value](https://github.com/rofrischmann/fela/tree/master/packages/fela-plugin-fallback-value)
 - [fela-plugin-plugin-unit](https://github.com/rofrischmann/fela/tree/master/packages/fela-plugin-plugin-unit)
+*The plugins are a lite most useful part of fela-preset-web.*
 
 
 ## USAGE
