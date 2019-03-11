@@ -64,8 +64,7 @@
     "fela-plugin-extend": "*",
     "fela-plugin-fallback-value": "*",
     "fela-plugin-prefixer": "*",
-    "fela-plugin-unit": "*",
-    "is-browser": "^2.1.0"
+    "fela-plugin-unit": "*"
   },
   "devDependencies": {
     "@types/node": "^11.11.0",
