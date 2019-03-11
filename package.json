@@ -41,7 +41,7 @@
     "prod:es": "cross-env NODE_ENV=production BUILD=es rollup -c",
     "prod": "npm run prod:es && npm run prod:cjs"
   },
-  "version": "1.4.6",
+  "version": "1.4.9",
   "ava": {
     "files": [
       "./test/specs/*.ts"
@@ -61,8 +61,9 @@
     "fela": "*",
     "fela-dom": "*",
     "fela-plugin-embedded": "*",
-    "fela-plugin-prefixer": "*",
+    "fela-plugin-extend": "*",
     "fela-plugin-fallback-value": "*",
+    "fela-plugin-prefixer": "*",
     "fela-plugin-unit": "*",
     "is-browser": "^2.1.0"
   },

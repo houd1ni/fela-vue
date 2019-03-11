@@ -5,7 +5,16 @@ import embedded from 'fela-plugin-embedded'
 import prefixer from 'fela-plugin-prefixer'
 import fallback from 'fela-plugin-fallback-value'
 import unit from 'fela-plugin-unit'
-const isBrowser = require('is-browser')
+
+const isObject = (a: any) => typeof a == 'object'
+
+const isBrowser = (() => {
+  try {
+    return isObject(window)
+  } catch {
+    return isObject(global)
+  }
+})()
 
 interface AnyObject {
   [key: string]: any
@@ -40,8 +49,8 @@ class Renderer {
     return renderToMarkup(this.renderer)
   }
   constructor(opts: Partial<Options> = {}) {
-    const { method, ssr, plugins } = { ...defaultOpts, ...opts }
-    const preset = { ...defaultOpts.preset, ...(opts.preset || {}) }
+    const { method, ssr, preset, plugins } = { ...defaultOpts, ...opts }
+    const presetConfig = { ...defaultOpts.preset, ...(preset || {}) }
 
     if((opts as any).fdef) {
       throw new Error('fela-vue: Change deprecated `fdef` to `defStyles`!')
@@ -53,7 +62,7 @@ class Renderer {
         embedded(),
         prefixer(),
         fallback(),
-        unit(...preset.unit),
+        unit(...presetConfig.unit),
         ...plugins
       ]
     })
