@@ -41,7 +41,7 @@
     "prod:es": "cross-env NODE_ENV=production BUILD=es rollup -c",
     "prod": "npm run prod:es && npm run prod:cjs"
   },
-  "version": "1.4.5",
+  "version": "1.4.6",
   "ava": {
     "files": [
       "./test/specs/*.ts"
@@ -84,5 +84,5 @@
     "tslint": "^5.13.1",
     "typescript": "^3.3.3333"
   },
-  "types": "./dist/src/main.d.ts"
+  "types": "./dist/main.d.ts"
 }

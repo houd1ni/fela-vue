@@ -12,7 +12,14 @@ export default {
     name: 'fela-vue',
   },
   sourcemap: true,
-  external: ['fela', 'fela-dom', 'fela-preset-web'],
+  external: [
+    'fela',
+    'fela-dom',
+    'fela-plugin-embedded',
+    'fela-plugin-prefixer',
+    'fela-plugin-fallback-value',
+    'fela-plugin-unit'
+  ],
   plugins: [
     resolve(),
     commonjs(),
