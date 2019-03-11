@@ -1,5 +1,5 @@
 
-import { createRenderer, IRenderer } from 'fela'
+import { createRenderer, IRenderer, TRule } from 'fela'
 import { render, rehydrate, renderToMarkup } from 'fela-dom'
 import embedded from 'fela-plugin-embedded'
 import prefixer from 'fela-plugin-prefixer'
@@ -38,6 +38,42 @@ const defaultOpts = {
   preset: { unit: [] },
   ssr: false
 }
+
+const getRules = (() => {
+  const empty = () => ({})
+  const always = (a: any) => () => a
+  const reflect = (a: any) => a
+  const types = { f: 'function', o: 'object', s: 'string' }
+  const camelify = (str: string) => str.replace(/-(\w)/gu, (_s, l) => l.toUpperCase())
+  const pickStyle = (style: AnyObject, name: string) => {
+    return style ? (
+      style[name] ||
+      style[camelify(name)]
+    ) : {}
+  }
+  const pickStyles = (style: AnyObject, names: string) => {
+    return names.split(/[,\s\t]+/g).map((name) => pickStyle(style, name))
+  }
+
+  return (style: AnyObject | undefined, propsOrRule: any) => {
+    switch(typeof propsOrRule) {
+      case types.f:
+        return [propsOrRule]
+      case types.o:
+        return [always(propsOrRule)]
+      case types.s:
+        return pickStyles(style, propsOrRule).reduce(
+          (accum, rule) => {
+            accum.push(...getRules(style, rule))
+            return accum
+          }
+        , [] as (() => AnyObject)[])
+      default:
+        return [reflect]
+    }
+  }
+})()
+
 
 class Renderer {
   private renderer: IRenderer
@@ -92,18 +128,9 @@ class Renderer {
     this._mixin = {
       methods: {
         [method](propsOrRule: any, props: AnyObject = {}): string {
-          const rule = ({
-            'function': propsOrRule,
-            'object': () => propsOrRule,
-            'string': (() => {
-              const rule = this.style && (this.style as any)[propsOrRule]
-              return ({
-                'function': rule,
-                'object': () => rule,
-              } as any)[typeof rule] || ((props: AnyObject) => props)
-            })()
-          } as any)[typeof propsOrRule]
-          return renderer.renderRule(rule, props)
+          return getRules(this.style, propsOrRule).map((rule: TRule) =>
+            renderer.renderRule(rule, props)
+          ).join(' ')
         }
       },
       computed: fdef ? {

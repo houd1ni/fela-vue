@@ -13,6 +13,7 @@ Included as deps:
 - [fela-plugin-prefixer](https://github.com/rofrischmann/fela/tree/master/packages/fela-plugin-prefixer)
 - [fela-plugin-fallback-value](https://github.com/rofrischmann/fela/tree/master/packages/fela-plugin-fallback-value)
 - [fela-plugin-plugin-unit](https://github.com/rofrischmann/fela/tree/master/packages/fela-plugin-plugin-unit)
+
 *The plugins are a lite most useful part of fela-preset-web.*
 
 
@@ -92,6 +93,9 @@ Vue.mixin(renderer.mixin)
     <span :class="f('two')"> It's cyan! </span>
     <span :class="f('three', {color: 'white'})"> you don't see me! </span>
     <span :class="f({color: 'yellow'})"> I do it by myself! </span>
+    <span :class="f('one two, bold')"> Combined classes by commas and spaces </span>
+    <span :class="f('bold my-kebab')"> And kebab-case! </span>
+    <span :class="f('bold myKebab')"> The same! </span>
     <div v-for="i in [0,1,2]">
       <span
         :class="f((i) => ({color: ['green', 'blue', 'yellow'][i]}))"
@@ -117,6 +121,13 @@ export default {
         three: ({color}) => {
           fontWeight: 'bold',
           color
+        },
+        bold: () => ({
+          fontWeight: 'bold'
+        }),
+        // 'my-kebab' is also valid.
+        myKebab: {
+          color: 'purple'
         }
       }
     }

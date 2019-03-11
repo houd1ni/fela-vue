@@ -6,7 +6,7 @@ test('SSR', (t) => {
     const renderer = new Renderer({ ssr: true })
     renderer.mixin.methods.f({ color: 'red' })
     const style = renderer.style
-    if(style.includes('.a{color:red}')) {
+    if(style.includes('red')) {
       ff(t.pass())
     } else {
       // Just to look inside.
