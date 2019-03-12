@@ -67,11 +67,7 @@
     "fela-plugin-unit": "*"
   },
   "devDependencies": {
-<<<<<<< HEAD
     "@types/node": "^11.11.2",
-=======
-    "@types/node": "^11.11.1",
->>>>>>> 3cf1afa25e4527aab314661cd309c164efc8d34f
     "ava": "^1.3.1",
     "codecov": "^3.2.0",
     "cross-env": "^5.2.0",
