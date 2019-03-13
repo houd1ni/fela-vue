@@ -125,7 +125,7 @@ export default {
         bold: () => ({
           fontWeight: 'bold'
         }),
-        // 'my-kebab' is also valid.
+        // 'my-kebab' is also valid if the same in the template.
         myKebab: {
           color: 'purple'
         }
