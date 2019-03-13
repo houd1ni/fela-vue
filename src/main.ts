@@ -1,5 +1,5 @@
 
-import { createRenderer, combineRules, IRenderer, TRule } from 'fela'
+import { createRenderer, combineRules, IRenderer, TPlugin, TEnhancer } from 'fela'
 import { render, rehydrate, renderToMarkup } from 'fela-dom'
 import embedded from 'fela-plugin-embedded'
 import prefixer from 'fela-plugin-prefixer'
@@ -27,7 +27,8 @@ interface Options {
     value: ((vm?: AnyObject) => AnyObject)
   }
   preset: { unit: [string, AnyObject] | [] }
-  plugins: any[]
+  plugins: TPlugin[]
+  enhancers: TEnhancer[]
   ssr: boolean
 }
 
@@ -35,12 +36,12 @@ const defaultOpts = {
   method: 'f',
   defStyles: undefined,
   plugins: [],
+  enhancers: [],
   preset: { unit: [] },
   ssr: false
 }
 
 const getRules = (() => {
-  const empty = () => ({})
   const always = (a: any) => () => a
   const reflect = (a: any) => a
   const types = { f: 'function', o: 'object', s: 'string' }
@@ -85,7 +86,7 @@ class Renderer {
     return renderToMarkup(this.renderer)
   }
   constructor(opts: Partial<Options> = {}) {
-    const { method, ssr, preset, plugins } = { ...defaultOpts, ...opts }
+    const { method, ssr, preset, plugins, enhancers } = { ...defaultOpts, ...opts }
     const presetConfig = { ...defaultOpts.preset, ...(preset || {}) }
 
     if((opts as any).fdef) {
@@ -94,13 +95,14 @@ class Renderer {
 
     // Fela renderer creation. 
     this.renderer = createRenderer({
+      enhancers,
       plugins: [
         embedded(),
         prefixer(),
         fallback(),
         unit(...presetConfig.unit),
         ...plugins
-      ]
+      ],
     })
     const { renderer } = this
 

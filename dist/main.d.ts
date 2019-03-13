@@ -1,3 +1,4 @@
+import { TPlugin, TEnhancer } from 'fela';
 interface AnyObject {
     [key: string]: any;
 }
@@ -10,7 +11,8 @@ interface Options {
     preset: {
         unit: [string, AnyObject] | [];
     };
-    plugins: any[];
+    plugins: TPlugin[];
+    enhancers: TEnhancer[];
     ssr: boolean;
 }
 declare class Renderer {
