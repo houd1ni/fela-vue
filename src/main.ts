@@ -1,5 +1,5 @@
 
-import { createRenderer, IRenderer, TRule } from 'fela'
+import { createRenderer, combineRules, IRenderer, TRule } from 'fela'
 import { render, rehydrate, renderToMarkup } from 'fela-dom'
 import embedded from 'fela-plugin-embedded'
 import prefixer from 'fela-plugin-prefixer'
@@ -128,9 +128,10 @@ class Renderer {
     this._mixin = {
       methods: {
         [method](propsOrRule: any, props: AnyObject = {}): string {
-          return getRules(this.style, propsOrRule).map((rule: TRule) =>
-            renderer.renderRule(rule, props)
-          ).join(' ')
+          return renderer.renderRule(
+            combineRules(...getRules(this.style, propsOrRule)),
+            props
+          )
         }
       },
       computed: fdef ? {
