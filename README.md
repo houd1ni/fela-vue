@@ -37,6 +37,7 @@ const options = {
   plugins: [],
   // Not required. Additional fela enhancers.
   // [More info and list of them.](https://fela.js.org/docs/advanced/Enhancers.html)
+  // [I suggest to look at this one first.](https://github.com/rofrischmann/fela/tree/master/packages/fela-monolithic)
   enhancers: [],
   // Not required. Preset configurations.
   preset: {
