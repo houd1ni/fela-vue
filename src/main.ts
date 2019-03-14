@@ -41,10 +41,11 @@ const defaultOpts = {
   ssr: false
 }
 
+const types = Object.freeze({ f: 'function', o: 'object', s: 'string' })
+
 const getRules = (() => {
   const always = (a: any) => () => a
   const reflect = (a: any) => a
-  const types = { f: 'function', o: 'object', s: 'string' }
   const camelify = (str: string) => str.replace(/-(\w)/gu, (_s, l) => l.toUpperCase())
   const pickStyle = (style: AnyObject, name: string) => {
     return style ? (
@@ -86,7 +87,14 @@ class Renderer {
     return renderToMarkup(this.renderer)
   }
   constructor(opts: Partial<Options> = {}) {
-    const { method, ssr, preset, plugins, enhancers } = { ...defaultOpts, ...opts }
+    const {
+      method,
+      ssr,
+      preset,
+      plugins,
+      enhancers,
+      ...miscRenderOpts
+    } = { ...defaultOpts, ...opts }
     const presetConfig = { ...defaultOpts.preset, ...(preset || {}) }
 
     if((opts as any).fdef) {
@@ -94,7 +102,8 @@ class Renderer {
     }
 
     // Fela renderer creation. 
-    this.renderer = createRenderer({
+    this.renderer = createRenderer({      
+      ...miscRenderOpts,
       enhancers,
       plugins: [
         embedded(),
@@ -102,19 +111,18 @@ class Renderer {
         fallback(),
         unit(...presetConfig.unit),
         ...plugins
-      ],
+      ]
     })
     const { renderer } = this
 
     // Default styles.
     const fdef = opts.defStyles as any
-    let fdefKey: string, fdefValue: Function 
+    let fdefKey: string, fdefValue: (vm?: AnyObject) => AnyObject 
 
-    if(fdef) {
-      ;[fdefKey, fdefValue] = {
-        'object': [fdef.key, fdef.value],
-        'function': ['fdef', fdef]
-      }[typeof fdef]
+    switch(typeof fdef) {
+      case types.o: [fdefKey, fdefValue] = [fdef.key, fdef.value]; break
+      case types.f: [fdefKey, fdefValue] = ['fdef', fdef]; break
+      default: break
     }
 
     // Fela mounting.

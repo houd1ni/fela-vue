@@ -24,8 +24,9 @@ Included as deps:
 [More about enhancers.](https://fela.js.org/docs/advanced/Enhancers.html)
 [I suggest to look at this one first.](https://github.com/rofrischmann/fela/tree/master/packages/fela-monolithic)
 
-```javascript
+*In the options object below you can also add [other Renderer options](https://fela.js.org/docs/advanced/RendererConfiguration.html)*
 
+```javascript
 const options = {
   // Not required. Default styles to mix. Does not mix if omitted.
   // Either pass a function (then key would be `fdef`):
