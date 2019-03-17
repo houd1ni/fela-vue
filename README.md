@@ -113,6 +113,9 @@ Vue.mixin(renderer.mixin)
 </template>
 
 <script>
+// Uncomment to use literal css: css`...`
+// import { css } from 'fela-vue'
+
 export default {
   computed: {
     styles() {
