@@ -11,12 +11,26 @@ const join = (strings: string[], values: any[]) => {
 }
 
 export const css = (() => {
-  const ruleRe = /[^\n]\s*([\w-]+)[:\s]+(.+?)[\n;$]/g
+  const ruleRe = /(}|[^\n]*?\s*([\w-]+)[:\s]+(.*?))([\n;]|{|(?=})|$)/g
   return (strings: string[], ...values: any[]) => {
     const out: AnyObject = {}
+    let levelUp: AnyObject
+    let current = out
     join(strings, values)
-    .replace(ruleRe, (_rule, name, value, _delimiter) => {
-      out[camelify(name)] = isNaN(value) ? value.trim() : +value
+    .replace(ruleRe, (_rule, open, name, value, close, _offset, all) => {
+      if(close == '{') {
+        levelUp = current
+        current[camelify(name)] = current = {}
+      } else if(open == '}') {
+        if(levelUp) {
+          current = levelUp
+          levelUp = null
+        } else {
+          throw new Error('Bad rule: ' + all)
+        }
+      } else {
+        current[camelify(name)] = isNaN(value) ? value.trim() : +value
+      }
       return ''
     })
     return out

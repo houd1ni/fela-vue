@@ -13,6 +13,9 @@ test('init', (t) => {
         that some-shit; those: shiii
         margin-left: ${value}
         margin-right: 10px
+        govno {
+          shit 66
+        }
       `
       renderer.mixin.methods.f(rule)
       if(renderer.style.includes('10px')) {
