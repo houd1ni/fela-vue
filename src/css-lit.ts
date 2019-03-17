@@ -11,7 +11,7 @@ const join = (strings: string[], values: any[]) => {
 }
 
 export const css = (() => {
-  const ruleRe = /(}|([}^\n])*?\s*([\w->*:]+)[:\s]+(.*?)([\n;]|{|(?=})|$))/g
+  const ruleRe = /(}|([}^\n])*?\s*([\w-&>*:]+)[:\s]+(.*?)([\n;]|{|(?=})|$))/g
   return (strings: string[], ...values: any[]) => {
     const out: AnyObject = {}
     let current = out
@@ -34,6 +34,9 @@ export const css = (() => {
       if(name) {
         const hasColon = name.includes(':')
         if(value || hasColon) {
+          if(name[0] == '.') {
+            name = name.slice(1)
+          }
           if(!value && hasColon) {
             const parts = name.split(':')
             name = parts.slice(0, -1).join(':')
