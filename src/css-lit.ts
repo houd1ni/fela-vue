@@ -11,7 +11,7 @@ const join = (strings: string[], values: any[]) => {
 }
 
 export const css = (() => {
-  const ruleRe = /(}|[^\n]*?\s*([\w-]+)[:\s]+(.*?))([\n;]|{|(?=})|$)/g
+  const ruleRe = /([}^\n])*?\s*([\w-]+)[:\s]+(.*?)([\n;]|{|(?=})|$)/g
   return (strings: string[], ...values: any[]) => {
     const out: AnyObject = {}
     let levelUp: AnyObject
