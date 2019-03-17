@@ -11,15 +11,12 @@ const join = (strings: string[], values: any[]) => {
 }
 
 export const css = (() => {
-  const ruleRe = /[^\n]\s*([\w-]+)[:\s]+(.+)[$\n]/g
+  const ruleRe = /[^\n]\s*([\w-]+)[:\s]+(.+?)[\n;$]/g
   return (strings: string[], ...values: any[]) => {
     const out: AnyObject = {}
     join(strings, values)
-    .replace(ruleRe, (_rule, name, value) => {
-      if(last(value) == ';') {
-        value = value.slice(0, -1)
-      }
-      out[camelify(name)] = isNaN(value) ? value : +value
+    .replace(ruleRe, (_rule, name, value, _delimiter) => {
+      out[camelify(name)] = isNaN(value) ? value.trim() : +value
       return ''
     })
     return out

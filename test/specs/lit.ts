@@ -9,8 +9,8 @@ test('init', (t) => {
       const renderer = new Renderer({ ssr: true })
       const value = 40
       const rule = () => css`
-        this: some-shit
-        that some-shit;
+        this: some-shit;
+        that some-shit; those: shiii
         margin-left: ${value}
         margin-right: 10px
       `
