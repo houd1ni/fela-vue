@@ -17,8 +17,8 @@ export const css = (() => {
     let current = out
     const levels: AnyObject[] = []
     join(strings, values)
-    .replace(ruleRe, (_rule, start, name, value, end, _offset, all) => {
-      if(start == '}') {
+    .replace(ruleRe, (_rule, onlyEnd, start, name, value, end, _offset, all) => {
+      if(start == '}' || onlyEnd == '}') {
         if(levels.length) {
           current = levels.pop()
         } else {
@@ -31,17 +31,19 @@ export const css = (() => {
         current[camelify(name)] = o
         current = o
       }
-      const hasColon = name.includes(':')
-      if(value || hasColon) {
-        if(!value && hasColon) {
-          const parts = name.split(':')
-          name = parts.slice(0, -1).join(':')
-          value = last(parts)
-        } else {
-          name = name.slice(0, -1)
-        }
-        if(name && value) {
-          current[camelify(name)] = isNaN(value) ? value.trim() : +value
+      if(name) {
+        const hasColon = name.includes(':')
+        if(value || hasColon) {
+          if(!value && hasColon) {
+            const parts = name.split(':')
+            name = parts.slice(0, -1).join(':')
+            value = last(parts)
+          } else {
+            name = name.slice(0, -1)
+          }
+          if(name && value) {
+            current[camelify(name)] = isNaN(value) ? value.trim() : +value
+          }
         }
       }
       return ''
