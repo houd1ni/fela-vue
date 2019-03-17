@@ -1,10 +1,11 @@
-
-import { createRenderer, combineRules, IRenderer, TPlugin, TEnhancer } from 'fela'
+import { AnyObject, Options } from './types'
+import { createRenderer, combineRules, IRenderer } from 'fela'
 import { render, rehydrate, renderToMarkup } from 'fela-dom'
 import embedded from 'fela-plugin-embedded'
 import prefixer from 'fela-plugin-prefixer'
 import fallback from 'fela-plugin-fallback-value'
 import unit from 'fela-plugin-unit'
+import { always, reflect, camelify } from './utils'
 
 const isObject = (a: any) => typeof a == 'object'
 
@@ -15,22 +16,6 @@ const isBrowser = (() => {
     return false
   }
 })()
-
-interface AnyObject {
-  [key: string]: any
-}
-
-interface Options {
-  method: string,
-  defStyles?: ((vm?: AnyObject) => AnyObject) | {
-    key: string
-    value: ((vm?: AnyObject) => AnyObject)
-  }
-  preset: { unit: [string, AnyObject] | [] }
-  plugins: TPlugin[]
-  enhancers: TEnhancer[]
-  ssr: boolean
-}
 
 const defaultOpts = {
   method: 'f',
@@ -44,9 +29,6 @@ const defaultOpts = {
 const types = Object.freeze({ f: 'function', o: 'object', s: 'string' })
 
 const getRules = (() => {
-  const always = (a: any) => () => a
-  const reflect = (a: any) => a
-  const camelify = (str: string) => str.replace(/-(\w)/gu, (_s, l) => l.toUpperCase())
   const pickStyle = (style: AnyObject, name: string) => {
     return style ? (
       style[name] ||
@@ -153,6 +135,7 @@ class Renderer {
   }
 }
 
+export * from './css-lit'
 export {
   Renderer
 }

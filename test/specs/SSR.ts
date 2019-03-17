@@ -10,7 +10,7 @@ test('SSR', (t) => {
       ff(t.pass())
     } else {
       // Just to look inside.
-      ff(t.is(style, 'asd'))
+      ff(t.is(style, '10px'))
     }
   })
 })

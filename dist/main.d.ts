@@ -1,20 +1,4 @@
-import { TPlugin, TEnhancer } from 'fela';
-interface AnyObject {
-    [key: string]: any;
-}
-interface Options {
-    method: string;
-    defStyles?: ((vm?: AnyObject) => AnyObject) | {
-        key: string;
-        value: ((vm?: AnyObject) => AnyObject);
-    };
-    preset: {
-        unit: [string, AnyObject] | [];
-    };
-    plugins: TPlugin[];
-    enhancers: TEnhancer[];
-    ssr: boolean;
-}
+import { AnyObject, Options } from './types';
 declare class Renderer {
     private renderer;
     private _mixin;
@@ -22,4 +6,5 @@ declare class Renderer {
     readonly style: string;
     constructor(opts?: Partial<Options>);
 }
+export * from './css-lit';
 export { Renderer };
