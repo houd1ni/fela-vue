@@ -136,7 +136,21 @@ export default {
         // 'my-kebab' is also valid if the same in the template.
         myKebab: {
           color: 'purple'
-        }
+        },
+        anotherClass: css`
+          background: grey
+        `,
+        ...css`
+          .other-class {
+            margin-top: 44; // still ok for fela. will be 44px.
+            margin-left 22  // no colons and semicolons are ok here.
+            :hover {
+              background grey
+            }
+          }
+          .anotherOne {
+            padding: 15
+          }
       }
     }
   }
