@@ -1,5 +1,5 @@
 import { AnyObject } from './types'
-import { camelify } from './utils'
+import { last, camelify } from './utils'
 
 const join = (strings: string[], values: any[]) => {
   const len = strings.length
@@ -11,25 +11,39 @@ const join = (strings: string[], values: any[]) => {
 }
 
 export const css = (() => {
-  const ruleRe = /([}^\n])*?\s*([\w-]+)[:\s]+(.*?)([\n;]|{|(?=})|$)/g
+  const ruleRe = /([}^\n])*?\s*([\w->*:]+)[:\s]+(.*?)([\n;]|{|(?=})|$)/g
   return (strings: string[], ...values: any[]) => {
     const out: AnyObject = {}
     let levelUp: AnyObject
     let current = out
     join(strings, values)
-    .replace(ruleRe, (_rule, open, name, value, close, _offset, all) => {
-      if(close == '{') {
-        levelUp = current
-        current[camelify(name)] = current = {}
-      } else if(open == '}') {
+    .replace(ruleRe, (_rule, start, name, value, end, _offset, all) => {
+      if(start == '}') {
         if(levelUp) {
           current = levelUp
           levelUp = null
         } else {
           throw new Error('Bad rule: ' + all)
         }
-      } else {
-        current[camelify(name)] = isNaN(value) ? value.trim() : +value
+      }
+      if(end == '{') {
+        levelUp = current
+        const o = {}
+        current[camelify(name)] = o
+        current = o
+      }
+      const hasColon = name.includes(':')
+      if(value || hasColon) {
+        if(!value && hasColon) {
+          const parts = name.split(':')
+          name = parts.slice(0, -1).join(':')
+          value = last(parts)
+        } else {
+          name = name.slice(0, -1)
+        }
+        if(name && value) {
+          current[camelify(name)] = isNaN(value) ? value.trim() : +value
+        }
       }
       return ''
     })
