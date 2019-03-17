@@ -29,7 +29,8 @@ export default {
       tsconfigOverride: {
         compilerOptions: {
           sourceMap: false,
-          inlineSourceMap: process.env.BUILD==='development'
+          inlineSourceMap: process.env.BUILD==='development',
+          module: 'esnext'
         }
       }
     }),

@@ -4,7 +4,8 @@
       "dom",
       "esnext"
     ],
-    "target":"es2015",
+    "target":"esnext",
+    "module": "commonjs",
     "allowJs": false,
     "sourceMap": true,
     "emitDecoratorMetadata": true,
@@ -12,9 +13,8 @@
     "noUnusedParameters": true,
     "noUnusedLocals": false,
     "outDir": "./dist/",
-    "declaration": true,
-    "rootDir": "./src",
-    "baseUrl": "./src"
+    "rootDir": ".",
+    "baseUrl": "."
   },
   "include": [
     "./src/main.ts"

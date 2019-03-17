@@ -1,5 +1,5 @@
 import { AnyObject } from './types'
-import { last, camelify } from './utils'
+import { camelify } from './utils'
 
 const join = (strings: string[], values: any[]) => {
   const len = strings.length
