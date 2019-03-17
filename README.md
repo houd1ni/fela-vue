@@ -157,6 +157,7 @@ export default {
           and-more {  // without . is ok too, 'cause they are always classes.
             padding 15
           }
+        `
       }
     }
   }
