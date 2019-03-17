@@ -14,20 +14,19 @@ export const css = (() => {
   const ruleRe = /([}^\n])*?\s*([\w->*:]+)[:\s]+(.*?)([\n;]|{|(?=})|$)/g
   return (strings: string[], ...values: any[]) => {
     const out: AnyObject = {}
-    let levelUp: AnyObject
     let current = out
+    const levels: AnyObject[] = []
     join(strings, values)
     .replace(ruleRe, (_rule, start, name, value, end, _offset, all) => {
       if(start == '}') {
-        if(levelUp) {
-          current = levelUp
-          levelUp = null
+        if(levels.length) {
+          current = levels.pop()
         } else {
           throw new Error('Bad rule: ' + all)
         }
       }
       if(end == '{') {
-        levelUp = current
+        levels.push(current)
         const o = {}
         current[camelify(name)] = o
         current = o
