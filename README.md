@@ -118,7 +118,7 @@ Vue.mixin(renderer.mixin)
 
 export default {
   computed: {
-    styles() {
+    style() {
       // Or any other key in `options.defStyles.key`.
       const { colors } = this.fdef
 
