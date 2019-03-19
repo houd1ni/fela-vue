@@ -1,0 +1,3 @@
+- Make an issue of what you want to archieve: let's be communicative.
+- Describe how does it affect API, bundle size, performance.
+- Create, write tests where possible and make a PR.
