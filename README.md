@@ -29,6 +29,7 @@ Included as deps:
 ```javascript
 const options = {
   // Not required. Default styles to mix. Does not mix if omitted.
+  // Have a look at the example below to see it in action.
   // Either pass a function (then key would be `fdef`):
   defStyles: (componentInstance) => ({ colors: { cyan: 'cyan' } }),
   // ... Or an object with your own key:
@@ -104,6 +105,11 @@ Vue.mixin(renderer.mixin)
     <span :class="f('one two, bold')"> Combined classes by commas and spaces </span>
     <span :class="f('bold my-kebab')"> And kebab-case! </span>
     <span :class="f('bold myKebab')"> The same! </span>
+    <span :class="f('button one')">
+      If class is not in local style(), it will be taken from defaults (defStyles), if present.
+      Here's button could be taken from there, then merged with `one`
+      where is `one` is in priority: right to left principle.
+    </span>
     <div v-for="i in [0,1,2]">
       <span
         :class="f((i) => ({color: ['green', 'blue', 'yellow'][i]}))"

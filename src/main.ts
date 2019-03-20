@@ -5,9 +5,10 @@ import embedded from 'fela-plugin-embedded'
 import prefixer from 'fela-plugin-prefixer'
 import fallback from 'fela-plugin-fallback-value'
 import unit from 'fela-plugin-unit'
-import { always, reflect, camelify } from './utils'
+import { always, reflect, camelify, memoize } from './utils'
 
 const isObject = (a: any) => typeof a == 'object'
+const emptyObject = Object.freeze({})
 
 const isBrowser = (() => {
   try {
@@ -30,25 +31,31 @@ const types = Object.freeze({ f: 'function', o: 'object', s: 'string' })
 
 const getRules = (() => {
   const pickStyle = (style: AnyObject, name: string) => {
-    return style ? (
-      style[name] ||
-      style[camelify(name)]
-    ) : {}
+    return style[name] || style[camelify(name)]
   }
-  const pickStyles = (style: AnyObject, names: string) => {
-    return names.split(/[,\s\t]+/g).map((name) => pickStyle(style, name))
+  const pickStyles = (getDefStyle: () => AnyObject, style: AnyObject, names: string) => {
+    return names.split(/[,\s\t]+/g).map((name) =>
+      pickStyle(style, name) || pickStyle(getDefStyle(), name) || emptyObject
+    )
   }
 
-  return (style: AnyObject | undefined, propsOrRule: any) => {
+  return (
+    getDefStyle: () => AnyObject,
+    style: AnyObject | undefined,
+    propsOrRule: any
+  ) => {
+    if(!style) {
+      style = emptyObject
+    }
     switch(typeof propsOrRule) {
       case types.f:
         return [propsOrRule]
       case types.o:
         return [always(propsOrRule)]
       case types.s:
-        return pickStyles(style, propsOrRule).reduce(
+        return pickStyles(getDefStyle, style, propsOrRule).reduce(
           (accum, rule) => {
-            accum.push(...getRules(style, rule))
+            accum.push(...getRules(getDefStyle, style, rule))
             return accum
           }
         , [] as (() => AnyObject)[])
@@ -121,7 +128,11 @@ class Renderer {
       methods: {
         [method](propsOrRule: any, props: AnyObject = {}): string {
           return renderer.renderRule(
-            combineRules(...getRules(this.style, propsOrRule)),
+            combineRules(...getRules(
+              memoize(() => fdefValue ? fdefValue(this): emptyObject),
+              this.style,
+              propsOrRule)
+            ),
             props
           )
         }
