@@ -1,5 +1,5 @@
 # fela-vue
-Fela mixin for Vue designed for flexibility yet team-oriented.
+Fela mixin for Vue designed for flexibility yet team-oriented. [website.](https://houd1ni.github.io/fela-vue/)
 
 [![Build Status](https://circleci.com/gh/houd1ni/fela-vue/tree/master.svg?style=shield)](https://circleci.com/gh/houd1ni/fela-vue/tree/master) [![codecov](https://codecov.io/gh/houd1ni/fela-vue/branch/master/graph/badge.svg)](https://codecov.io/gh/houd1ni/fela-vue) [![bundlephobia](https://badgen.net/bundlephobia/minzip/fela-vue)](https://bundlephobia.com/result?p=fela-vue)  [![npm](https://badgen.net/npm/v/fela-vue)](https://www.npmjs.com/package/fela-vue) [![Deps](https://david-dm.org/houd1ni/fela-vue.svg)](https://david-dm.org/houd1ni/fela-vue) [![DevDeps](https://david-dm.org/houd1ni/fela-vue/dev-status.svg)](https://david-dm.org/houd1ni/fela-vue)
 
