@@ -14,7 +14,7 @@ Included as deps:
 - [fela-plugin-fallback-value](https://github.com/rofrischmann/fela/tree/master/packages/fela-plugin-fallback-value)
 - [fela-plugin-unit](https://github.com/rofrischmann/fela/tree/master/packages/fela-plugin-unit)
 
-*The plugins are a lite most useful part of fela-preset-web.*
+*The plugins are a lite most useful part of [fela-preset-web](https://github.com/rofrischmann/fela/tree/master/packages/fela-preset-web).*
 
 
 ## USAGE
@@ -45,7 +45,7 @@ const options = {
   enhancers: [],
   // Not required. Preset configurations.
   preset: {
-    // Not required. Config for fela-plugin-plugin-unit. Same defaults ('px', {}).
+    // Not required. Config for fela-plugin-unit. Same defaults ('px', {}).
     unit: ['em', { margin: '%' }]
   },
   // SSR status.
