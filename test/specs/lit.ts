@@ -18,6 +18,14 @@ test('lit-css', (t) => {
           '& .inner': {
             left: 42
           }
+        },
+        cls: {
+         '& .red': {
+           padding: 5
+         },
+         '& .green': {
+            padding: 5
+          }
         }
       }
       const rule = () => css`
@@ -30,6 +38,10 @@ test('lit-css', (t) => {
           .inner {
             left: 42
           }
+        }
+        .cls: {
+         .red, .green: {
+           padding: 5
         }
       `
 

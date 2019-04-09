@@ -14,7 +14,7 @@ const analyseLine = (() => {
   const ruleRE = /^([\w-]+)(: *| +)(.*)$/
   const selectorRE = /^(([@>\*\.:&\(\)\^="\-\[\]]+).*[ ,]*)+:?$/
   const delimRE = /\s*,\s*/g
-  const trailingColonRE = /(.*):[\n\r]/g
+  const trailingColonRE = /(.*):$/
   return (levels: AnyObject[], line: string, names: string[]) => {
     let groups: string[]
     const current = last(levels)
