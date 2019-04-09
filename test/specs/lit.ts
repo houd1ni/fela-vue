@@ -1,13 +1,25 @@
 import test from 'ava'
 // import { Renderer } from '../../dist/bundle.esm'
-const { Renderer, css } = require('../../dist/bundle')
+const { css } = require('../../dist/bundle')
 const fs = require('fs').promises
 
-test('init', (t) => {
+test('lit-css', (t) => {
   return new Promise(async (ff) => {
     try {
-      const renderer = new Renderer({ ssr: true })
       const value = 40
+      const obj = {
+        margin: 'some-shit',
+        padding: 'some-shit',
+        those: 'shiii',
+        marginLeft: 40,
+        marginRight: '10px',
+        '>*:first-of-type': {
+          shit: 66,
+          '& .inner': {
+            left: 42
+          }
+        }
+      }
       const rule = () => css`
         margin: some-shit;
         padding some-shit; those: shiii
@@ -15,18 +27,15 @@ test('init', (t) => {
         margin-right: 10px
         >*:first-of-type {
           shit 66
+          .inner {
+            left: 42
+          }
         }
       `
-      renderer.mixin.methods.f(rule)
-      if(renderer.style.includes('10px')) {
-        ff(t.pass())
-      } else {
-        // Just to look inside.
-        ff(t.is(renderer.style, '10px'))
-      }
-      ff(t.pass())
+
+      ff(t.deepEqual(rule(), obj))
     } catch(e) {
-      ff(t.fail())
+      ff(t.fail(e))
     }
   })
 })

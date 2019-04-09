@@ -10,46 +10,69 @@ const join = (strings: string[], values: any[]) => {
   return out
 }
 
+const analyseLine = (() => {
+  const ruleRE = /^([\w-]+)(: *| +)(.*)$/
+  const selectorRE = /^(([@>\*\.:&\(\)\^="\-\[\]]+).*[ ,]*)+:?$/
+  const delimRE = /\s*,\s*/g
+  const trailingColonRE = /(.*):[\n\r]/g
+  return (levels: AnyObject[], line: string, names: string[]) => {
+    let groups: string[]
+    const current = last(levels)
+    switch(true) {
+      case line=='{':
+        const oo = {}
+        names.forEach(name => current[name] = oo)
+        levels.push(oo)
+        break
+      case line=='}':
+        levels.pop()
+        break
+      case (groups = ruleRE.exec(line)) != null:
+        current[camelify(groups[1])] = isNaN(groups[3] as any) ? groups[3] : +groups[3]
+        break
+      case (groups = selectorRE.exec(line)) != null:
+        names.splice(0)
+        names.push(...line.split(delimRE).map((selector) => {
+          selector = selector.replace(trailingColonRE, '$1')
+          if(selector[0] == '.') {
+            selector = levels.length > 1
+              ? '& ' + selector
+              : selector.slice(1)
+          }
+          return selector
+        }))
+        break
+    }
+  }
+})();
+
 export const css = (() => {
-  const ruleRe = /(}|([}^\n])*?\s*([\w-&#>*:]+)[:\s]+(.*?)([\n;]|{|(?=})|$))/g
+  const delimiters = ['\n', '\r', ';']
+  const isDelimiter = (s: string) => delimiters.includes(s)
+  const delimRE = new RegExp(`[${delimiters.join('')}]`, 'g')
   return (strings: string[], ...values: any[]) => {
     const out: AnyObject = {}
-    let current = out
-    const levels: AnyObject[] = []
+    const names: string[] = [] // selector names, class names.
+    const levels = [out]
     join(strings, values)
-    .replace(ruleRe, (_rule, onlyEnd, start, name, value, end, _offset, all) => {
-      if(start == '}' || onlyEnd == '}') {
-        if(levels.length) {
-          current = levels.pop()
-        } else {
-          throw new Error('Bad rule: ' + all)
-        }
+    .replace(/(\{|\})/g, (_, brace, offset, full) => {
+      if(!isDelimiter(full[offset-1])) {
+        brace = ';' + brace
       }
-      if(end == '{') {
-        levels.push(current)
-        const o = {}
-        current[camelify(name)] = o
-        current = o
+      if(!isDelimiter(full[offset+1])) {
+        brace += ';'
       }
-      if(name) {
-        const hasColon = name.includes(':')
-        if(value || hasColon) {
-          if(name[0] == '.') {
-            name = name.slice(1)
-          }
-          if(!value && hasColon) {
-            const parts = name.split(':')
-            name = parts.slice(0, -1).join(':')
-            value = last(parts)
-          } else {
-            name = name.slice(0, -1)
-          }
-          if(name && value) {
-            current[camelify(name)] = isNaN(value) ? value.trim() : +value
-          }
-        }
+      return brace
+    })
+    .split(delimRE)
+    .forEach((line) => {
+      line = line.trim()
+      if(line) {
+        analyseLine(levels, line, names)
       }
-      return ''
+      if(!levels.length) {
+        throw new Error('lit-css parse error: unbalanced {} braces !')
+      }
     })
     return out
   }

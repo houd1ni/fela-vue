@@ -131,10 +131,10 @@ class Renderer {
             combineRules(...getRules(
               memoize(() => fdefValue ? fdefValue(this): emptyObject),
               this.style,
-              propsOrRule)
-            ),
+              propsOrRule
+            )),
             props
-          )
+          ) || undefined
         }
       },
       computed: fdef ? {

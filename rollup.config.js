@@ -5,11 +5,11 @@ import { terser } from 'rollup-plugin-terser'
 import replace from 'rollup-plugin-replace'
 
 export default {
-  input: 'src/main.ts',
+  input: process.env.NODE_ENV==='development' ? 'test/in-browser.ts' : 'src/main.ts',
   output: {
     file: process.env.BUILD === 'cjs' ? 'dist/bundle.js' : 'dist/bundle.esm.js',
     format: process.env.BUILD === 'cjs' ? 'cjs' : 'es',
-    name: 'fela-vue',
+    name: 'fela-vue'
   },
   sourcemap: true,
   external: [
@@ -29,14 +29,14 @@ export default {
       tsconfigOverride: {
         compilerOptions: {
           sourceMap: false,
-          inlineSourceMap: process.env.BUILD==='development',
+          inlineSourceMap: process.env.NODE_ENV==='development',
           module: 'esnext'
         }
       }
     }),
     terser(),
     replace({
-      'process.env.NODE_ENV': JSON.stringify(process.env.BUILD)
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
     })
   ]
 }

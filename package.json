@@ -32,17 +32,17 @@
     "url": "git+https://github.com/houd1ni/fela-vue.git"
   },
   "scripts": {
-    "lint": "tslint 'src/**/*.ts'",
+    "lint": "tslint src/*.ts",
     "test": "npm run gentypes && npm run prod:cjs && ava",
     "test:report": "nyc npm test && nyc report --reporter=text-lcov > coverage.lcov && codecov",
     "test:lazy": "ava",
     "gentypes": "dts-bundle-generator -o dist/bundle.d.ts src/main.ts",
-    "dev": "rollup --watch -c",
+    "dev": "cross-env NODE_ENV=development rollup -c",
     "prod:cjs": "cross-env NODE_ENV=production BUILD=cjs rollup -c",
     "prod:es": "cross-env NODE_ENV=production BUILD=es rollup -c",
     "prod": "npm run gentypes && npm run prod:es && npm run prod:cjs"
   },
-  "version": "2.5.1",
+  "version": "2.6.0beta.0",
   "ava": {
     "files": [
       "./test/specs/*.ts"
