@@ -5,7 +5,7 @@
   "bugs": {
     "url": "https://github.com/houd1ni/fela-vue/issues"
   },
-  "bundleDependencies": false,
+  "bundleDependencies": [],
   "deprecated": false,
   "description": "Fela mixin for Vue designed for flexibility yet team-oriented.",
   "homepage": "https://github.com/houd1ni/fela-vue#readme",
@@ -42,7 +42,7 @@
     "prod:es": "cross-env NODE_ENV=production BUILD=es rollup -c",
     "prod": "npm run gentypes && npm run prod:es && npm run prod:cjs"
   },
-  "version": "2.6.0beta.1",
+  "version": "2.6.0beta.2",
   "ava": {
     "files": [
       "./test/specs/*.ts"
@@ -68,23 +68,23 @@
     "fela-plugin-unit": "*"
   },
   "devDependencies": {
-    "@types/node": "^11.11.3",
-    "ava": "^1.3.1",
-    "codecov": "^3.2.0",
+    "@types/node": "^11.13.4",
+    "ava": "^1.4.1",
+    "codecov": "^3.3.0",
     "cross-env": "^5.2.0",
     "dts-bundle-generator": "^2.1.0",
     "nyc": "^13.3.0",
-    "rollup": "^1.6.0",
+    "rollup": "^1.9.3",
     "rollup-plugin-alias": "^1.5.1",
-    "rollup-plugin-commonjs": "^9.2.1",
-    "rollup-plugin-node-resolve": "^4.0.1",
-    "rollup-plugin-replace": "^2.1.0",
+    "rollup-plugin-commonjs": "^9.3.4",
+    "rollup-plugin-node-resolve": "^4.2.2",
+    "rollup-plugin-replace": "^2.2.0",
     "rollup-plugin-resolve-aliases": "^0.2.0",
     "rollup-plugin-terser": "4.0.4",
     "rollup-plugin-typescript2": "^0.20.1",
     "ts-node": "^8.0.3",
-    "tslint": "^5.14.0",
-    "typescript": "^3.3.3333"
+    "tslint": "^5.15.0",
+    "typescript": "^3.4.3"
   },
   "types": "./dist/bundle.d.ts"
 }

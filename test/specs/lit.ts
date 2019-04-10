@@ -21,7 +21,7 @@ test('lit-css', (t) => {
         },
         cls: {
          '& .red': {
-           padding: 5
+            padding: 5
          },
          '& .green': {
             padding: 5
@@ -42,6 +42,7 @@ test('lit-css', (t) => {
         .cls: {
          .red, .green: {
            padding: 5
+           // margin: 7px 5px
         }
       `
 

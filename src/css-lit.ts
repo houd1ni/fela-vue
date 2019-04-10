@@ -12,7 +12,7 @@ const join = (strings: string[], values: any[]) => {
 
 const analyseLine = (() => {
   const ruleRE = /^([\w-]+)(: *| +)(.*)$/
-  const selectorRE = /^(([@>\*\.:&\(\)\^="\-\[\]]+).*[ ,]*)+:?$/
+  const selectorRE = /^(([\|~\$@>\*\.:&\(\)\^="\-\[\]]+).*[ ,]*)+:?$/
   const delimRE = /\s*,\s*/g
   const trailingColonRE = /(.*):$/
   return (levels: AnyObject[], line: string, names: string[]) => {
@@ -50,6 +50,7 @@ export const css = (() => {
   const delimiters = ['\n', '\r', ';']
   const isDelimiter = (s: string) => delimiters.includes(s)
   const delimRE = new RegExp(`[${delimiters.join('')}]`, 'g')
+  const commentRE = /^\/\/.*$/
   return (strings: string[], ...values: any[]) => {
     const out: AnyObject = {}
     const names: string[] = [] // selector names, class names.
@@ -66,7 +67,7 @@ export const css = (() => {
     })
     .split(delimRE)
     .forEach((line) => {
-      line = line.trim()
+      line = line.trim().replace(commentRE, '')
       if(line) {
         analyseLine(levels, line, names)
       }
