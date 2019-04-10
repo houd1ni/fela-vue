@@ -128,6 +128,7 @@ export default {
       // Or any other key in `options.defStyles.key`.
       const { colors } = this.fdef
 
+      // Also, it's OK to return one css`...` with all classes included.
       return {
         one: {
           color: 'green'
@@ -152,8 +153,12 @@ export default {
         ...css`
           .other-class {
             margin-top: 44; // still ok for fela. will be 44px.
-            margin-left 22  // no colons and semicolons are ok here.
+            // you can comment a whole line,
+            // and if you want to make comment at end of a line,
+            // please add a semicolon ; "moving" the comment to next line.
+            margin-left: 22  // hence, this rule value will include this comment.
             :hover {
+              // no colons and semicolons are ok without comments.
               background grey
             }
           }
