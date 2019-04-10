@@ -160,9 +160,6 @@ export default {
           .anotherOne {
             padding: 15
           }
-          and-more {  // without . is ok too, 'cause they are always classes.
-            padding 15
-          }
         `
       }
     }
