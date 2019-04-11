@@ -1,14 +1,10 @@
 import { AnyObject } from './types'
 import { last, camelify } from './utils'
 
-const join = (strings: string[], values: any[]) => {
-  const len = strings.length
-  let out = ''
-  for(let i = 0; i < len; i++) {
-    out += strings[i] + (values[i] == undefined ? '' : values[i])
-  }
-  return out
-}
+const join = (strings: string[], values: any[]) =>
+  strings.reduce((accum, str, i) =>
+    accum + str + (values[i] == undefined ? '' : values[i])
+  , '')
 
 const analyseLine = (() => {
   const ruleRE = /^([\w-]+)(: *| +)(.*)$/
