@@ -24,3 +24,5 @@ export declare class Renderer {
 	readonly style: string;
 	constructor(opts?: Partial<Options>);
 }
+
+export {};

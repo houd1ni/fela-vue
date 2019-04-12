@@ -1,7 +1,5 @@
 import test from 'ava'
-// import { Renderer } from '../../dist/bundle.esm'
 const { css } = require('../../dist/bundle')
-const fs = require('fs').promises
 
 test('lit-css', (t) => {
   return new Promise(async (ff) => {
