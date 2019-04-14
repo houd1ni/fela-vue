@@ -18,11 +18,26 @@ test('lit-css', (t) => {
           }
         },
         cls: {
+          color: 'yellow',
          '& .red': {
-            padding: 5
+            padding: 5,
+            '& .one': {
+              margin: 5,
+              padding: 15
+            },
+            '& .two': {
+              margin: 5
+            }
          },
          '& .green': {
-            padding: 5
+            padding: 5,
+            '& .one': {
+              margin: 5,
+              padding: 15
+            },
+            '& .two': {
+              margin: 5
+            }
           }
         }
       }
@@ -37,10 +52,20 @@ test('lit-css', (t) => {
             left: 42
           }
         }
-        .cls: {
-         .red, .green: {
-           padding: 5
-           // margin: 7px 5px
+        .cls {
+          .red, .green: {
+            padding: 5
+            // margin: 7px 5px
+            .one, .two {
+              margin: 5
+            }
+            .one {
+              padding: 15
+            }
+          }
+        }
+        .cls {
+          color yellow
         }
       `
 

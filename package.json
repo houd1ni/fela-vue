@@ -8,7 +8,7 @@
   "bundleDependencies": [],
   "deprecated": false,
   "description": "Fela mixin for Vue designed for flexibility yet team-oriented.",
-  "homepage": "https://github.com/houd1ni/fela-vue#readme",
+  "homepage": "https://houd1ni.github.io/fela-vue/",
   "keywords": [
     "vue",
     "vuejs",
@@ -42,7 +42,7 @@
     "prod:es": "cross-env NODE_ENV=production BUILD=es rollup -c",
     "prod": "npm run gentypes && npm run prod:es && npm run prod:cjs"
   },
-  "version": "2.6.0beta.3",
+  "version": "2.6.0beta.4",
   "ava": {
     "files": [
       "./test/specs/*.ts"

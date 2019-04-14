@@ -1,2 +1,4 @@
 
 + Don't render empty rules, avoiding class=""
++ Styles merging.
+- Extract utils to external public repo.
