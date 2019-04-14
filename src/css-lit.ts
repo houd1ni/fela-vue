@@ -19,23 +19,23 @@ class Levels {
   add(keys: string[]) {
     const curs = last(this.path)
     const newCurs = []
-    keys.forEach((k) => {
-      curs.forEach((cur) => {
+    for(const k of keys) {
+      for(const cur of curs) {
         if(!cur[k]) {
           cur[k] = {}
         }
         newCurs.push(cur[k])
-      })
-    })
+      }
+    }
     this.path.push(newCurs)
   }
   merge(k: string, v: any) {
-    last(this.path).forEach(o => {
+    for(const o of last(this.path)) {
       o[k] = v
-    })
+    }
   }
   pop() {
-    this.path.pop()
+    return this.path.pop()
   }
   constructor() {
     this.path.push([ this.o ])
