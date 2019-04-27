@@ -158,6 +158,7 @@ export default {
             // and if you want to make comment at end of a line,
             // please add a semicolon ; "moving" the comment to next line.
             margin-left: 22  // hence, this rule value will include this comment.
+            /* block comments are also supported. */
             :hover {
               // no colons and semicolons are ok without comments.
               background grey
