@@ -45,7 +45,9 @@ test('lit-css', (t) => {
         margin: some-shit;
         padding some-shit; those: shiii
         margin-left: ${value}
-        margin-right: 10px
+        margin-right: 10px /*
+          some block comment
+        */
         >*:first-of-type {
           shit 66
           .inner {

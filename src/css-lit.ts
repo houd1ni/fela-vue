@@ -82,11 +82,12 @@ export const css = (() => {
   const delimiters = ['\n', '\r', ';']
   const isDelimiter = (s: string) => delimiters.includes(s)
   const delimRE = new RegExp(`[${delimiters.join('')}]`, 'g')
-  const commentRE = /^\/\/.*$/
+  const commentRE = /((^\s*?\/\/.*$)|\/\*(.|[\n\r])*?\*\/)/gm
   return (strings: string[], ...values: any[]) => {
     const names: string[] = [] // selector names, class names.
     const levels = new Levels()
     join(strings, values)
+    .replace(commentRE, '')
     .replace(/(\{|\})/g, (_, brace, offset, full) => {
       if(!isDelimiter(full[offset-1])) {
         brace = ';' + brace
@@ -98,7 +99,7 @@ export const css = (() => {
     })
     .split(delimRE)
     .forEach((line) => {
-      line = line.trim().replace(commentRE, '')
+      line = line.trim()
       if(line) {
         analyseLine(levels, line, names)
       }
