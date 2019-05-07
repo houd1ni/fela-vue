@@ -42,7 +42,7 @@
     "prod:es": "cross-env NODE_ENV=production BUILD=es rollup -c",
     "prod": "npm run gentypes && npm run prod:es && npm run prod:cjs"
   },
-  "version": "2.6.0beta.8",
+  "version": "2.6.0beta.9",
   "ava": {
     "files": [
       "./test/specs/*.ts"
@@ -68,13 +68,13 @@
     "fela-plugin-unit": "*"
   },
   "devDependencies": {
-    "@types/node": "^11.13.8",
+    "@types/node": "^12.0.0",
     "ava": "^1.4.1",
     "codecov": "^3.3.0",
     "cross-env": "^5.2.0",
     "dts-bundle-generator": "^3.0.0",
-    "nyc": "^14.0.0",
-    "rollup": "^1.10.1",
+    "nyc": "^14.1.0",
+    "rollup": "^1.11.3",
     "rollup-plugin-alias": "^1.5.1",
     "rollup-plugin-commonjs": "^9.3.4",
     "rollup-plugin-node-resolve": "^4.2.3",

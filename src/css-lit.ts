@@ -83,10 +83,10 @@ export const css = (() => {
   const isDelimiter = (s: string) => delimiters.includes(s)
   const delimRE = new RegExp(`[${delimiters.join('')}]`, 'g')
   const commentRE = /((^\s*?\/\/.*$)|\/\*(.|[\n\r])*?\*\/)/gm
-  return (strings: string[], ...values: any[]) => {
+  return (strings: (string[] | TemplateStringsArray), ...values: any[]) => {
     const names: string[] = [] // selector names, class names.
     const levels = new Levels()
-    join(strings, values)
+    join(strings as string[], values)
     .replace(commentRE, '')
     .replace(/(\{|\})/g, (_, brace, offset, full) => {
       if(!isDelimiter(full[offset-1])) {
