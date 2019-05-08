@@ -5,7 +5,7 @@ export interface AnyObject {
 }
 export interface Options {
 	method: string;
-	defStyles?: ((vm?: AnyObject) => AnyObject) | {
+	defStyles?: ((vm: AnyObject) => AnyObject) | {
 		key: string;
 		value: ((vm?: AnyObject) => AnyObject);
 	};
