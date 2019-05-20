@@ -47,6 +47,13 @@ const analyseLine = (() => {
   const selectorRE = /^(([\|~\$@>\*\.:&\(\)\^="\-\[\]]+).*[ ,]*)+:?$/
   const delimRE = /\s*,\s*/g
   const trailingColonRE = /(.*):$/
+  const getValue = (value: string) => {
+    switch(value) {
+      case 'undefined': case '': return undefined
+      case 'null': return null
+      default: return isNaN(+value) ? value : +value
+    }
+  }
   return (levels: Levels, line: string, names: string[]) => {
     let groups: string[]
     switch(true) {
@@ -57,10 +64,7 @@ const analyseLine = (() => {
         levels.pop()
         break
       case (groups = ruleRE.exec(line)) != null:
-        levels.merge(
-          camelify(groups[1]),
-          isNaN(groups[3] as any) ? groups[3] : +groups[3]
-        )
+        levels.merge(camelify(groups[1]), getValue(groups[3]))
         break
       case (groups = selectorRE.exec(line)) != null:
         names.splice(0)
