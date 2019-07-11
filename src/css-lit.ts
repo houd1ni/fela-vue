@@ -1,5 +1,6 @@
 import { AnyObject } from './types'
-import { last, camelify } from './utils'
+import { camelify, splitByGroup, escape, unescape } from './utils'
+import { compose, replace, forEach, last, when } from 'ramda'
 
 const join = (strings: string[], values: any[]) =>
   strings.reduce((accum, str, i) =>
@@ -64,7 +65,10 @@ const analyseLine = (() => {
         levels.pop()
         break
       case (groups = ruleRE.exec(line)) != null:
-        levels.merge(camelify(groups[1]), getValue(groups[3]))
+        levels.merge(
+          unescape(camelify(groups[1])),
+          when(isNaN, unescape, getValue(groups[3]))
+        )
         break
       case (groups = selectorRE.exec(line)) != null:
         names.splice(0)
@@ -80,37 +84,45 @@ const analyseLine = (() => {
         break
     }
   }
-})();
+})()
 
-export const css = (() => {
+const parse = (() => {
   const delimiters = ['\n', '\r', ';']
   const isDelimiter = (s: string) => delimiters.includes(s)
-  const delimRE = new RegExp(`[${delimiters.join('')}]`, 'g')
+  const delimRE = new RegExp(`[^\\\\](${delimiters.join('|')})`, 'g')
   const commentRE = /((^\s*?\/\/.*$)|\/\*(.|[\n\r])*?\*\/)/gm
-  return (strings: (string[] | TemplateStringsArray), ...values: any[]) => {
-    const names: string[] = [] // selector names, class names.
+  return (css: string) => {
     const levels = new Levels()
-    join(strings as string[], values)
-    .replace(commentRE, '')
-    .replace(/(\{|\})/g, (_, brace, offset, full) => {
-      if(!isDelimiter(full[offset-1])) {
-        brace = ';' + brace
-      }
-      if(!isDelimiter(full[offset+1])) {
-        brace += ';'
-      }
-      return brace
-    })
-    .split(delimRE)
-    .forEach((line) => {
-      line = line.trim()
-      if(line) {
-        analyseLine(levels, line, names)
-      }
-      if(levels.depth < 1) {
-        throw new Error('lit-css parse error: unbalanced {} braces !')
-      }
-    })
-    return levels.out
+    const names: string[] = [] // selector names, class names.
+    return compose(
+      () => levels.out,
+      forEach((line) => {
+        line = line.trim()
+        if(line) {
+          analyseLine(levels, line, names)
+        }
+        if(levels.depth < 1) {
+          throw new Error('lit-css parse error: unbalanced {} braces !')
+        }
+      }),
+      splitByGroup(delimRE, 1),
+      replace(/(\{|\})/g, (_, brace, offset, full) => {
+        if(!isDelimiter(full[offset-1])) {
+          brace = ';' + brace
+        }
+        if(!isDelimiter(full[offset+1])) {
+          brace += ';'
+        }
+        return brace
+      }),
+      escape,
+      replace(commentRE, '')
+    )(css)
+  }
+})()
+
+export const css = (() => {
+  return (strings: (string[] | TemplateStringsArray), ...values: any[]) => {
+    return parse(join(strings as string[], values))
   }
 })()

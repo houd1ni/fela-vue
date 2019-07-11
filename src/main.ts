@@ -5,7 +5,8 @@ import embedded from 'fela-plugin-embedded'
 import prefixer from 'fela-plugin-prefixer'
 import fallback from 'fela-plugin-fallback-value'
 import unit from 'fela-plugin-unit'
-import { always, reflect, camelify, memoize } from './utils'
+import { camelify, memoize } from './utils'
+import { always, identity } from 'ramda'
 
 const isObject = (a: any) => typeof a == 'object'
 const emptyObject = Object.freeze({})
@@ -60,7 +61,7 @@ const getRules = (() => {
           }
         , [] as (() => AnyObject)[])
       default:
-        return [reflect]
+        return [identity]
     }
   }
 })()

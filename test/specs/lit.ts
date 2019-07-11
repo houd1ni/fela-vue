@@ -19,6 +19,7 @@ test('lit-css', (t) => {
         },
         cls: {
           color: 'yellow',
+          background: 'url("data:image/gif;base64,R0lGO")',
          '& .red': {
             padding: 5,
             '& .one': {
@@ -68,6 +69,7 @@ test('lit-css', (t) => {
         }
         .cls {
           color yellow
+          background url("data:image/gif;base64,R0lGO")
         }
       `
 
