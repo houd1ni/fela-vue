@@ -5,7 +5,7 @@ jobs:
   build:
     working_directory: ~/test
     docker: # run the steps with Docker
-      - image: circleci/node:4.8.2 # ...with this image as the primary container; this is where all `steps` will run
+      - image: circleci/node
     steps:
       - checkout
       - run:
