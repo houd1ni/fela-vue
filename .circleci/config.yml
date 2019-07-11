@@ -4,7 +4,7 @@ version: 2
 jobs:
   build:
     working_directory: ~/test
-    docker: # run the steps with Docker
+    docker:
       - image: circleci/node
     steps:
       - checkout

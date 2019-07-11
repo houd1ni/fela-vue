@@ -18,7 +18,8 @@ export default {
     'fela-plugin-embedded',
     'fela-plugin-prefixer',
     'fela-plugin-fallback-value',
-    'fela-plugin-unit'
+    'fela-plugin-unit',
+    'ramda'
   ],
   plugins: [
     resolve(),
