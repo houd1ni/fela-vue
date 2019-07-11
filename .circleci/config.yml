@@ -3,19 +3,11 @@ version: 2
 
 jobs:
   build:
-    machine: true
+    working_directory: ~/test
+    docker: # run the steps with Docker
+      - image: circleci/node:4.8.2 # ...with this image as the primary container; this is where all `steps` will run
     steps:
       - checkout
-      - run:
-          name: install
-          command: |
-              sudo apt-get -y update
-              sudo curl -sL https://deb.nodesource.com/setup_12.x | bash -
-              sudo apt-get install -y nodejs
-              sudo npm install -g npm@latest
-      - run:
-          name: node setup
-          command: npm i -g npm
       - run:
           name: install
           command: npm i
