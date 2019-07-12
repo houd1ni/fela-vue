@@ -1,8 +1,6 @@
 import {
-  replace, when, isNil, complement, map, length
+  replace, when, isNil, complement, map, length, both, isEmpty
 } from 'ramda'
-import both from 'ramda/es/both';
-import isEmpty from 'ramda/es/isEmpty';
 
 export const camelify = (str: string) => str.replace(/-(\w)/gu, (_s, l) => l.toUpperCase())
 export const memoize = (fn: Function) => {
