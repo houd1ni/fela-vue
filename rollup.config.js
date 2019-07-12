@@ -11,7 +11,6 @@ export default {
     format: process.env.BUILD === 'cjs' ? 'cjs' : 'es',
     name: 'fela-vue'
   },
-  sourcemap: true,
   external: process.env.NODE_ENV==='development' ? [] : [
     'fela',
     'fela-dom',
