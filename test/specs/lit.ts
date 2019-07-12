@@ -68,6 +68,7 @@ test('lit-css', (t) => {
           }
         }
         .cls {
+          margin ${null};  // Should omit.
           color yellow
           background url("data:image/gif;base64,R0lGO")
         }

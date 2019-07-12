@@ -1,3 +1,5 @@
+import { always, compose, replace, when, isNil } from 'ramda'
+
 export const camelify = (str: string) => str.replace(/-(\w)/gu, (_s, l) => l.toUpperCase())
 export const memoize = (fn: Function) => {
   let cache: any
@@ -29,8 +31,7 @@ export const escape = (() => {
       v.replace(signsRE, (s) => `\\${s}`)
     )
 })()
-export const unescape = (() => {
-  const re = /([^\\])\\([^\\])/g
-  return (v: string): string =>
-    v.replace(re, '$1$2')
-})()
+export const unescape = compose(
+  replace(/([^\\])\\([^\\])/g, '$1$2'),
+  when(isNil, always(''))
+)
