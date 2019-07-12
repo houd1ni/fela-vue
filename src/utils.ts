@@ -1,6 +1,8 @@
 import {
   replace, when, isNil, complement, map, length
 } from 'ramda'
+import both from 'ramda/es/both';
+import isEmpty from 'ramda/es/isEmpty';
 
 export const camelify = (str: string) => str.replace(/-(\w)/gu, (_s, l) => l.toUpperCase())
 export const memoize = (fn: Function) => {
@@ -43,4 +45,8 @@ export const escape = (() => {
 export const unescape = when(
   complement(isNil),
   replace(/([^\\])\\([^\\])/g, '$1$2')
+)
+export const valuable = both(
+  complement(isEmpty),
+  complement(isNil)
 )

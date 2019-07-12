@@ -16,7 +16,7 @@ export interface Options {
 	enhancers: TEnhancer[];
 	ssr: boolean;
 }
-export declare const css: (strings: string[] | TemplateStringsArray, ...values: any[]) => any;
+export declare const css: (strings: string[] | TemplateStringsArray, ...values: any[]) => AnyObject;
 export declare class Renderer {
 	private renderer;
 	private _mixin;

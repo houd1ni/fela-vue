@@ -1,5 +1,5 @@
 import { AnyObject } from './types'
-import { camelify, splitNonEscaped, escape, unescape } from './utils'
+import { camelify, splitNonEscaped, escape, unescape, valuable } from './utils'
 import { compose, replace, forEach, last, when } from 'ramda'
 
 const join = (strings: string[], values: any[]) =>
@@ -31,7 +31,7 @@ class Levels {
     this.path.push(newCurs)
   }
   merge(k: string, v: any) {
-    if(v && k) {
+    if(valuable(v) && valuable(k)) {
       for(const o of last(this.path)) {
         o[k] = v
       }
