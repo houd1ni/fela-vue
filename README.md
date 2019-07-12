@@ -156,12 +156,10 @@ export default {
           .other-class {
             margin-top: 44; // still ok for fela. will be 44px.
             // you can comment a whole line,
-            // and if you want to make comment at end of a line,
-            // please add a semicolon ; "moving" the comment to next line.
-            margin-left: 22  // hence, this rule value will include this comment.
+            margin-left: 22 // this's OK too.
             /* block comments are also supported. */
             :hover {
-              // no colons and semicolons are ok without comments.
+              // no colons and semicolons are ok.
               background grey
             }
           }
