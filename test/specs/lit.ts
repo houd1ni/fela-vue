@@ -6,9 +6,11 @@ test('lit-css', (t) => {
     try {
       const value = 40
       const obj = {
+        empty: {},
         margin: 'some-shit',
         padding: 'some-shit',
         those: 'shiii',
+        marginTop: 0,
         marginLeft: 40,
         marginRight: '10px',
         '>*:first-of-type': {
@@ -43,8 +45,9 @@ test('lit-css', (t) => {
         }
       }
       const rule = () => css`
-        empty {} // should be removed.
+        .empty {}
         margin: some-shit;
+        margin-top: 0  // This falsy should be kept.
         padding some-shit; those: shiii
         margin-left: ${value}
         margin-right: 10px /*

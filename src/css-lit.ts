@@ -91,7 +91,7 @@ const analyseLine = (() => {
 const parse = (() => {
   const delimiters = ['\n', '\r', ';']
   const isDelimiter = (s: string) => delimiters.includes(s)
-  const commentRE = /((^\s*?\/\/.*$)|\/\*(.|[\n\r])*?\*\/)/gm
+  const commentRE = /(([\s^]+?\/\/.*$)|\/\*(.|[\n\r])*?\*\/)/gm
   return (css: string) => {
     const levels = new Levels()
     const names: string[] = [] // selector names, class names.

@@ -28,8 +28,9 @@ Included as deps:
 *In the options object below you can also add [other Renderer options](https://fela.js.org/docs/advanced/RendererConfiguration.html)*
 
 ```javascript
+// All of the options are optional.
 const options = {
-  // Not required. Default styles to mix. Does not mix if omitted.
+  // Default styles to mix. Does not mix if omitted.
   // Have a look at the example below to see it in action.
   // Either pass a function (then key would be `fdef`):
   defStyles: (componentInstance) => ({ colors: { cyan: 'cyan' } }),
@@ -38,15 +39,15 @@ const options = {
     key: 'fdef',
     value: (componentInstance) => ({ colors: { cyan: 'cyan' } })
   },
-  // Not required. Name of styling method. Defaults to `f`.
+  // Name of styling method. Defaults to `f`.
   method: 'f',
-  // Not required. Additional fela plugins.
+  // Additional fela plugins.
   plugins: [],
-  // Not required. Additional fela enhancers.
+  // Additional fela enhancers.
   enhancers: [],
-  // Not required. Preset configurations.
+  // Preset configurations.
   preset: {
-    // Not required. Config for fela-plugin-unit. Same defaults ('px', {}).
+    // Config for fela-plugin-unit. Same defaults ('px', {}).
     unit: ['em', { margin: '%' }]
   },
   // SSR status.
