@@ -12,7 +12,7 @@ export default {
     name: 'fela-vue'
   },
   sourcemap: true,
-  external: [
+  external: process.env.NODE_ENV==='development' ? [] : [
     'fela',
     'fela-dom',
     'fela-plugin-embedded',

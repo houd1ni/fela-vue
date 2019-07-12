@@ -4,7 +4,7 @@ import { compose, replace, forEach, last, when } from 'ramda'
 
 const join = (strings: string[], values: any[]) =>
   strings.reduce((accum, str, i) =>
-    accum + str + (values[i] == undefined ? '' : values[i])
+    accum + str + (values[i] || '')
   , '')
 
 /** Keeps the structure of CSS to navigate and change the tree. */
@@ -31,8 +31,10 @@ class Levels {
     this.path.push(newCurs)
   }
   merge(k: string, v: any) {
-    for(const o of last(this.path)) {
-      o[k] = v
+    if(v && k) {
+      for(const o of last(this.path)) {
+        o[k] = v
+      }
     }
   }
   pop() {
@@ -89,7 +91,7 @@ const analyseLine = (() => {
 const parse = (() => {
   const delimiters = ['\n', '\r', ';']
   const isDelimiter = (s: string) => delimiters.includes(s)
-  const delimRE = new RegExp(`[^\\\\](${delimiters.join('|')})`, 'g')
+  const delimRE = new RegExp(`(?!\\\\)(${delimiters.join('|')})`, 'g')
   const commentRE = /((^\s*?\/\/.*$)|\/\*(.|[\n\r])*?\*\/)/gm
   return (css: string) => {
     const levels = new Levels()
