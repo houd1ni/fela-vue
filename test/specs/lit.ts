@@ -6,7 +6,6 @@ test('lit-css', (t) => {
     try {
       const value = 40
       const obj = {
-        empty: {},
         margin: 'some-shit',
         padding: 'some-shit',
         those: 'shiii',
@@ -44,7 +43,7 @@ test('lit-css', (t) => {
         }
       }
       const rule = () => css`
-        empty {}
+        empty {} // should be removed.
         margin: some-shit;
         padding some-shit; those: shiii
         margin-left: ${value}
