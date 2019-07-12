@@ -22,8 +22,8 @@ export const splitNonEscaped = (delims: string[]) => (str: string): string[] => 
         && str[i-1] !== '\\'
       ) {
         out.push(str.slice(last_index, i))
-        i += delims_lns[j]
-        last_index = i
+        i += delims_lns[j]-1
+        last_index = i+1
       }
     }
   }
@@ -31,23 +31,6 @@ export const splitNonEscaped = (delims: string[]) => (str: string): string[] => 
     out.push(str.slice(last_index))
   }
   return out
-}
-export const splitByGroup = (re: RegExp, groupN: number) => (str: string) => {
-  const savedLastIndex = re.lastIndex
-  let groups: string[] | null
-  let lastIndex = 0
-  let part: string
-  const accum: string[] = []
-  while((groups = re.exec(str)) !== null) {
-    part = groups[groupN] || ''
-    accum.push(str.slice(lastIndex, re.lastIndex-part.length))
-    lastIndex = re.lastIndex
-  }
-  if(lastIndex < str.length) {
-    accum.push(str.slice(lastIndex))
-  }
-  re.lastIndex = savedLastIndex
-  return accum
 }
 export const escape = (() => {
   const patternRE = /url\(.*?\)/g

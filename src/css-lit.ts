@@ -106,6 +106,10 @@ const parse = (() => {
           throw new Error('lit-css parse error: unbalanced {} braces !')
         }
       }),
+      (a) => {
+        console.log(a)
+        return a
+      },
       splitNonEscaped(delimiters),
       replace(/(\{|\})/g, (_, brace, offset, full) => {
         if(!isDelimiter(full[offset-1])) {
@@ -116,6 +120,10 @@ const parse = (() => {
         }
         return brace
       }),
+      (a) => {
+        console.log(a)
+        return a
+      },
       escape,
       replace(commentRE, '')
     )(css)
