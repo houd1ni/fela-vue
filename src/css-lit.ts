@@ -1,5 +1,5 @@
 import { AnyObject } from './types'
-import { camelify, splitByGroup, escape, unescape } from './utils'
+import { camelify, splitNonEscaped, escape, unescape } from './utils'
 import { compose, replace, forEach, last, when } from 'ramda'
 
 const join = (strings: string[], values: any[]) =>
@@ -91,14 +91,13 @@ const analyseLine = (() => {
 const parse = (() => {
   const delimiters = ['\n', '\r', ';']
   const isDelimiter = (s: string) => delimiters.includes(s)
-  const delimRE = new RegExp(`(?!\\\\)(${delimiters.join('|')})`, 'g')
   const commentRE = /((^\s*?\/\/.*$)|\/\*(.|[\n\r])*?\*\/)/gm
   return (css: string) => {
     const levels = new Levels()
     const names: string[] = [] // selector names, class names.
-    return compose(
+    return (compose as any)(
       () => levels.out,
-      forEach((line) => {
+      forEach((line: string) => {
         line = line.trim()
         if(line) {
           analyseLine(levels, line, names)
@@ -107,7 +106,7 @@ const parse = (() => {
           throw new Error('lit-css parse error: unbalanced {} braces !')
         }
       }),
-      splitByGroup(delimRE, 1),
+      splitNonEscaped(delimiters),
       replace(/(\{|\})/g, (_, brace, offset, full) => {
         if(!isDelimiter(full[offset-1])) {
           brace = ';' + brace
