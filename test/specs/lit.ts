@@ -6,6 +6,7 @@ test('lit-css', (t) => {
     try {
       const value = 40
       const obj = {
+        empty: {},
         margin: 'some-shit',
         padding: 'some-shit',
         those: 'shiii',
@@ -43,6 +44,7 @@ test('lit-css', (t) => {
         }
       }
       const rule = () => css`
+        empty {}
         margin: some-shit;
         padding some-shit; those: shiii
         margin-left: ${value}
