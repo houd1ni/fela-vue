@@ -69,24 +69,23 @@
     "ramda": "^0.26.1"
   },
   "devDependencies": {
-    "@types/node": "^12.6.2",
-    "@types/ramda": "^0.26.15",
-    "ava": "^2.2.0",
-    "codecov": "^3.5.0",
-    "cross-env": "^5.2.0",
-    "dts-bundle-generator": "^3.1.0",
+    "@types/node": "^12.12.5",
+    "@types/ramda": "^0.26.33",
+    "ava": "^2.4.0",
+    "codecov": "^3.6.1",
+    "cross-env": "^6.0.3",
+    "dts-bundle-generator": "^3.2.0",
     "nyc": "^14.1.1",
-    "rollup": "^1.16.7",
-    "rollup-plugin-alias": "^1.5.2",
-    "rollup-plugin-commonjs": "^10.0.1",
+    "rollup": "^1.26.3",
+    "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-replace": "^2.2.0",
-    "rollup-plugin-resolve-aliases": "^0.2.0",
-    "rollup-plugin-terser": "5.1.1",
-    "rollup-plugin-typescript2": "^0.22.0",
-    "ts-node": "^8.3.0",
-    "tslint": "^5.18.0",
-    "typescript": "^3.5.3"
+    "rollup-plugin-resolve-aliases": "^0.3.0",
+    "rollup-plugin-terser": "5.1.2",
+    "rollup-plugin-typescript2": "^0.24.3",
+    "ts-node": "^8.4.1",
+    "tslint": "^6.0.0-beta0",
+    "typescript": "^3.6.4"
   },
   "types": "./dist/bundle.d.ts"
 }
