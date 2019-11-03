@@ -1,10 +1,10 @@
 import { AnyObject } from './types'
 import { camelify, splitNonEscaped, escape, unescape, valuable } from './utils'
-import { compose, replace, forEach, last, when } from 'ramda'
+import { compose, replace, forEach, last, when, tap } from 'ramda'
 
 const join = (strings: string[], values: any[]) =>
   strings.reduce((accum, str, i) =>
-    accum + str + (values[i] || '')
+    accum + str + values[i]
   , '')
 
 /** Keeps the structure of CSS to navigate and change the tree. */
@@ -95,7 +95,7 @@ const parse = (() => {
   return (css: string) => {
     const levels = new Levels()
     const names: string[] = [] // selector names, class names.
-    return compose(
+    return (compose as any)(
       () => levels.out,
       forEach((line: string) => {
         line = line.trim()
@@ -117,7 +117,7 @@ const parse = (() => {
         return brace
       }),
       escape,
-      replace(commentRE, '')
+      replace(commentRE, ''),
     )(css)
   }
 })()
