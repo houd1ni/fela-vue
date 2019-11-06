@@ -1,6 +1,7 @@
 import {
-  replace, when, isNil, complement, map, length, both, isEmpty
+  replace, when, isNil, complement, map, length, both, isEmpty, compose, equals, type
 } from 'ramda'
+import { AnyObject } from './types'
 
 export const camelify = (str: string) => str.replace(/-(\w)/gu, (_s, l) => l.toUpperCase())
 export const memoize = (fn: Function) => {
@@ -48,3 +49,20 @@ export const valuable = both(
   complement(isEmpty),
   complement(isNil)
 )
+export const join = (strings: string[], values: any[]) =>
+  strings.reduce((accum, str, i) =>
+    accum + str + values[i]
+  , '')
+
+export const isObject = compose(equals('Object'), type)
+
+export const deepMerge = (o1: AnyObject, o2: AnyObject): AnyObject => {
+  for(let k in o2) {
+    if(isObject(o1[k]) && isObject(o2[k])) {
+      deepMerge(o1[k], o2[k])
+    } else {
+      o1[k] = o2[k]
+    }
+  }
+  return o1
+}

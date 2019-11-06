@@ -41,7 +41,10 @@ test('lit-css', (t) => {
             '& .two': {
               margin: 5
             }
-          }
+          },
+          // ':after': {
+          //   alignItems: 'center'
+          // }
         }
       }
       const rule = () => css`
@@ -76,6 +79,9 @@ test('lit-css', (t) => {
           color yellow
           background url("data:image/gif;base64,R0lGO")
         }
+        // .cls:after {
+        //   align-items: center;
+        // }
       `
 
       ff(t.deepEqual(rule(), obj))

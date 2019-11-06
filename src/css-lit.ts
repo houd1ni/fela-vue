@@ -1,49 +1,6 @@
-import { AnyObject } from './types'
-import { camelify, splitNonEscaped, escape, unescape, valuable } from './utils'
-import { compose, replace, forEach, last, when, tap } from 'ramda'
-
-const join = (strings: string[], values: any[]) =>
-  strings.reduce((accum, str, i) =>
-    accum + str + values[i]
-  , '')
-
-/** Keeps the structure of CSS to navigate and change the tree. */
-class Levels {
-  private o: AnyObject = {}
-  private path: AnyObject[][] = []
-  public get out() {
-    return this.o
-  }
-  public get depth() {
-    return this.path.length
-  }
-  add(keys: string[]) {
-    const curs = last(this.path)
-    const newCurs = []
-    for(const k of keys) {
-      for(const cur of curs) {
-        if(!cur[k]) {
-          cur[k] = {}
-        }
-        newCurs.push(cur[k])
-      }
-    }
-    this.path.push(newCurs)
-  }
-  merge(k: string, v: any) {
-    if(valuable(v) && valuable(k)) {
-      for(const o of last(this.path)) {
-        o[k] = v
-      }
-    }
-  }
-  pop() {
-    return this.path.pop()
-  }
-  constructor() {
-    this.path.push([ this.o ])
-  }
-}
+import { camelify, splitNonEscaped, escape, unescape, join } from './utils'
+import { compose, replace, forEach, when } from 'ramda'
+import { Levels } from './classes/Levels'
 
 const analyseLine = (() => {
   const ruleRE = /^([\w-]+)(: *| +)(.*)$/
@@ -74,15 +31,9 @@ const analyseLine = (() => {
         break
       case (groups = selectorRE.exec(line)) != null:
         names.splice(0)
-        names.push(...line.split(delimRE).map((selector) => {
-          selector = selector.replace(trailingColonRE, '$1')
-          if(selector[0] == '.') {
-            selector = levels.depth > 1
-              ? '& ' + selector
-              : selector.slice(1)
-          }
-          return selector
-        }))
+        names.push(...line.split(delimRE).map((selector) =>
+          selector.replace(trailingColonRE, '$1')
+        ))
         break
     }
   }
