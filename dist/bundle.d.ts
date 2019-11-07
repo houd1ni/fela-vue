@@ -20,8 +20,8 @@ export declare const css: (strings: string[] | TemplateStringsArray, ...values: 
 export declare class Renderer {
 	private renderer;
 	private _mixin;
-	readonly mixin: AnyObject;
-	readonly style: string;
+	get mixin(): AnyObject;
+	get style(): string;
 	constructor(opts?: Partial<Options>);
 }
 
