@@ -42,18 +42,16 @@ test('lit-css', (t) => {
               margin: 5
             }
           },
-          '&:before': {
+          ':before': {
             content: '\'\'',
             position: 'absolute',
             borderWidth: 0
           },
-          '&:after': {
+          ':after': {
             content: '\'\'',
-            display: 'block'
+            display: 'block',
+            alignItems: 'center'
           }
-          // ':after': {
-          //   alignItems: 'center'
-          // }
         }
       }
       const rule = () => css`
@@ -89,19 +87,19 @@ test('lit-css', (t) => {
           background url("data:image/gif;base64,R0lGO")
         }
         .cls {
-          &:before {
+          :before {
             content: '';
             position: absolute;
             border-width: 0;
           }
-          &:after {
+          :after {
             content: '';
             display: block;
           }
         }
-        // .cls:after {
-        //   align-items: center;
-        // }
+        .cls:after {
+         align-items: center;
+        }
       `
 
       ff(t.deepEqual(rule(), obj))
