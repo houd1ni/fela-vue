@@ -42,6 +42,15 @@ test('lit-css', (t) => {
               margin: 5
             }
           },
+          '&:before': {
+            content: '\'\'',
+            position: 'absolute',
+            borderWidth: 0
+          },
+          '&:after': {
+            content: '\'\'',
+            display: 'block'
+          }
           // ':after': {
           //   alignItems: 'center'
           // }
@@ -78,6 +87,17 @@ test('lit-css', (t) => {
           margin ${null};  // Should omit.
           color yellow
           background url("data:image/gif;base64,R0lGO")
+        }
+        .cls {
+          &:before {
+            content: '';
+            position: absolute;
+            border-width: 0;
+          }
+          &:after {
+            content: '';
+            display: block;
+          }
         }
         // .cls:after {
         //   align-items: center;
