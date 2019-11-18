@@ -42,9 +42,16 @@ test('lit-css', (t) => {
               margin: 5
             }
           },
-          // ':after': {
-          //   alignItems: 'center'
-          // }
+          ':before': {
+            content: '\'\'',
+            position: 'absolute',
+            borderWidth: 0
+          },
+          ':after': {
+            content: '\'\'',
+            display: 'block',
+            alignItems: 'center'
+          }
         }
       }
       const rule = () => css`
@@ -79,9 +86,20 @@ test('lit-css', (t) => {
           color yellow
           background url("data:image/gif;base64,R0lGO")
         }
-        // .cls:after {
-        //   align-items: center;
-        // }
+        .cls {
+          :before {
+            content: '';
+            position: absolute;
+            border-width: 0;
+          }
+          :after {
+            content: '';
+            display: block;
+          }
+        }
+        .cls:after {
+         align-items: center;
+        }
       `
 
       ff(t.deepEqual(rule(), obj))
