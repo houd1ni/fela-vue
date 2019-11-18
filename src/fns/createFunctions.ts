@@ -12,19 +12,20 @@ export const createFunctions = (lines: string[]) => {
         case '{': balance++; break
         case '}':
           if(--balance==1) {
+            const gen = new Function(
+              '_css,$',
+              `return _css\`
+                ${accum.join('\n')
+                  .replace(
+                    /\[(.*?)\]/g,
+                    (_, expr) => '${' + expr.replace(/\b([a-zA-Z]+)\b/g, '$$.$1') + '}'
+                  )
+                }
+              \``
+            ) as StyleGenerator
             out.push([
               selector,
-              new Function(
-                '$',
-                `return _css\`
-                  ${accum.join('\n')
-                    .replace(
-                      /\[(.*?)\]/g,
-                      (_, expr) => '${' + expr.replace(/\b([a-zA-Z]+)\b/g, '$$.$1') + '}'
-                    )
-                  }
-                \``
-              ) as StyleGenerator
+              ($) => gen(_css, $)
             ])
             balance = 0
             accum.splice(0)

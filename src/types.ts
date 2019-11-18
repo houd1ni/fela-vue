@@ -16,4 +16,4 @@ export interface Options {
   ssr: boolean
 }
 
-export type StyleGenerator = ($: AnyObject) => AnyObject
+export type StyleGenerator = (css: Function, $: AnyObject) => AnyObject
