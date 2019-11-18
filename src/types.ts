@@ -15,3 +15,5 @@ export interface Options {
   enhancers: TEnhancer[]
   ssr: boolean
 }
+
+export type StyleGenerator = ($: AnyObject) => AnyObject
