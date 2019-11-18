@@ -1,4 +1,6 @@
 import { StyleGenerator } from '../types'
+// NEEDED in Function constructor below !
+import { css as _css } from '../main'
 
 export const createFunctions = (lines: string[]) => {
   const out: (string|[string, StyleGenerator])[] = []
@@ -14,7 +16,7 @@ export const createFunctions = (lines: string[]) => {
               selector,
               new Function(
                 '$',
-                `return css\`
+                `return _css\`
                   ${accum.join('\n')
                     .replace(
                       /\[(.*?)\]/g,
