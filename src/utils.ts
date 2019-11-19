@@ -50,8 +50,8 @@ export const valuable = both(
   complement(isNil)
 )
 export const join = (strings: string[], values: any[]) =>
-  strings.reduce((accum, str, i) =>
-    accum + str + (values.length<i ? values[i] : '')
+  strings.reduce((accum, str, i) => 
+    accum + str + (values.length>i ? values[i] : '')
   , '')
 
 export const isObject = compose(equals('Object'), type)
