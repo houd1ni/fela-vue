@@ -1,5 +1,6 @@
 import {
-  replace, when, isNil, complement, map, length, both, isEmpty, compose, equals, type
+  replace, when, isNil, complement, map, length, both,
+  isEmpty, compose, equals, type
 } from 'ramda'
 import { AnyObject } from './types'
 
