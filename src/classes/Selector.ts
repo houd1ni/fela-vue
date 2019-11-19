@@ -16,7 +16,7 @@ export class Selector {
     return (className ? `.${className}` : '') + (modifier||'')
   }
   constructor(selector: string) {
-    const cls = selector.match(/^\.[\w-_]+$/)
+    const cls = selector.match(/^\.[\w-_]+/)
     this.s = {
       className: cls ? cls[0].slice(1) : null,
       modifier: cls ? selector.slice(cls[0].length)||null : selector

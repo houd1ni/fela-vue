@@ -43,7 +43,7 @@ const injectExpressions = (line: string) => {
     for(let [from, to] of findEntries(['[', ']'], line)) {
       accum.push(
         line.slice(lastI, from),
-        '${' + line.slice(from+1, to).replace(/\b([a-zA-Z]+)\b/g, '$$.$1') + '}'
+        '${' + line.slice(from+1, to).replace(/\$([a-zA-Z_]+)\b/g, '$$.$1') + '}'
       )
       lastI = to+1
     }
