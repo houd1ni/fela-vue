@@ -51,7 +51,7 @@ export const valuable = both(
 )
 export const join = (strings: string[], values: any[]) =>
   strings.reduce((accum, str, i) =>
-    accum + str + values[i]
+    accum + str + (values.length<i ? values[i] : '')
   , '')
 
 export const isObject = compose(equals('Object'), type)

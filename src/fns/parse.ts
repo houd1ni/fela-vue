@@ -1,6 +1,6 @@
 
 import { splitNonEscaped, escape } from '../utils'
-import { compose, replace, forEach, type } from 'ramda'
+import { compose, replace, forEach, type, tap } from 'ramda'
 import { Levels } from '../classes/Levels'
 import { analyseLine } from './analyseLine'
 import { createFunctions } from './createFunctions'
@@ -40,7 +40,7 @@ export const parse = (() => {
         return brace
       }),
       escape,
-      replace(commentRE, ''),
+      replace(commentRE, '')
     )(css)
   }
 })()
