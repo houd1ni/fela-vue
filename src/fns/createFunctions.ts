@@ -1,6 +1,6 @@
 import { StyleGenerator } from '../types'
 import { css } from '../main'
-import { curry, map, compose, join } from 'ramda'
+import { curry, map, compose, join, last } from 'ramda'
 
 const errorString = 'fela-vue literal: unbalanced delimeter in functional expression !'
 
@@ -38,17 +38,17 @@ const findEntries = curry((
 })
 
 const injectExpressions = (line: string) => {
-    const accum: string[] = []
-    let lastI = 0
-    for(let [from, to] of findEntries(['[', ']'], line)) {
-      accum.push(
-        line.slice(lastI, from),
-        '${' + line.slice(from+1, to).replace(/\$([a-zA-Z_]+)\b/g, '$$.$1') + '}'
-      )
-      lastI = to+1
-    }
-    accum.push(line.slice(lastI))
-    return accum.join('')
+  const accum: string[] = []
+  let lastI = 0
+  for(let [from, to] of findEntries(['[', ']'], line)) {
+    accum.push(
+      line.slice(lastI, from),
+      '${' + line.slice(from+1, to).replace(/\$([a-zA-Z_]+)\b/g, '$$.$1') + '}'
+    )
+    lastI = to+1
+  }
+  accum.push(line.slice(lastI))
+  return accum.join('')
 }
 
 const intoExpression = compose(join('\n'), map(injectExpressions))
@@ -60,7 +60,10 @@ export const createFunctions = (lines: string[]) => {
   for(line of lines) {
     if(balance > 0) {
       switch(line) {
-        case '{': balance++; break
+        case '{':
+          balance++
+          accum[accum.length-1] += line
+          break
         case '}':
           if(--balance==1) {
             const gen = new Function(
@@ -75,6 +78,8 @@ export const createFunctions = (lines: string[]) => {
             ])
             balance = 0
             accum.splice(0)
+          } else {
+            accum[accum.length-1] += line
           }
           break
         default:
