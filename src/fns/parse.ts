@@ -1,6 +1,9 @@
 
 import { splitNonEscaped, escape } from '../utils'
-import { compose, replace, forEach, type, tap } from 'ramda'
+import {
+  compose, replace, forEach, type, map, trim,
+  complement, isEmpty, filter
+} from 'ramda'
 import { Levels } from '../classes/Levels'
 import { analyseLine } from './analyseLine'
 import { createFunctions } from './createFunctions'
@@ -19,9 +22,8 @@ export const parse = (() => {
         if(type(line) == 'Array') {
           levels.merge(line[0], line[1])
         } else {
-          line = (line as string).trim()
           if(line) {
-            analyseLine(levels, line, names)
+            analyseLine(levels, line as string, names)
           }
           if(levels.depth < 1) {
             throw new Error('lit-css parse error: unbalanced {} braces !')
@@ -29,6 +31,8 @@ export const parse = (() => {
         }
       }),
       createFunctions,
+      filter(complement(isEmpty) as any),
+      map(trim),
       splitNonEscaped(delimiters),
       replace(/(\{|\})/g, (_, brace, offset, full) => {
         if(!isDelimiter(full[offset-1])) {
