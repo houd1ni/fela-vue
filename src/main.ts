@@ -132,7 +132,7 @@ class Renderer {
             combineRules(...getRules(
               memoize(() => fdefValue ? fdefValue(this): emptyObject),
               this.style,
-              propsOrRule
+              (props: AnyObject) => propsOrRule.call(this, props)
             )),
             props
           ) || undefined

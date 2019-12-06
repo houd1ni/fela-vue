@@ -74,7 +74,7 @@ export const createFunctions = (lines: string[]) => {
             ) as StyleGenerator
             out.push([
               selector,
-              ($) => gen(css, $)
+              ($, t) => gen.call(t, css, $)
             ])
             balance = 0
             accum.splice(0)
