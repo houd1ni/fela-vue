@@ -4,6 +4,8 @@ import {
 } from 'ramda'
 import { AnyObject } from './types'
 
+export const emptyObject = Object.freeze({})
+export const types = Object.freeze({ f: 'function', o: 'object', s: 'string' })
 export const camelify = (str: string) => str.replace(/-(\w)/gu, (_s, l) => l.toUpperCase())
 export const memoize = (fn: Function) => {
   let cache: any
@@ -67,3 +69,11 @@ export const deepMerge = (o1: AnyObject, o2: AnyObject): AnyObject => {
   }
   return o1
 }
+
+export const isBrowser = (() => {
+  try {
+    return isObject(window)
+  } catch {
+    return false
+  }
+})()
