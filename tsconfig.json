@@ -4,7 +4,7 @@
       "dom",
       "esnext"
     ],
-    "target":"es5",
+    "target": "esnext",
     "module": "commonjs",
     "allowJs": false,
     "sourceMap": true,
