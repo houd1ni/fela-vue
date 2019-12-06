@@ -43,7 +43,11 @@ const injectExpressions = (line: string) => {
   for(let [from, to] of findEntries(['[', ']'], line)) {
     accum.push(
       line.slice(lastI, from),
-      '${' + line.slice(from+1, to).replace(/\$([a-zA-Z_]+)\b/g, '$$.$1') + '}'
+      `\${${line
+        .slice(from+1, to)
+        .replace(/(\W|^)\$([a-zA-Z_]+)\b/g, '$1$$ps.$2')
+        .replace(/(\W|^)@(.+?)\b/g, '$1$t.$2')
+      }}`
     )
     lastI = to+1
   }
@@ -67,14 +71,14 @@ export const createFunctions = (lines: string[]) => {
         case '}':
           if(--balance==1) {
             const gen = new Function(
-              '_css,$',
-              `return _css\`
+              '$t,css,$ps',
+              `return css\`
                 ${intoExpression(accum)}
               \``
             ) as StyleGenerator
             out.push([
               selector,
-              ($, t) => gen.call(t, css, $)
+              (props, t) => gen(t, css, props)
             ])
             balance = 0
             accum.splice(0)
