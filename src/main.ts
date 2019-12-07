@@ -4,7 +4,7 @@ import embedded from 'fela-plugin-embedded'
 import prefixer from 'fela-plugin-prefixer'
 import fallback from 'fela-plugin-fallback-value'
 import unit from 'fela-plugin-unit'
-import { clearEmpty } from 'lafetch'
+import { filter, identity } from 'pepka'
 import { AnyObject, Options } from './types'
 import getRules from './fns/getRules'
 import { memoize, types, isBrowser, emptyObject } from './utils'
@@ -76,7 +76,7 @@ class Renderer {
     }
 
     // Mixin creation.
-    this._mixin = clearEmpty({
+    this._mixin = filter(identity,{
       methods: {
         [method](propsOrRule: any, props: AnyObject = {}): string {
           return renderer.renderRule(

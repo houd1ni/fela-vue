@@ -1,6 +1,6 @@
-import { AnyObject } from "lafetch"
 import { camelify, emptyObject, types } from "../utils"
-import { always, identity } from "ramda"
+import { always, identity } from "pepka"
+import { AnyObject } from "../types"
 
 const pickStyle = (style: AnyObject, name: string) => {
   return style[name] || style[camelify(name)]

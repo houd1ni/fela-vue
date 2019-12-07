@@ -3,7 +3,7 @@ import { splitNonEscaped, escape } from '../utils'
 import {
   compose, replace, forEach, type, map, trim,
   complement, isEmpty, filter
-} from 'ramda'
+} from 'pepka'
 import { Levels } from '../classes/Levels'
 import { analyseLine } from './analyseLine'
 import { createFunctions } from './createFunctions'

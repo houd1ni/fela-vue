@@ -1,7 +1,7 @@
 import { Selector } from './Selector'
 import { deepMerge, valuable } from '../utils'
 import { AnyObject } from '../types'
-import { last } from 'ramda'
+import { last } from 'pepka'
 
 const extractRules = (s: Selector, depth=0): AnyObject => {
   const o: AnyObject = {}

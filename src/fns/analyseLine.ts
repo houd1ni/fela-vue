@@ -1,5 +1,5 @@
 import { camelify, unescape } from '../utils'
-import { when } from 'ramda'
+import { when } from 'pepka'
 import { Levels } from '../classes/Levels'
 
 export const analyseLine = (() => {

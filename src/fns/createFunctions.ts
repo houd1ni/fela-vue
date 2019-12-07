@@ -1,6 +1,6 @@
 import { StyleGenerator } from '../types'
 import { css } from '../main'
-import { curry, map, compose, join, last } from 'ramda'
+import { curry, map, compose, join } from 'pepka'
 
 const errorString = 'fela-vue literal: unbalanced delimeter in functional expression !'
 

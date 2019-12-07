@@ -98,11 +98,11 @@ test('lit-css', (t) => {
           }
         }
         .cls:after {
-         align-items: center;
+          align-items: center;
         }
       `
 
-      ff(t.deepEqual(rule(), obj))
+      ff(t.deepEqual(obj, rule()))
     } catch(e) {
       ff(t.fail(e))
     }

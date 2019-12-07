@@ -1,7 +1,7 @@
 import {
   replace, when, isNil, complement, map, length, both,
   isEmpty, compose, equals, type
-} from 'ramda'
+} from 'pepka'
 import { AnyObject } from './types'
 
 export const emptyObject = Object.freeze({})
