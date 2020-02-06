@@ -23,7 +23,9 @@ Included as deps:
 [More about plugins.](https://fela.js.org/docs/advanced/Plugins.html) Several basic are already built in here!
 
 [More about enhancers.](https://fela.js.org/docs/advanced/Enhancers.html)
-[I suggest to look at this one first.](https://github.com/rofrischmann/fela/tree/master/packages/fela-monolithic)
+[I suggest to look at this one first to have nice-looking classes during development.](https://github.com/rofrischmann/fela/tree/master/packages/fela-monolithic)
+
+[Usage with literal css (lit-css) from this package](https://github.com/houd1ni/fela-vue/blob/master/docs/literal.md)
 
 *In the options object below you can also add [other Renderer options](https://fela.js.org/docs/advanced/RendererConfiguration.html)*
 

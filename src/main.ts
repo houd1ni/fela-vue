@@ -4,12 +4,27 @@ import embedded from 'fela-plugin-embedded'
 import prefixer from 'fela-plugin-prefixer'
 import fallback from 'fela-plugin-fallback-value'
 import unit from 'fela-plugin-unit'
-import { filter, identity } from 'pepka'
+import { filter, identity, compose, toPairs, type, fromPairs, map } from 'pepka'
 import { AnyObject, Options } from './types'
 import getRules from './fns/getRules'
 import { memoize, types, isBrowser, emptyObject } from './utils'
 
-const defaultOpts = {
+const mergeProps = (
+  defaults: Partial<Options>,
+  opts: Partial<Options> = {}
+) => compose(
+  fromPairs,
+  map(([k, v]) => {
+    switch(type(v)) {
+      case 'Array': return [k, [...v, ...(opts[k] || [])]]
+      case 'Object': return [k, {...v, ...(opts[k] || {})}]
+      default: return [k, opts[k] || v]
+    }
+  }),
+  toPairs
+)(defaults)
+
+const defaultOpts: Options = {
   method: 'f',
   defStyles: undefined,
   plugins: [],
@@ -35,7 +50,7 @@ class Renderer {
       plugins,
       enhancers,
       ...miscRenderOpts
-    } = { ...defaultOpts, ...opts }
+    } = mergeProps(defaultOpts, opts)
     const presetConfig = { ...defaultOpts.preset, ...(preset || {}) }
 
     if((opts as any).fdef) {
@@ -76,7 +91,7 @@ class Renderer {
     }
 
     // Mixin creation.
-    this._mixin = filter(identity,{
+    this._mixin = filter(identity, {
       methods: {
         [method](propsOrRule: any, props: AnyObject = {}): string {
           return renderer.renderRule(
@@ -90,11 +105,11 @@ class Renderer {
           ) || undefined
         }
       },
-      computed: fdef ? {
+      computed: fdef && {
         [fdefKey]() {
           return fdefValue(this)
         }
-      } : ''
+      }
     })
   }
 }

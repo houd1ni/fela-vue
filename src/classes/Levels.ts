@@ -10,19 +10,21 @@ const extractRules = (s: Selector, depth=0): AnyObject => {
   for(k in s.rules) {
     tmp = s.rules[k]
     if(tmp instanceof Selector) {
-      full = tmp.complex ? tmp.s.className : tmp.serialize()
-      key = (depth==0 && full[0]=='.')
-        ? full.slice(1)
-        : full[0]=='.' ? `& ${full}` : full
+      full = tmp.serialize()
+      key = (depth!=0 && full[0]=='.') ? `& ${full}` : full
       newRules = tmp.complex
         ? { [tmp.s.modifier]: extractRules(tmp, depth+1) }
         : extractRules(tmp, depth+1)
+      console.log('Setting newRules.className', {key, newRules})
+      newRules.className = key
       if(o[key]) {
         deepMerge(o[key], newRules)
       } else {
         o[key] = newRules
       }
     } else {
+      console.log('Setting o.className', {tmp, o})
+      o.className = tmp
       o[k] = tmp
     }
   }

@@ -87,6 +87,8 @@ const extractRules = (s, depth = 0) => {
             newRules = tmp.complex
                 ? { [tmp.s.modifier]: extractRules(tmp, depth + 1) }
                 : extractRules(tmp, depth + 1);
+            console.log('Setting newRules.className', { key, newRules });
+            newRules.className = key;
             if (o[key]) {
                 deepMerge(o[key], newRules);
             }
@@ -95,6 +97,8 @@ const extractRules = (s, depth = 0) => {
             }
         }
         else {
+            console.log('Setting o.className', { tmp, o });
+            o.className = tmp;
             o[k] = tmp;
         }
     }
@@ -2322,6 +2326,13 @@ const getRules = (getDefStyle, style, propsOrRule, context) => {
     }
 };
 
+const mergeProps = (defaults, opts = {}) => a(N, m(([k, v]) => {
+    switch (C(v)) {
+        case 'Array': return [k, [...v, ...(opts[k] || [])]];
+        case 'Object': return [k, { ...v, ...(opts[k] || {}) }];
+        default: return [k, opts[k] || v];
+    }
+}), p)(defaults);
 const defaultOpts = {
     method: 'f',
     defStyles: undefined,
@@ -2332,7 +2343,7 @@ const defaultOpts = {
 };
 class Renderer {
     constructor(opts = {}) {
-        const { method, ssr, preset, plugins, enhancers, ...miscRenderOpts } = { ...defaultOpts, ...opts };
+        const { method, ssr, preset, plugins, enhancers, ...miscRenderOpts } = mergeProps(defaultOpts, opts);
         const presetConfig = { ...defaultOpts.preset, ...(preset || {}) };
         if (opts.fdef) {
             throw new Error('fela-vue: Change deprecated `fdef` to `defStyles`!');
