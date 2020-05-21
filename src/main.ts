@@ -96,7 +96,7 @@ class Renderer {
         [method](propsOrRule: any, props: AnyObject = {}): string {
           return renderer.renderRule(
             combineRules(...getRules(
-              memoize(() => fdefValue ? fdefValue(this): emptyObject),
+              memoize(() => fdefValue ? fdefValue(this) : emptyObject),
               this.style,
               propsOrRule,
               this
@@ -115,6 +115,7 @@ class Renderer {
 }
 
 export * from './css-lit'
+export * from './svelte'
 export {
   Renderer
 }
