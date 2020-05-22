@@ -1,6 +1,6 @@
 import {
   replace, when, isNil, complement, map, length, both,
-  isEmpty, compose, equals, type
+  isEmpty, compose, equals, type, AnyFunc
 } from 'pepka'
 import { AnyObject } from './types'
 
@@ -58,6 +58,7 @@ export const join = (strings: string[], values: any[]) =>
   , '')
 
 export const isObject = compose(equals('Object'), type)
+export const isWindow = compose(equals('Window'), type)
 
 export const deepMerge = (o1: AnyObject, o2: AnyObject): AnyObject => {
   for(let k in o2) {
@@ -70,9 +71,18 @@ export const deepMerge = (o1: AnyObject, o2: AnyObject): AnyObject => {
   return o1
 }
 
+export const tryNamedFn = (rule: AnyFunc, name: string, useNamed: boolean) => {
+  if(useNamed && name && name!=='anonymous') {
+    const tmpObj = {
+      [name]: (props?: any, renderer?: any) => rule(props, renderer)
+    }
+    return tmpObj[name]
+  } else return rule
+}
+
 export const isBrowser = (() => {
   try {
-    return isObject(window)
+    return isWindow(window)
   } catch {
     return false
   }
