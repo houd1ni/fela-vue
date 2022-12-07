@@ -1,8 +1,9 @@
-import commonjs from 'rollup-plugin-commonjs'
-import resolve from 'rollup-plugin-node-resolve'
-import typescript from 'rollup-plugin-typescript2'
-import { terser } from 'rollup-plugin-terser'
-import replace from 'rollup-plugin-replace'
+import commonjs from '@rollup/plugin-commonjs'
+import resolve from '@rollup/plugin-node-resolve'
+import terser from '@rollup/plugin-terser'
+import replace from '@rollup/plugin-replace'
+import typescript from 'typescript'
+import typescript2 from 'rollup-plugin-typescript2'
 
 export default {
   input: process.env.NODE_ENV=='development' ? 'test/in-browser.ts' : 'src/main.ts',
@@ -18,13 +19,13 @@ export default {
     'fela-plugin-prefixer',
     'fela-plugin-fallback-value',
     'fela-plugin-unit',
-    'ramda'
+    'pepka'
   ],
   plugins: [
     resolve(),
     commonjs(),
-    typescript({
-      typescript: require("typescript"),
+    typescript2({
+      typescript,
       tsconfig: "./tsconfig.json",
       tsconfigOverride: {
         compilerOptions: {
@@ -36,7 +37,10 @@ export default {
     }),
     process.env.NODE_ENV!='development' && terser(),
     replace({
-      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+      preventAssignment: true,
+      values: {
+        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+      }
     })
   ]
 }

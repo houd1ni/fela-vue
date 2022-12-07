@@ -10,22 +10,12 @@
   "description": "Fela mixin for Vue designed for flexibility yet team-oriented.",
   "homepage": "https://houd1ni.github.io/fela-vue/",
   "keywords": [
-    "vue",
-    "vuejs",
-    "fela",
-    "css-in-js",
-    "css",
-    "styles",
-    "styling",
-    "easy",
-    "fp",
-    "functional",
-    "structure",
-    "strongly-typed",
-    "typescript",
-    "d.ts"
+    "vue", "vuejs", "fela", "css-in-js", "css", "styles",
+    "styling", "easy", "fp", "functional", "structure",
+    "strongly-typed", "typescript", "d.ts"
   ],
   "license": "MIT",
+  "type": "module",
   "main": "dist/bundle.js",
   "module": "dist/bundle.esm.js",
   "name": "fela-vue",
@@ -44,21 +34,15 @@
     "prod:es": "cross-env NODE_ENV=production BUILD=es rollup -c",
     "prod": "npm run gentypes && npm run prod:es && npm run prod:cjs"
   },
-  "version": "2.6.0beta.44",
+  "version": "2.6.0beta.46",
   "ava": {
     "files": [
       "./test/specs/*.ts"
     ],
-    "serial": false,
     "failFast": true,
     "timeout": "2m",
-    "compileEnhancements": false,
-    "extensions": [
-      "ts"
-    ],
-    "require": [
-      "ts-node/register"
-    ]
+    "extensions": [ "ts" ],
+    "require": [ "ts-node/register" ]
   },
   "dependencies": {
     "fela": "*",
@@ -69,26 +53,26 @@
     "fela-plugin-prefixer": "*",
     "fela-plugin-unit": "*",
     "lafetch": "0.4.5",
-    "pepka": "0.9.5"
+    "pepka": "^0.13.0-beta11"
   },
   "devDependencies": {
-    "@types/node": "^14.0.5",
-    "ava": "^2.4.0",
-    "codecov": "^3.7.0",
-    "cross-env": "^7.0.2",
-    "dts-bundle-generator": "^4.3.0",
-    "fela-monolithic": "^11.3.0",
-    "nyc": "^15.0.1",
-    "rollup": "^2.10.7",
-    "rollup-plugin-commonjs": "^10.1.0",
-    "rollup-plugin-node-resolve": "^5.2.0",
-    "rollup-plugin-replace": "^2.2.0",
+    "@types/node": "^18.11.11",
+    "ava": "^5.1.0",
+    "codecov": "^3.8.2",
+    "cross-env": "^7.0.3",
+    "dts-bundle-generator": "^7.1.0",
+    "fela-monolithic": "^12.2.1",
+    "nyc": "^15.1.0",
+    "rollup": "^3.6.0",
+    "@rollup/plugin-commonjs": "^23.0.3",
+    "@rollup/plugin-node-resolve": "^15.0.1",
+    "@rollup/plugin-terser": "^0.1.0",
+    "@rollup/plugin-replace": "^5.0.1",
     "rollup-plugin-resolve-aliases": "^0.3.0",
-    "rollup-plugin-terser": "^5.3.0",
-    "rollup-plugin-typescript2": "^0.27.1",
-    "ts-node": "^8.10.1",
+    "rollup-plugin-typescript2": "^0.34.1",
+    "ts-node": "^10.9.1",
     "tslint": "^6.1.2",
-    "typescript": "^3.9.3"
+    "typescript": "^4.9.3"
   },
   "types": "./dist/bundle.d.ts",
   "sideEffects": false

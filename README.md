@@ -81,10 +81,19 @@ Vue.mixin( (new Renderer(options)).mixin )
 
 ## WITH SSR
 **`entry.server.js` is the same as `entry.client.js`**
-```javascript
+```typescript
 import Vue from 'vue'
-import { Renderer } from 'fela-vue'
+// Don't import type AnyObject in plain javascript.
+import { Renderer, AnyObject } from 'fela-vue'
 // OR const { Renderer } = require('fela-vue')
+
+// Only for typescript. Omit in vanilla JS.
+declare module '@vue/runtime-core' {
+  export interface ComponentCustomProperties {
+    f: (cls: string | AnyObject, ...ss: any[]) => string,
+    fdef: AnyObject
+  }
+}
 
 const renderer = new Renderer({
   ...options,

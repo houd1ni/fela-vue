@@ -13,7 +13,7 @@ export const memoize = (fn: Function) => {
   return () => cached ? cache : (cached = true, cache = fn())
 }
 export const splitNonEscaped = (delims: string[]) => (str: string): string[] => {
-  const delims_lns: number[] = map(length as any, delims)
+  const delims_lns: number[] = map(length as (d: string) => number, delims)
   const out: string[] = []
   let i: number, j: number,
       last_index = 0,
