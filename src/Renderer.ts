@@ -7,7 +7,7 @@ import unit from 'fela-plugin-unit'
 import { filter, identity, compose, toPairs, type, fromPairs, map } from 'pepka'
 import { AnyObject, Options } from './types'
 import getRules from './fns/getRules'
-import { memoize, types, isBrowser, emptyObject, tryNamedFn } from './utils'
+import { memoize, types, isBrowser, emptyObject, tryNamedFn, preparePlugins } from './utils'
 
 const mergeProps = (
   defaults: Partial<Options>,
@@ -63,13 +63,13 @@ export class Renderer {
     this.renderer = createRenderer({      
       ...miscRenderOpts,
       enhancers,
-      plugins: [
-        embedded(),
-        prefixer(),
-        fallback(),
-        unit(...presetConfig.unit),
+      plugins: preparePlugins([
+        unit,
+        embedded,
+        prefixer,
+        fallback,
         ...plugins
-      ]
+      ], {0: presetConfig.unit})
     })
     const { renderer } = this
 
@@ -83,7 +83,6 @@ export class Renderer {
       default: break
     }
 
-    console.log({isBrowser, ssr, renderer})
     // Fela mounting.
     if(isBrowser) {
       if(ssr) {

@@ -1,6 +1,6 @@
 import {
   replace, when, isNil, complement, map, length, both,
-  isEmpty, compose, equals, type, AnyFunc
+  isEmpty, compose, equals, type, AnyFunc, ifElse, identity, prop, toPairs, explore
 } from 'pepka'
 import { AnyObject } from './types'
 
@@ -87,3 +87,25 @@ export const isBrowser = (() => {
     return false
   }
 })()
+
+const tryUnwrap = map(ifElse(
+  compose(equals('Function'), type),
+  identity,
+  prop('default')
+))
+type PluginArgsMap = {[i: number]: any[]}
+const callWith = (
+  args: PluginArgsMap,
+  i: number,
+  fn: AnyFunc
+) => fn(...(args[i] || []))
+
+export const preparePlugins = (
+  plugins: (AnyFunc | {default: AnyFunc})[],
+  args: PluginArgsMap
+) =>
+  compose(
+    map(([i, p]) => callWith(args, i, p)),
+    toPairs,
+    tryUnwrap
+  )(plugins)

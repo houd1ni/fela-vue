@@ -23,7 +23,10 @@ export default {
   ],
   plugins: [
     resolve(),
-    commonjs(),
+    commonjs({
+      defaultIsModuleExports: false,
+      // include: 'node_modules/*.js'
+    }),
     typescript2({
       typescript,
       tsconfig: "./tsconfig.json",

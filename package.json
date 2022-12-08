@@ -16,8 +16,10 @@
   ],
   "license": "MIT",
   "type": "module",
-  "main": "dist/bundle.js",
-  "module": "dist/bundle.esm.js",
+  "exports": {
+    ".": "./dist/bundle.esm.js",
+    "./cjs": "./dist/bundle.js"
+  },
   "name": "fela-vue",
   "repository": {
     "type": "git",
@@ -25,7 +27,7 @@
   },
   "scripts": {
     "lint": "tslint src/*.ts",
-    "test": "npm run gentypes && npm run prod:cjs && ava",
+    "test": "npm run gentypes && npm run prod:es && ava",
     "test:report": "nyc npm test && nyc report --reporter=text-lcov > coverage.lcov && codecov",
     "test:lazy": "ava",
     "gentypes": "dts-bundle-generator -o dist/bundle.d.ts src/main.ts",
@@ -34,15 +36,16 @@
     "prod:es": "cross-env NODE_ENV=production BUILD=es rollup -c",
     "prod": "npm run gentypes && npm run prod:es && npm run prod:cjs"
   },
-  "version": "2.6.0beta.46",
+  "version": "2.6.0-beta.49",
   "ava": {
     "files": [
-      "./test/specs/*.ts"
+      "./test/specs/*.js"
     ],
     "failFast": true,
     "timeout": "2m",
-    "extensions": [ "ts" ],
-    "require": [ "ts-node/register" ]
+    "nodeArguments": [
+      "--experimental-specifier-resolution=node"
+    ]
   },
   "dependencies": {
     "fela": "*",
@@ -53,7 +56,7 @@
     "fela-plugin-prefixer": "*",
     "fela-plugin-unit": "*",
     "lafetch": "0.4.5",
-    "pepka": "^0.13.0-beta11"
+    "pepka": "^0.13.0-beta12"
   },
   "devDependencies": {
     "@types/node": "^18.11.11",
