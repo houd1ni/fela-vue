@@ -38,7 +38,7 @@ import { styl } from './styles'
 import { computed } from 'vue'
 
 // As in Options API, I recommend to use a User Snippet for this.
-const f = styl(computed(() => css`
+const f = computed(() => styl(css`
   .root {
     color cyan;
     text-decoration underline;
