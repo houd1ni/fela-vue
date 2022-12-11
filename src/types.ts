@@ -17,3 +17,4 @@ export interface Options {
 }
 
 export type StyleGenerator = (t: AnyObject, css: Function, $: AnyObject) => AnyObject
+export type RenderClasses = (propsOrRule: any, props?: AnyObject) => string

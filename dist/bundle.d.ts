@@ -24,12 +24,18 @@ export interface Options {
 	enhancers: TEnhancer[];
 	ssr: boolean;
 }
+export type RenderClasses = (propsOrRule: any, props?: AnyObject) => string;
 export declare class Renderer {
 	/** To use with fela-monolithic enhancer. */
 	static devClassNames: boolean;
 	private renderer;
 	private _mixin;
+	private renderClasses;
+	/** Vue Composition API endpoint. */
+	styl: (stylesheet: AnyObject) => RenderClasses;
+	/** @returns Vue Options API mixin. */
 	get mixin(): AnyObject;
+	/** @returns Entire css for SSR proposes. */
 	get style(): string;
 	constructor(opts?: Partial<Options>);
 }

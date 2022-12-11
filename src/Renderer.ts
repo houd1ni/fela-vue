@@ -4,8 +4,8 @@ import embedded from 'fela-plugin-embedded'
 import prefixer from 'fela-plugin-prefixer'
 import fallback from 'fela-plugin-fallback-value'
 import unit from 'fela-plugin-unit'
-import { filter, identity, compose, toPairs, type, fromPairs, map } from 'pepka'
-import { AnyObject, Options } from './types'
+import { filter, identity, compose, toPairs, type, fromPairs, map, AnyFunc } from 'pepka'
+import { AnyObject, RenderClasses, Options } from './types'
 import getRules from './fns/getRules'
 import { memoize, types, isBrowser, emptyObject, tryNamedFn, preparePlugins } from './utils'
 
@@ -33,17 +33,27 @@ const defaultOpts: Options = {
   ssr: false
 }
 
+
 export class Renderer {
   /** To use with fela-monolithic enhancer. */
   static devClassNames = false
   private renderer: IRenderer
   private _mixin: AnyObject
+  private renderClasses: RenderClasses
+
+  /** Vue Composition API endpoint. */
+  public styl: (stylesheet: AnyObject) => RenderClasses
+
+  /** @returns Vue Options API mixin. */
   public get mixin(): AnyObject {
     return Object.freeze(this._mixin)
   }
+
+  /** @returns Entire css for SSR proposes. */
   public get style(): string {
     return renderToMarkup(this.renderer)
   }
+
   constructor(opts: Partial<Options> = {}) {
     const {
       method,
@@ -54,6 +64,7 @@ export class Renderer {
       ...miscRenderOpts
     } = mergeProps(defaultOpts, opts)
     const presetConfig = { ...defaultOpts.preset, ...(preset || {}) }
+    const thisRenderer = this
 
     if((opts as any).fdef) {
       throw new Error('fela-vue: Change deprecated `fdef` to `defStyles`!')
@@ -84,33 +95,43 @@ export class Renderer {
     }
 
     // Fela mounting.
-    if(isBrowser) {
-      if(ssr) {
-        rehydrate(renderer)
-      } else {
-        render(renderer)
-      }
+    if(isBrowser)
+      if(ssr) rehydrate(renderer)
+      else render(renderer)
+
+    this.renderClasses = function(
+      stylesheet: AnyObject,
+      propsOrRule: any,
+      props: AnyObject = {}
+    ): string {
+      const [name, rules] = getRules(
+        memoize(() => fdefValue ? fdefValue(this) : emptyObject),
+        stylesheet,
+        propsOrRule,
+        this
+      )
+      return renderer.renderRule(
+        tryNamedFn(
+          combineRules(...rules),
+          name,
+          Renderer.devClassNames
+        ),
+        props
+      ) || undefined
     }
+
+    // Should be bound to Renderer.
+    this.styl = (stylesheet: AnyObject): RenderClasses =>
+      (...args: any[]) => this.renderClasses(stylesheet, ...args)
 
     // Mixin creation.
     this._mixin = filter(identity, {
       methods: {
-        [method](propsOrRule: any, props: AnyObject = {}): string {
-          const [name, rules] = getRules(
-            memoize(() => fdefValue ? fdefValue(this) : emptyObject),
-            this.style,
-            propsOrRule,
-            this
-          )
-          return renderer.renderRule(
-            tryNamedFn(
-              combineRules(...rules),
-              name,
-              Renderer.devClassNames
-            ),
-            props
-          ) || undefined
-        }
+        /** propsOrRule: any, props?: AnyObject */
+        [method]: function(...args: any[]) {
+          return thisRenderer.renderClasses
+            .call(this, this.style, ...args)
+        } as RenderClasses
       },
       computed: fdef && {
         [fdefKey]() {
