@@ -23,11 +23,17 @@ Included as deps:
 [More about plugins.](https://fela.js.org/docs/advanced/Plugins.html) Several basic are already built in here!
 
 [More about enhancers.](https://fela.js.org/docs/advanced/Enhancers.html)
-[I suggest to look at this one first to have nice-looking classes during development.](https://github.com/rofrischmann/fela/tree/master/packages/fela-monolithic)
-
-[Usage with literal css (lit-css) from this package](https://github.com/houd1ni/fela-vue/blob/master/docs/literal.md)
 
 *In the options object below you can also add [other Renderer options](https://fela.js.org/docs/advanced/RendererConfiguration.html)*
+
+*Detailed API Docs are in separate markdowns below*
+
+* [Usage with literal css (lit-css) helper from this package](https://github.com/houd1ni/fela-vue/blob/master/docs/literal.md)
+* [with typescript](https://github.com/houd1ni/fela-vue/blob/master/docs/typescript.md)
+* [with Vue Composition API](https://github.com/houd1ni/fela-vue/blob/master/docs/Composition-API.md)
+* [Server-Side Rendering (SSR) guide](https://github.com/houd1ni/fela-vue/blob/master/docs/SSR.md)
+* [How to make generated classes readable](https://github.com/houd1ni/fela-vue/blob/master/docs/readable.md)
+
 
 ```javascript
 // All of the options are optional.
@@ -60,6 +66,8 @@ const renderer = new Renderer(options)
 
 // Use globally
 Vue.mixin(renderer.mixin)
+// or createApp(App).mixin(stylesRenderer.mixin)
+
 // ... Or per module
 export default {
   mixins: [ renderer.mixin ],
@@ -70,40 +78,19 @@ export default {
 ## EXAMPLES
 ** same `options` object as above **
 
-## WITHOUT SSR
-**main.js**
 ```javascript
+// main.js
 import Vue from 'vue'
 import { Renderer } from 'fela-vue'
 
+// if Options API.
+// Vue 2:
 Vue.mixin( (new Renderer(options)).mixin )
+// Vue 3:
+// createApp(App)
+//   .mixin((new Renderer(options)).mixin)
+//   .mount('#app')
 ```
-
-## WITH SSR
-**`entry.server.js` is the same as `entry.client.js`**
-```typescript
-import Vue from 'vue'
-// Don't import type AnyObject in plain javascript.
-import { Renderer, AnyObject } from 'fela-vue'
-// OR const { Renderer } = require('fela-vue')
-
-// Only for typescript. Omit in vanilla JS.
-declare module '@vue/runtime-core' {
-  export interface ComponentCustomProperties {
-    f: (cls: string | AnyObject, ...ss: any[]) => string,
-    fdef: AnyObject
-  }
-}
-
-const renderer = new Renderer({
-  ...options,
-  // SSR status to `true`.
-  ssr: true
-})
-
-Vue.mixin(renderer.mixin)
-```
-**Then just put `renderer.style` into your template.**
 
 
 ## Component example
@@ -134,8 +121,9 @@ Vue.mixin(renderer.mixin)
 <script>
 // Uncomment to use literal css: css`...`
 // import { css } from 'fela-vue'
+import { defineComponent } from 'vue'
 
-export default {
+export default defineComponent({
   computed: {
     style() {
       // Or any other key in `options.defStyles.key`.
@@ -143,23 +131,15 @@ export default {
 
       // Also, it's OK to return one css`...` with all classes included.
       return {
-        one: {
-          color: 'green'
-        },
-        two: {
-          color: colors.cyan
-        },
+        one: { color: 'green' },
+        two: { color: colors.cyan },
         three: ({color}) => {
           fontWeight: 'bold',
           color
         },
-        bold: () => ({
-          fontWeight: 'bold'
-        }),
+        bold: () => ({ fontWeight: 'bold' }),
         // 'my-kebab' is also valid if the same in the template.
-        myKebab: {
-          color: 'purple'
-        },
+        myKebab: { color: 'purple' },
         anotherClass: css`
           background: grey
         `,
@@ -181,7 +161,7 @@ export default {
       }
     }
   }
-}
+})
 </script>
 ```
 
