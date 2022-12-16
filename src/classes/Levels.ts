@@ -1,8 +1,6 @@
-import { last } from 'pepka'
+import { last, AnyObject, qmergeDeep } from 'pepka'
 import { Selector } from './Selector'
-import { deepMerge, valuable } from '../utils'
-import { AnyObject } from '../types'
-import { Renderer } from '../Renderer'
+import { valuable } from '../utils'
 
 const extractRules = (s: Selector, depth=0): AnyObject => {
   const o: AnyObject = {}
@@ -10,7 +8,8 @@ const extractRules = (s: Selector, depth=0): AnyObject => {
       key: string, newRules: AnyObject, k: string
   for(k in s.rules) {
     tmp = s.rules[k]
-    if(tmp instanceof Selector) {
+    if(Selector.isSelector(tmp)) {
+      tmp = tmp as Selector // will get erased by minifier.
       full = tmp.complex ? tmp.s.className : tmp.serialize()
       key = (depth==0 && full[0]=='.')
         ? full.slice(1)
@@ -18,15 +17,9 @@ const extractRules = (s: Selector, depth=0): AnyObject => {
       newRules = tmp.complex
         ? { [tmp.s.modifier]: extractRules(tmp, depth+1) }
         : extractRules(tmp, depth+1)
-      if(o[key]) deepMerge(o[key], newRules)
-      else {
-        o[key] = newRules
-        // if(Renderer.devClassNames) newRules.className = tmp.s.className
-      }
-    } else {
-      o[k] = tmp
-      // if(Renderer.devClassNames) o.className = tmp
-    }
+      if(o[key]) qmergeDeep(o[key], newRules)
+      else o[key] = newRules
+    } else o[k] = tmp
   }
   return o
 }
@@ -40,7 +33,7 @@ export class Levels {
   public get depth() {
     return this.path.length
   }
-  add(selectors: string[]) {
+  public add(selectors: string[]) {
     const curSelectors = last(this.path)
     const newCurs: Selector[] = []
     for(const rawSel of selectors) {
@@ -56,12 +49,20 @@ export class Levels {
     }
     this.path.push(newCurs)
   }
-  merge(k: string, v: any) {
+  public merge(k: string, v: any) {
     if(valuable(v) && valuable(k)) {
       for(const o of last(this.path)) {
         o.rules[k] = v
       }
     }
+  }
+  public findClass(name: string): Selector | null {
+    for(const group of this.path)
+      for(const s of group) {
+        const res = s.findClass(name)
+        if(res) return res
+      }
+    return null
   }
   pop() {
     return this.path.pop()

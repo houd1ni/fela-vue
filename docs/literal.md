@@ -37,11 +37,32 @@ css`
 //      See correspondent options parameter.
 ```
 
+Use `...spread` operator with classes to share rules.
+Use when class names composition in f('class1 class2') decrease readability.
+
+```javascript
+import { css } from 'fela-vue'
+css`
+  .common1 {
+    display flex
+    color green
+  }
+  .common2 {
+    position relative
+  }
+  .cls {
+    ...common1
+    ...common2
+    color cyan // cyan is better.
+    background magenta // wow.
+  }
+`
+```
+
 Both `/* multi-line comments */` end `// one-line` are supported:
 
 ```javascript
 import { css } from 'fela-vue'
-const shouldMargin = false
 css`
   .cls {
     /* color red

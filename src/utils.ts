@@ -60,17 +60,6 @@ export const join = (strings: string[], values: any[]) =>
 export const isObject = compose(equals('Object'), type)
 export const isWindow = compose(equals('Window'), type)
 
-export const deepMerge = (o1: AnyObject, o2: AnyObject): AnyObject => {
-  for(let k in o2) {
-    if(isObject(o1[k]) && isObject(o2[k])) {
-      deepMerge(o1[k], o2[k])
-    } else {
-      o1[k] = o2[k]
-    }
-  }
-  return o1
-}
-
 export const tryNamedFn = (rule: AnyFunc, name: string, useNamed: boolean) => {
   if(useNamed && name && name!=='anonymous') {
     const tmpObj = {

@@ -16,18 +16,14 @@ export const parse = (() => {
   return (css: string) => {
     const levels = new Levels()
     const names: string[] = [] // selector names, class names.
-    return (compose as any)(
+    return compose(
       () => levels.out,
       forEach((line: string | [string, StyleGenerator]) => {
-        if(type(line) == 'Array') {
-          levels.merge(line[0], line[1])
-        } else {
-          if(line) {
-            analyseLine(levels, line as string, names)
-          }
-          if(levels.depth < 1) {
+        if(type(line) == 'Array') levels.merge(line[0], line[1])
+        else {
+          if(line) analyseLine(levels, line as string, names)
+          if(levels.depth < 1)
             throw new Error('lit-css parse error: unbalanced {} braces !')
-          }
         }
       }),
       createFunctions,
@@ -35,12 +31,8 @@ export const parse = (() => {
       map(trim),
       splitNonEscaped(delimiters),
       replace(/(\{|\})/g, (_, brace, offset, full) => {
-        if(!isDelimiter(full[offset-1])) {
-          brace = ';' + brace
-        }
-        if(!isDelimiter(full[offset+1])) {
-          brace += ';'
-        }
+        if(!isDelimiter(full[offset-1])) brace = ';' + brace
+        if(!isDelimiter(full[offset+1])) brace += ';'
         return brace
       }),
       escape,

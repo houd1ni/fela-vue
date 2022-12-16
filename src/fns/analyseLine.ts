@@ -5,6 +5,7 @@ import { Levels } from '../classes/Levels'
 export const analyseLine = (() => {
   const ruleRE = /^([\w-]+)(: *| +)(.*)$/
   const selectorRE = /^(([\|~\$@>\*\.:&\(\)\^="\-\[\]]+).*[ ,]*)+:?$/
+  const spreadRE = /\.\.\.(\S*)$/
   const delimRE = /\s*,\s*/g
   const trailingColonRE = /(.*):$/
   const getValue = (value: string) => {
@@ -23,13 +24,18 @@ export const analyseLine = (() => {
       case line=='}':
         levels.pop()
         break
-      case (groups = ruleRE.exec(line)) != null:
+      case (groups = spreadRE.exec(line)) !== null:
+        const cls = levels.findClass(groups[1])
+        if(cls) for(const name in cls.rules)
+          levels.merge(name, cls.rules[name])
+        break
+      case (groups = ruleRE.exec(line)) !== null:
         levels.merge(
           unescape(camelify(groups[1])),
           when(isNaN, unescape, getValue(groups[3]))
         )
         break
-      case (groups = selectorRE.exec(line)) != null:
+      case (groups = selectorRE.exec(line)) !== null:
         names.splice(0)
         names.push(...line.split(delimRE).map((selector) =>
           selector.replace(trailingColonRE, '$1')

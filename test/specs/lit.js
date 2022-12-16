@@ -51,6 +51,28 @@ test('lit-css', (t) => {
           display: 'block',
           alignItems: 'center'
         }
+      },
+      grandpa: {
+        position: 'flex',
+        margin: 0
+      },
+      pa: {
+        position: 'flex',
+        margin: 0,
+        left: 1
+      },
+      misc: {
+        float: 'right',
+        width: '100%',
+        left: 11
+      },
+      son: {
+        position: 'flex',
+        margin: 0,
+        left: 11,
+        float: 'right',
+        width: '100%',
+        top: 42
       }
     }
     const rule = () => css`
@@ -98,6 +120,25 @@ test('lit-css', (t) => {
       }
       .cls:after {
         align-items: center;
+      }
+      .grandpa {
+        position flex
+        margin 0
+      }
+      .pa {
+        ...grandpa
+        left 1
+      }
+      .misc {
+        float right
+        width 100%
+        left 11
+      }
+      .son {
+        ...pa
+        ...misc
+        ...nonexistent
+        top 42
       }
     `
 
