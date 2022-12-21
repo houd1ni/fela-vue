@@ -33,7 +33,7 @@ export const rollupCSSCompression = function() {
       let res: string = code
       try {
         res = code.replace(/css\`((.|\s)*?)\`/g, (_, g1) =>
-          compressRules(g1)
+          `css\`${compressRules(g1)}}`
         )
       } catch(e) {
         console.warn(e)

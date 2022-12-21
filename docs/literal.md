@@ -12,7 +12,7 @@ It saves a lot of client's bandwith by cost of adding small boilerplate
 are done during compilation time.**
 
 ```javascript
-// vite.config.js or similar option in rollup.config.js
+// vite.config.mjs or similar option in rollup.config.mjs
 import { defineConfig } from 'vite'
 import { rollupCSSCompression } from 'fela-vue'
 
