@@ -4,7 +4,7 @@
 It is a relatively simple helper that makes a fela-friendly object
 of your css-like sheet.
 
-**First of all, starting from 2.8.0beta.2 if your build tool is rollup or Vite,
+**First of all, starting from 2.8.0beta.3 if your build tool is rollup or Vite,
 use compression to really heavingly compress strings in css`` literals.
 They become much smaller than original fela objects and any css minifier's output.
 It saves a lot of client's bandwith by cost of adding small boilerplate
