@@ -1,3 +1,5 @@
 export * from './css-lit'
 export * from './Renderer'
 export * from './SvelteRenderer'
+export { setCompression } from './fns/analyseLine'
+export { rollupCSSCompression } from './compression/fela-plugin'

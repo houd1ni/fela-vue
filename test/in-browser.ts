@@ -1,9 +1,11 @@
-import { css } from '../src/css-lit'
-import { Renderer, SvelteRenderer } from '../src/main'
+import { css, __specialcss } from '../src/css-lit'
+import { Renderer, setCompression, SvelteRenderer } from '../src/main'
 import monolithic from 'fela-monolithic'
 
 Renderer.devClassNames = true
+;(window as any).setCompression = setCompression
 ;(window as any).css = css
+;(window as any).specialcss = __specialcss
 ;(window as any).renderer = new Renderer({
   enhancers: [monolithic({prettySelectors: true})]
 })

@@ -4,6 +4,7 @@ import { TEnhancer, TPlugin } from 'fela';
 import { AnyFunc } from 'pepka';
 
 export declare const css: (strings: (string[] | TemplateStringsArray), ...values: any[]) => any;
+declare const __specialcss: (strings: (string[] | TemplateStringsArray), ...values: any[]) => any;
 export interface AnyObject {
 	[key: string]: any;
 }
@@ -49,5 +50,13 @@ export declare class SvelteRenderer extends Renderer {
 	getLiteralCSS(): (template_0: string[]) => (className: string | AnyFunc<any, import("pepka").AnyArgs> | AnyObject, attrs?: AnyObject) => any;
 	constructor(opts?: Partial<Options>);
 }
+export declare const setCompression: (to: boolean) => boolean;
+export declare const rollupCSSCompression: () => {
+	name: string;
+	transform(code: any): Promise<{
+		code: string;
+		map: any;
+	}>;
+};
 
 export {};

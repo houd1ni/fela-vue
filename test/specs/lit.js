@@ -1,5 +1,5 @@
 import test from 'ava'
-import { css } from '../../dist/bundle.esm.js'
+import { css, setCompression } from '../../dist/bundle.esm.js'
 
 test('lit-css', (t) => {
   try {
@@ -142,7 +142,36 @@ test('lit-css', (t) => {
       }
     `
 
+    const compressed_css = `
+.root {a2:inline-block
+  min-width:5px
+  a3:12px 25px
+  a12:8px
+a13:66
+a6:6
+:hover {a13:77
+a6:qwe
+  }
+  }
+    `
+    const decompressed_css = {
+      root: {
+        display: 'inline-block',
+        minWidth: '5px',
+        padding: '12px 25px',
+        borderRadius: '8px',
+        background: 66,
+        color: 6,
+        ':hover': {
+          background: 77,
+          color: 'qwe'
+        }
+      }
+    }
+
     t.deepEqual(obj, rule())
+    setCompression(true)
+    t.deepEqual(css`${compressed_css}`, decompressed_css)
   } catch(e) {
     t.fail(e)
   }

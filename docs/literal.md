@@ -3,6 +3,36 @@
 
 It is a relatively simple helper that makes a fela-friendly object
 of your css-like sheet.
+
+**First of all, starting from 2.8.0.beta.0 if your build tool is rollup or Vite,
+use compression to really heavingly compress strings in css`` literals.
+They become much smaller than original fela objects and any css minifier's output.
+It saves a lot of client's bandwith by cost of adding small boilerplate
+(somewhere less than one kb not gzipped). All somewhat costly computations
+are done during compilation time.**
+
+```javascript
+// vite.config.js or similar option in rollup.config.js
+import { defineConfig } from 'vite'
+import { rollupCSSCompression } from 'fela-vue'
+
+export default defineConfig({
+  plugins: [
+    // vue(),
+    // ...
+    rollupCSSCompression()
+  ]
+})
+```
+
+```javascript
+// main.js of your project.
+import { setCompression } from 'fela-vue'
+
+// This hints the parser to use decompression methods.
+setCompression(true)
+```
+
 It can be used like regular css or with (semi)colons omitted:
 
 ```javascript

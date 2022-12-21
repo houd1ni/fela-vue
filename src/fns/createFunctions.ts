@@ -57,7 +57,7 @@ const injectExpressions = (line: string) => {
 
 const intoExpression = compose(join('\n'), map(injectExpressions))
 
-export const createFunctions = (lines: string[]) => {
+export const createFunctions = (aug: boolean) => (lines: string[]) => {
   const out: (string|[string, StyleGenerator])[] = []
   let line: string, arrowI: number, selector: string,
       balance = 0, accum: string[] = []
@@ -70,16 +70,18 @@ export const createFunctions = (lines: string[]) => {
           break
         case '}':
           if(--balance==1) {
+            if(aug) {
+              const gen = `($ps, $t) => css\`${intoExpression(accum)}\``
+              out.push([selector, gen as any]) // only for internal aug stuff.
+          } else {
             const gen = new Function(
               '$t,css,$ps',
               `return css\`
                 ${intoExpression(accum)}
               \``
             ) as StyleGenerator
-            out.push([
-              selector,
-              (props, t) => gen(t, css, props)
-            ])
+            out.push([ selector, (props, t) => gen(t, css, props) ])
+          }
             balance = 0
             accum.splice(0)
           } else {

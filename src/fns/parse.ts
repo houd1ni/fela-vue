@@ -2,7 +2,7 @@
 import { splitNonEscaped, escape } from '../utils'
 import {
   compose, replace, forEach, type, map, trim,
-  complement, isEmpty, filter
+  complement, isEmpty, filter, always, not, when
 } from 'pepka'
 import { Levels } from '../classes/Levels'
 import { analyseLine } from './analyseLine'
@@ -13,7 +13,7 @@ export const parse = (() => {
   const delimiters = ['\n', '\r', ';']
   const isDelimiter = (s: string) => delimiters.includes(s)
   const commentRE = /(([\s^]+?\/\/.*$)|\/\*(.|[\n\r])*?\*\/)/gm
-  return (css: string) => {
+  return (css: string, aug = false) => {
     const levels = new Levels()
     const names: string[] = [] // selector names, class names.
     return compose(
@@ -26,7 +26,8 @@ export const parse = (() => {
             throw new Error('lit-css parse error: unbalanced {} braces !')
         }
       }),
-      createFunctions,
+      createFunctions(aug),
+      // when(always(not(aug)), createFunctions),
       filter(complement(isEmpty) as any),
       map(trim),
       splitNonEscaped(delimiters),
