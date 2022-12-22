@@ -25,7 +25,7 @@ export interface Options {
 	enhancers: TEnhancer[];
 	ssr: boolean;
 }
-export type RenderClasses = (propsOrRule: any, props?: AnyObject) => string;
+export type RenderClasses = (base: AnyObject | null, propsOrRule: any, props?: AnyObject) => string;
 export declare class Renderer {
 	/** To use with fela-monolithic enhancer. */
 	static devClassNames: boolean;
@@ -38,6 +38,8 @@ export declare class Renderer {
 	get mixin(): AnyObject;
 	/** @returns Entire css for SSR proposes. */
 	get style(): string;
+	/** Sets classes to DOM elements what match. Just like CSS. */
+	setClasses: (this: Renderer, sheet: import("pepka").AnyObject, root?: NodeList) => void;
 	constructor(opts?: Partial<Options>);
 }
 export declare class SvelteRenderer extends Renderer {

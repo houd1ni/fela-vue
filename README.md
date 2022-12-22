@@ -32,6 +32,7 @@ Included as deps:
 * [with typescript](https://github.com/houd1ni/fela-vue/blob/master/docs/typescript.md)
 * [with Vue Composition API](https://github.com/houd1ni/fela-vue/blob/master/docs/Composition-API.md)
 * [Server-Side Rendering (SSR) guide](https://github.com/houd1ni/fela-vue/blob/master/docs/SSR.md)
+* [DOM helpers](https://github.com/houd1ni/fela-vue/blob/master/docs/dom-utils.md)
 * [How to make generated classes readable](https://github.com/houd1ni/fela-vue/blob/master/docs/readable.md)
 
 
@@ -64,7 +65,7 @@ const options = {
 
 const renderer = new Renderer(options)
 
-// Use globally
+// If Options API. To use globally:
 Vue.mixin(renderer.mixin)
 // or createApp(App).mixin(stylesRenderer.mixin)
 
@@ -83,15 +84,26 @@ export default {
 import Vue from 'vue'
 import { Renderer } from 'fela-vue'
 
+const renderer = new Renderer(options)
+
+// Not required.
+// Search for documentation link by "DOM helpers" here above.
+renderer.setClasses(css`
+  .html, .body {
+    margin 0
+    padding 0
+    font-size 18px
+  }
+`)
+
 // if Options API.
 // Vue 2:
-Vue.mixin( (new Renderer(options)).mixin )
+Vue.mixin( renderer.mixin )
 // Vue 3:
 // createApp(App)
 //   .mixin((new Renderer(options)).mixin)
 //   .mount('#app')
 ```
-
 
 ## Component example
 **MyComponent.vue**
@@ -126,10 +138,12 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   computed: {
     style() {
-      // Or any other key in `options.defStyles.key`.
+      // Not required. Use with arbitrary key by `options.defStyles.key`.
       const { colors } = this.fdef
 
-      // Also, it's OK to return one css`...` with all classes included.
+      // Also, it's recommended to return one css`...` with all classes included.
+      // Search for a "lit-css" documentation link above.
+      // Also search for a "Vue Composition API" to use along it.
       return {
         one: { color: 'green' },
         two: { color: colors.cyan },
