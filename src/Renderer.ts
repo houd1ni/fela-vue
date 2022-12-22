@@ -4,9 +4,9 @@ import embedded from 'fela-plugin-embedded'
 import prefixer from 'fela-plugin-prefixer'
 import fallback from 'fela-plugin-fallback-value'
 import unit from 'fela-plugin-unit'
-import { filter, identity, compose, toPairs, type, fromPairs, map, AnyFunc } from 'pepka'
+import { filter, identity, compose, toPairs, type, fromPairs, map } from 'pepka'
 import { AnyObject, RenderClasses, Options } from './types'
-import getRules from './fns/getRules'
+import {getRules, setClasses} from './fns'
 import { memoize, types, isBrowser, emptyObject, tryNamedFn, preparePlugins } from './utils'
 
 const mergeProps = (
@@ -54,6 +54,9 @@ export class Renderer {
     return renderToMarkup(this.renderer)
   }
 
+  /** Sets classes to DOM elements what match. Just like CSS. */
+  public setClasses = setClasses
+
   constructor(opts: Partial<Options> = {}) {
     const {
       method,
@@ -99,11 +102,11 @@ export class Renderer {
       if(ssr) rehydrate(renderer)
       else render(renderer)
 
-    this.renderClasses = function(
+    this.renderClasses = (
       stylesheet: AnyObject,
       propsOrRule: any,
       props: AnyObject = {}
-    ): string {
+    ): string => {
       const [name, rules] = getRules(
         memoize(() => fdefValue ? fdefValue(this) : emptyObject),
         stylesheet,
@@ -122,7 +125,7 @@ export class Renderer {
 
     // Should be bound to Renderer.
     this.styl = (stylesheet: AnyObject): RenderClasses =>
-      (...args: any[]) => this.renderClasses(stylesheet, ...args)
+      (...args: [any?, AnyObject?]) => this.renderClasses(stylesheet, ...args)
 
     // Mixin creation.
     this._mixin = filter(identity, {

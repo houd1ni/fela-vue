@@ -15,7 +15,7 @@ const pickStyles = (
     pickStyle(style, name) || pickStyle(getDefStyle(), name) || emptyObject
   ])
 
-const getRules = (
+export const getRules = (
   getDefStyle: () => AnyObject,
   style: AnyObject | undefined,
   propsOrRule: any,
@@ -47,5 +47,3 @@ const getRules = (
       return ['', [identity]]
   }
 }
-
-export default getRules
