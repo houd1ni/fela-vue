@@ -100,7 +100,7 @@ export const preparePlugins = (
   )(plugins)
 
 export const re = {
-  comment: /(([\s^]+?\/\/.*$)|\/\*(.|[\n\r])*?\*\/)/gm,
+  comment: /((\s+?\/\/.*$)|\/\*(.|[\n\r])*?\*\/)/gm,
   senseless_lines: /[\n\r]{2,}|(?:;\s)/g,
   trailing_ws: /(^|\r|\n)+[\t ]+/g,
   rule: /^([\w-]+)(: *| +)(.*)$/,
