@@ -1,5 +1,5 @@
 
-import { splitNonEscaped, escape } from '../utils'
+import { splitNonEscaped, escape, re } from '../utils'
 import {
   compose, replace, forEach, type, map, trim,
   complement, isEmpty, filter, always, not, when
@@ -12,7 +12,7 @@ import { StyleGenerator } from '../types'
 export const parse = (() => {
   const delimiters = ['\n', '\r', ';']
   const isDelimiter = (s: string) => delimiters.includes(s)
-  const commentRE = /(([\s^]+?\/\/.*$)|\/\*(.|[\n\r])*?\*\/)/gm
+  const commentRE = re.comment
   return (css: string, aug = false) => {
     const levels = new Levels()
     const names: string[] = [] // selector names, class names.

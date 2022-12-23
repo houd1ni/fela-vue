@@ -1,13 +1,16 @@
 
 import { AnyObject } from 'pepka'
+import { re } from '../utils'
 import { getDics } from './fela-compress'
 
 const prepareCompressRules = (dics: AnyObject, pepka: typeof import('pepka')) => {
   const { compose, replace  } = pepka
-  const ruleRE = /(^|\r|\n|;|{)\s*([a-z-]+)[ :][\t ]*?:?[\t ]*?([^;\r\n]+)/g
-  const trailingRE = /(^|\r|\n)+[\t ]+/g
-  const senselessRE = /[\n\r]{2,}|(?:;\s)/g
+  const ruleRE = re.rule_free
+  const trailingRE = re.trailing_ws
+  const senselessRE = re.senseless_lines
+  const commentRE = re.comment
   return compose(
+    replace(commentRE, ''),
     replace(senselessRE, '\n'),
     replace(trailingRE, '$1'),
     replace(ruleRE, (s: string, trailing: string, k: string, v: string) =>

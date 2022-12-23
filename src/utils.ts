@@ -98,3 +98,15 @@ export const preparePlugins = (
     toPairs,
     tryUnwrap
   )(plugins)
+
+export const re = {
+  comment: /(([\s^]+?\/\/.*$)|\/\*(.|[\n\r])*?\*\/)/gm,
+  senseless_lines: /[\n\r]{2,}|(?:;\s)/g,
+  trailing_ws: /(^|\r|\n)+[\t ]+/g,
+  rule: /^([\w-]+)(: *| +)(.*)$/,
+  rule_free: /(^|\r|\n|;|{)\s*([a-z-]+)[ :][\t ]*?:?[\t ]*?([^;\r\n]+)/g,
+  selector: /^(([\|~\$@>\*\.:&\(\)\^="\-\[\]]+).*[ ,]*)+:?$/,
+  spread: /\.\.\.(\S*)$/,
+  delim: /\s*,\s*/g,
+  trailing_colon: /(.*):$/
+}

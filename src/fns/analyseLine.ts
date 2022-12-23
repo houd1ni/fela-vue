@@ -1,4 +1,4 @@
-import { camelify, unescape } from '../utils'
+import { camelify, re, unescape } from '../utils'
 import { when, compose, fromPairs, map, reverse, toPairs } from 'pepka'
 import { Levels } from '../classes/Levels'
 import { getDics } from '../compression/fela-compress'
@@ -8,11 +8,11 @@ export const setCompression = (to: boolean) => compression=to
 const dics = getDics({ compose, fromPairs, map, reverse, toPairs })
 
 export const analyseLine = (() => {
-  const ruleRE = /^([\w-]+)(: *| +)(.*)$/
-  const selectorRE = /^(([\|~\$@>\*\.:&\(\)\^="\-\[\]]+).*[ ,]*)+:?$/
-  const spreadRE = /\.\.\.(\S*)$/
-  const delimRE = /\s*,\s*/g
-  const trailingColonRE = /(.*):$/
+  const ruleRE = re.rule
+  const selectorRE = re.selector
+  const spreadRE = re.spread
+  const delimRE = re.delim
+  const trailingColonRE = re.trailing_colon
   const decompress = when(() => compression, (s) => dics.dicRev[s] || s)
   const getValue = (value: string) => {
     switch(value) {
