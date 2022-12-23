@@ -143,14 +143,14 @@ test('lit-css', (t) => {
     `
 
     const compressed_css = `
-.root {a2:inline-block
-  min-width:5px
-  a3:12px 25px
-  a12:8px
-a13:66
-a6:6
-:hover {a13:77
-a6:qwe
+.root {a42:a45
+  a29:5px
+  a46:12px 25px
+  a16:8px
+a17:66
+a36:6
+:hover {a17:77
+a36:qwe
   }
   }
     `
