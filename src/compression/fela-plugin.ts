@@ -10,9 +10,9 @@ const prepareCompressRules = (dics: AnyObject, pepka: typeof import('pepka')) =>
   const senselessRE = re.senseless_lines
   const commentRE = re.comment
   return compose(
-    replace(commentRE, ''),
     replace(senselessRE, '\n'),
     replace(trailingRE, '$1'),
+    replace(commentRE, ''),
     replace(ruleRE, (s: string, trailing: string, k: string, v: string) =>
       trailing +
       (k&&v
