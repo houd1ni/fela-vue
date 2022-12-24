@@ -38,7 +38,7 @@ It can be used like regular css or with (semi)colons omitted:
 ```javascript
 import { css } from 'fela-vue'
 css`
-  .class-one {
+  .class-one, .class-two {
     color: cyan;
     background: url("data:image/gif;base64,R0lGO");
   }
