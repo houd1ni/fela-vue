@@ -10,9 +10,20 @@
   "description": "Fela toolkit for Vue designed for flexibility yet team-oriented.",
   "homepage": "https://houd1ni.github.io/fela-vue/",
   "keywords": [
-    "vue", "vuejs", "fela", "css-in-js", "css", "styles",
-    "styling", "easy", "fp", "functional", "structure",
-    "strongly-typed", "typescript", "d.ts"
+    "vue",
+    "vuejs",
+    "fela",
+    "css-in-js",
+    "css",
+    "styles",
+    "styling",
+    "easy",
+    "fp",
+    "functional",
+    "structure",
+    "strongly-typed",
+    "typescript",
+    "d.ts"
   ],
   "license": "MIT",
   "type": "module",
@@ -36,7 +47,7 @@
     "prod:es": "cross-env NODE_ENV=production BUILD=es rollup -c",
     "prod": "npm run gentypes && npm run prod:es && npm run prod:cjs"
   },
-  "version": "2.8.2",
+  "version": "2.8.3",
   "ava": {
     "files": [
       "./test/specs/*.js"
@@ -55,22 +66,22 @@
     "fela-plugin-fallback-value": "*",
     "fela-plugin-prefixer": "*",
     "fela-plugin-unit": "*",
-    "pepka": "^0.13.0-beta12"
+    "pepka": "^0.14.0-beta0"
   },
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^23.0.3",
+    "@rollup/plugin-node-resolve": "^15.0.1",
+    "@rollup/plugin-replace": "^5.0.1",
+    "@rollup/plugin-terser": "^0.1.0",
     "@types/node": "^18.11.11",
-    "lafetch": "0.4.5",
     "ava": "^5.1.0",
     "codecov": "^3.8.2",
     "cross-env": "^7.0.3",
     "dts-bundle-generator": "^7.1.0",
     "fela-monolithic": "^12.2.1",
+    "lafetch": "0.4.5",
     "nyc": "^15.1.0",
     "rollup": "^3.6.0",
-    "@rollup/plugin-commonjs": "^23.0.3",
-    "@rollup/plugin-node-resolve": "^15.0.1",
-    "@rollup/plugin-terser": "^0.1.0",
-    "@rollup/plugin-replace": "^5.0.1",
     "rollup-plugin-resolve-aliases": "^0.3.0",
     "rollup-plugin-typescript2": "^0.34.1",
     "ts-node": "^10.9.1",

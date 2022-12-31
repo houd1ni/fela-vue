@@ -1,8 +1,7 @@
 import {
-  replace, when, isNil, complement, map, length, both,
-  isEmpty, compose, equals, type, AnyFunc, ifElse, identity, prop, toPairs, explore
+  replace, when, isNil, complement, map, length, both, toPairs,
+  isEmpty, compose, equals, type, AnyFunc, ifElse, identity, prop
 } from 'pepka'
-import { AnyObject } from './types'
 
 export const emptyObject = Object.freeze({})
 export const types = Object.freeze({ f: 'function', o: 'object', s: 'string' })
@@ -69,7 +68,7 @@ export const tryNamedFn = (rule: AnyFunc, name: string, useNamed: boolean) => {
   } else return rule
 }
 
-export const isBrowser = (() => {
+export const isBrowser: boolean = (() => {
   try {
     return isWindow(window)
   } catch {
@@ -106,7 +105,7 @@ export const re = {
   rule: /^([\w-]+)(: *| +)(.*)$/,
   rule_free: /(^|\r|\n|;|{)\s*([a-z-]+)[ :][\t ]*?:?[\t ]*?([^;\r\n]+)/g,
   selector: /^(([\|~\$@>\*\.:&\(\)\^="\-\[\]]+).*[ ,]*)+:?$/,
-  spread: /\.\.\.(\S*)$/,
+  spread: /^\.\.\.(\S*)$/,
   delim: /\s*,\s*/g,
   trailing_colon: /(.*):$/
 }

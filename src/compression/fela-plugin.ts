@@ -31,13 +31,15 @@ export const rollupCSSCompression = function() {
     name: 'fela-vue-compression',
     async transform(code) {
       const pepka = await import('pepka')
+      const { compose, take } = pepka
       if(!dics) dics = getDics(pepka)
       const compressRules = prepareCompressRules(dics, pepka)
       let res: string = code
       try {
-        res = code.replace(/css\`((.|\s)*?)\`/g, (_, g1) =>
-          `css\`${compressRules(g1)}\``
-        )
+        res = code.replace(/css\`((.|\s)*?)\`/g, compose(
+          (g1) => `css\`${compressRules(g1)}\``,
+          take(1)
+        ))
       } catch(e) {
         console.warn(e)
       }

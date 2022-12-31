@@ -1,12 +1,13 @@
-import { AnyObject, fromPairs, isNil, type } from "pepka"
+import { AnyObject, fromPairs, type } from "pepka"
 import { RenderClasses } from "../types"
 import { Renderer } from '../Renderer'
+import { isBrowser } from "../utils"
 
 // TODO: make it reactive by caching classes added by it.
 export const setClasses = function(
   this: Renderer, sheet: AnyObject, root?: NodeList
 ) {
-  if(!isNil(window) && !isNil(window.document))
+  if(isBrowser)
     for(const tag in sheet) {
       const rules = sheet[tag]
       const simpleRules: [string, any][] = []
