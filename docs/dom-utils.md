@@ -1,7 +1,7 @@
 
 # There are some helpers to manipulate DOM with no explicit f(classes) calls.
 
-Setting fela styles to elements dound by selectors similarly to CSS ones,
+Setting fela styles to elements found by selectors similarly to CSS ones,
 but root "classes" or argument props, if not used with lit-css, are TAG selectors.
 To find some more complex stuff, use modifiers like `.div.thisClass:hover` etc.
 **It's safe to leave it as is during SSR, 'cause there's a check inside,
