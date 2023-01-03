@@ -8,7 +8,7 @@ import typescript2 from 'rollup-plugin-typescript2'
 export default {
   input: process.env.NODE_ENV=='development' ? 'test/in-browser.ts' : 'src/main.ts',
   output: {
-    file: process.env.BUILD == 'cjs' ? 'dist/bundle.js' : 'dist/bundle.esm.js',
+    file: process.env.BUILD == 'cjs' ? 'dist/bundle.cjs' : 'dist/bundle.mjs',
     format: process.env.BUILD == 'cjs' ? 'cjs' : 'es',
     name: 'fela-vue'
   },
@@ -23,10 +23,7 @@ export default {
   ],
   plugins: [
     resolve(),
-    commonjs({
-      defaultIsModuleExports: false,
-      // include: 'node_modules/*.js'
-    }),
+    commonjs({ defaultIsModuleExports: false }),
     typescript2({
       typescript,
       tsconfig: "./tsconfig.json",
