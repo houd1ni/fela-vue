@@ -1,5 +1,5 @@
 import test from 'ava'
-import { Renderer } from '../../dist/bundle.esm.js'
+import { Renderer } from '../../dist/bundle.mjs'
 
 test('init', async (t) => {
   try {

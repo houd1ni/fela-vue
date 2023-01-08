@@ -1,7 +1,7 @@
 import test from 'ava'
-import { css, setCompression } from '../../dist/bundle.esm.js'
+import { css, setCompression, rollupCSSCompression } from '../../dist/bundle.mjs'
 
-test('lit-css', (t) => {
+test('lit-css', async (t) => {
   try {
     const value = 40
     const obj = {
@@ -142,25 +142,25 @@ test('lit-css', (t) => {
       }
     `
 
-    const compressed_css = `
-.root {a42:a45
-  a29:5px
-  a46:12px 25px
-  a16:8px
-a17:66
-a36:6
-:hover {a17:77
-a36:qwe
-  }
-  }
+    const usual_css = `
+      .root {
+        display inline-block
+        padding: 12px 25px;;
+        border-radius 8px;
+        color 6
+        :hover {
+          background 77
+          color qwe
+        }
+      }
     `
+    const {code: compressed_css} = await rollupCSSCompression().transform(`css\`${usual_css}\``)
+    console.log(compressed_css)
     const decompressed_css = {
       root: {
         display: 'inline-block',
-        minWidth: '5px',
         padding: '12px 25px',
         borderRadius: '8px',
-        background: 66,
         color: 6,
         ':hover': {
           background: 77,
