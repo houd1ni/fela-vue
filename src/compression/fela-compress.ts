@@ -6,7 +6,8 @@ border width height border-radius background bottom position align-items
 center bottom absolute relative float right opacity z-index min-width
 min-height border-top border-bottom filter fixed left color space-between
 font-weight font-size none hidden auto display block inline inline-block
-padding padding-top padding-bottom paddin-left padding-right
+padding padding-top padding-bottom paddin-left padding-right text-align
+flex-direction column
 `.replace(/\s+/g, ',').split(/[, ]/g).filter(Boolean)
 
 // TODO: use generator from wspomisify. Then maybe add 100% into rules.
