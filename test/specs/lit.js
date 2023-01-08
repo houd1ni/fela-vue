@@ -154,8 +154,9 @@ test('lit-css', async (t) => {
         }
       }
     `
-    const {code: compressed_css} = await rollupCSSCompression().transform(`css\`${usual_css}\``)
-    console.log(compressed_css)
+    const compressed_css = (
+      await rollupCSSCompression().transform(`css\`${usual_css}\``)
+    ).code.replace(/(?:^css`)|(?:`$)/g, '')
     const decompressed_css = {
       root: {
         display: 'inline-block',

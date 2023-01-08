@@ -103,7 +103,7 @@ export const re = {
   senseless_lines: /[\n\r]{2,}|(?:;\s)/g,
   trailing_ws: /(^|\r|\n)+[\t ]+/g,
   excessSeps: /[;\n\r]+/g,
-  excessTrailingSeps: /(?:^[;\n\r]+)|(?:[;\n\r]+$)/g,
+  excessTrailingSeps: /(?:(}|{|]|)^[;\n\r ]+)|(?:[;\n\r ]+($|}|{|]))/g,
   rule: /^([\w-]+)(: *| +)(.*)$/,
   rule_free: /(^|\r|\n|;|{)\s*([a-z-]+)[ :][\t ]*?:?[\t ]*?([^;\r\n]+)/g,
   selector: /^(([\|~\$@>\*\.:&\(\)\^="\-\[\]]+).*[ ,]*)+:?$/,

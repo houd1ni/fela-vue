@@ -4,9 +4,9 @@ import { re } from '../utils'
 import { getDics } from './fela-compress'
 
 const prepareCompressRules = (dics: AnyObject, pepka: typeof import('pepka')) => {
-  const { compose, replace  } = pepka
+  const { compose, replace, trim } = pepka
   return compose(
-    replace(re.excessTrailingSeps, ''),
+    replace(re.excessTrailingSeps, '$2'),
     replace(re.excessSeps, ';'),
     replace(re.senseless_lines, '\n'),
     replace(re.trailing_ws, '$1'),
@@ -14,10 +14,10 @@ const prepareCompressRules = (dics: AnyObject, pepka: typeof import('pepka')) =>
     replace(re.rule_free, (s: string, trailing: string, k: string, v: string) =>
       trailing +
       (k&&v
-      ? `${dics.dic[k] || k}:${dics.dic[v] || v};`
-      : k ? s.replace(k, dics.dic[k] || k)
+      ? `${trim(dics.dic[k] || k)}:${trim(dics.dic[v] || v)};`
+      : trim(k ? s.replace(k, dics.dic[k] || k)
         : v ? s.replace(k, dics.dic[v] || v)
-          : s)
+          : s))
     )
   )
 }
