@@ -6,18 +6,20 @@ import { getDics } from './fela-compress'
 const prepareCompressRules = (dics: AnyObject, pepka: typeof import('pepka')) => {
   const { compose, replace, trim } = pepka
   return compose(
-    replace(re.excessTrailingSeps, '$2'),
-    replace(re.excessSeps, ';'),
+    replace(re.trailingSeps, '$2'),
+    replace(re.repeatingSeps, ';'),
     replace(re.senseless_lines, '\n'),
     replace(re.trailing_ws, '$1'),
     replace(re.comment, ''),
     replace(re.rule_free, (s: string, trailing: string, k: string, v: string) =>
-      trailing +
-      (k&&v
-      ? `${trim(dics.dic[k] || k)}:${trim(dics.dic[v] || v)};`
-      : trim(k ? s.replace(k, dics.dic[k] || k)
-        : v ? s.replace(k, dics.dic[v] || v)
-          : s))
+      v
+      ? trailing +
+        (k&&v
+        ? `${trim(dics.dic[k] || k)}:${trim(dics.dic[v] || v)};`
+        : trim(k ? s.replace(k, dics.dic[k] || k)
+          : v ? s.replace(k, dics.dic[v] || v)
+            : s))
+      : ''
     )
   )
 }

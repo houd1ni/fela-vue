@@ -148,6 +148,7 @@ test('lit-css', async (t) => {
         padding: 12px 25px;;
         border-radius 8px;
         color 6
+        display ${false && 'none'}
         :hover {
           background 77
           color qwe

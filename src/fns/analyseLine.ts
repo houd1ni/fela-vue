@@ -16,7 +16,7 @@ export const analyseLine = (() => {
   const decompress = when(() => compression, (s) => dics.dicRev[s] || s)
   const getValue = (value: string) => {
     switch(value) {
-      case 'undefined': case '': return undefined
+      case 'undefined': case 'false': case '': return undefined
       case 'null': return null
       default: return isNaN(+value) ? value : +value
     }
