@@ -1,3 +1,4 @@
+import { zipnum } from 'zipnum'
 
 const rules = `
 top flex grid overflow transform transition-duration max-height
@@ -6,17 +7,14 @@ border width height border-radius background bottom position align-items
 center bottom absolute relative float right opacity z-index min-width
 min-height border-top border-bottom filter fixed left color space-between
 font-weight font-size none hidden auto display block inline inline-block
-padding padding-top padding-bottom paddin-left padding-right text-align
-flex-direction column
+padding padding-top padding-bottom padding-left padding-right text-align
+flex-direction column box-shadow rotate 100%
 `.replace(/\s+/g, ',').split(/[, ]/g).filter(Boolean)
 
-// TODO: use generator from wspomisify. Then maybe add 100% into rules.
-let i = 0
-
-const compressRule = () => `a${i++}`
+const prepareCompressRule = () => {let i=0; return () => `a${zipnum(i++)}`}
 
 export const getDics = (pepka: Partial<typeof import('pepka')>) => {
-  i = 0
+  const compressRule = prepareCompressRule()
   const { compose, fromPairs, map, reverse, toPairs } = pepka
   const dic = compose(
     fromPairs,
