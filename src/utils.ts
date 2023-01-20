@@ -109,5 +109,6 @@ export const re = {
   selector: /^(([\|~\$@>\*\.:&\(\)\^="\-\[\]]+).*[ ,]*)+:?$/,
   spread: /^\.\.\.(\S*)$/,
   delim: /\s*,\s*/g,
-  trailing_colon: /(.*):$/
+  trailing_colon: /(.*):$/,
+  class_mod: /[.&]/
 }

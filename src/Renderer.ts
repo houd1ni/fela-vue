@@ -27,6 +27,7 @@ const mergeProps = (
 const defaultOpts: Options = {
   method: 'f',
   defStyles: undefined,
+  modifiers: {},
   plugins: [],
   enhancers: [],
   preset: { unit: [] },
@@ -111,6 +112,7 @@ export class Renderer {
         memoize(() => fdefValue ? fdefValue(this) : emptyObject),
         stylesheet,
         propsOrRule,
+        opts.modifiers,
         this
       )
       return renderer.renderRule(

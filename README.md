@@ -48,6 +48,9 @@ const options = {
     key: 'fdef',
     value: (componentInstance) => ({ colors: { cyan: 'cyan' } })
   },
+  // Modifiers to classes when assigned from templates. See examples below.
+  // Each modifier is a condition that is being called with provided class name and context object.
+  modifiers: {},
   // Name of styling method. Defaults to `f`.
   method: 'f',
   // Additional fela plugins.
@@ -84,7 +87,13 @@ export default {
 import Vue from 'vue'
 import { Renderer } from 'fela-vue'
 
-const renderer = new Renderer(options)
+const renderer = new Renderer({
+  ...options,
+  modifiers: {
+    // Too simple but short c:
+    mobile: () => window.clientWidth < 600
+  }
+})
 
 // Not required.
 // Search for documentation link by "DOM helpers" here above.
@@ -112,6 +121,9 @@ Vue.mixin( renderer.mixin )
   <div :class="f('wrapper')">
     <span :class="f('one')"> It's green! </span>
     <span :class="f('two')"> It's cyan! </span>
+    <span :class="f('mobile&one !mobile.two')">
+      It's green when mobile modifier is true and cyan when false. `.` equals to `&` on your taste.
+    </span>
     <span :class="f('three', {color: 'white'})"> you don't see me! </span>
     <span :class="f({color: 'yellow'})"> I do it by myself! </span>
     <span :class="f('one two, bold')"> Combined classes by commas and spaces </span>

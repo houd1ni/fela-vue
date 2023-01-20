@@ -8,11 +8,15 @@ declare const __specialcss: (strings: (string[] | TemplateStringsArray), ...valu
 export interface AnyObject {
 	[key: string]: any;
 }
+export type ModifierCondition = (className: string, context: AnyObject) => boolean;
 export interface Options {
 	method: string;
-	defStyles?: ((vm: AnyObject) => AnyObject) | {
+	defStyles: ((vm: AnyObject) => AnyObject) | {
 		key: string;
 		value: ((vm?: AnyObject) => AnyObject);
+	};
+	modifiers: {
+		[name: string]: ModifierCondition;
 	};
 	preset: {
 		unit: [

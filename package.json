@@ -50,7 +50,7 @@
     "prod:es": "cross-env NODE_ENV=production BUILD=es rollup -c",
     "prod": "npm run gentypes && npm run prod:es && npm run prod:cjs"
   },
-  "version": "2.9.1",
+  "version": "2.10.0",
   "ava": {
     "files": [
       "./test/specs/*.js"
@@ -69,7 +69,7 @@
     "fela-plugin-fallback-value": "*",
     "fela-plugin-prefixer": "*",
     "fela-plugin-unit": "*",
-    "pepka": "^0.14.1",
+    "pepka": "^1.0.0-beta.1",
     "zipnum": "^1.0.0"
   },
   "devDependencies": {
@@ -78,14 +78,14 @@
     "@rollup/plugin-replace": "^5.0.2",
     "@rollup/plugin-terser": "^0.3.0",
     "@types/node": "^18.11.18",
-    "ava": "^5.1.0",
+    "ava": "^5.1.1",
     "codecov": "^3.8.3",
     "cross-env": "^7.0.3",
     "dts-bundle-generator": "^7.1.0",
     "fela-monolithic": "^12.2.1",
     "lafetch": "0.4.5",
     "nyc": "^15.1.0",
-    "rollup": "^3.9.1",
+    "rollup": "^3.10.0",
     "rollup-plugin-resolve-aliases": "^0.3.0",
     "rollup-plugin-typescript2": "^0.34.1",
     "ts-node": "^10.9.1",
