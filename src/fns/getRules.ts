@@ -5,6 +5,7 @@ import { AnyObject, ModifierCondition } from "../types"
 const classModRE = re.class_mod
 const notMark = '!'
 
+// TODO: modifiers reactivity ?..
 const pickStyle = (style: AnyObject, name: string) =>
   style[name] || style[camelify(name)]
 const pickStyles = (

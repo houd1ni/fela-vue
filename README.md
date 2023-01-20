@@ -42,7 +42,7 @@ const options = {
   // Default styles to mix. Does not mix if omitted.
   // Have a look at the example below to see it in action.
   // Either pass a function (then key would be `fdef`):
-  defStyles: (componentInstance) => ({ colors: { cyan: 'cyan' } }),
+  defStyles: (componentInstance) => ({ colors: { cyan: 'cyan' }, bold: { fontWeight: 'bold' } }),
   // ... Or an object with your own key:
   defStyles: {
     key: 'fdef',
@@ -121,8 +121,10 @@ Vue.mixin( renderer.mixin )
   <div :class="f('wrapper')">
     <span :class="f('one')"> It's green! </span>
     <span :class="f('two')"> It's cyan! </span>
-    <span :class="f('mobile&one !mobile.two')">
+    <span :class="f('mobile&one !mobile.two localModifier.bold')">
       It's green when mobile modifier is true and cyan when false. `.` equals to `&` on your taste.
+      For Options API the local modifiers named styleMods in mixins (see below in JS)
+      For Composition API search for "with Vue Composition API" doc link above.
     </span>
     <span :class="f('three', {color: 'white'})"> you don't see me! </span>
     <span :class="f({color: 'yellow'})"> I do it by myself! </span>
@@ -184,6 +186,11 @@ export default defineComponent({
             padding: 15
           }
         `
+      }
+    },
+    styleMods() {
+      return {
+        localModifier: (name, context) => true
       }
     }
   }

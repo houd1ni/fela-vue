@@ -9,6 +9,9 @@ export interface AnyObject {
 	[key: string]: any;
 }
 export type ModifierCondition = (className: string, context: AnyObject) => boolean;
+export interface Modifiers {
+	[name: string]: ModifierCondition;
+}
 export interface Options {
 	method: string;
 	defStyles: ((vm: AnyObject) => AnyObject) | {
@@ -29,7 +32,7 @@ export interface Options {
 	enhancers: TEnhancer[];
 	ssr: boolean;
 }
-export type RenderClasses = (base: AnyObject | string | null, propsOrRule?: any, props?: AnyObject) => string;
+export type RenderClasses = (base: AnyObject | string | null, propsOrRule?: any, props?: AnyObject, modifiers?: Modifiers) => string;
 export declare class Renderer {
 	/** To use with fela-monolithic enhancer. */
 	static devClassNames: boolean;

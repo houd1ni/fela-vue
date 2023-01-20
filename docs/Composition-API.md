@@ -28,7 +28,7 @@ export const styl = renderer.styl
 
 ```vue
 <template>
-  <div :class="f('center root')">
+  <div :class="f('center localModifier.root')">
     lalala
   </div>
 </template>
@@ -37,6 +37,7 @@ export const styl = renderer.styl
 import { styl } from './styles'
 import { computed } from 'vue'
 
+// Second (optional) argument of styl is modifiers (see README description and example.)
 // As in Options API, I recommend to use a User Snippet for this.
 const f = computed(() => styl(css`
   .root {
@@ -44,6 +45,6 @@ const f = computed(() => styl(css`
     text-decoration underline;
     cursor pointer;
   }
-`))
+`, { localModifier: (name, context) => true }))
 </script>
 ```

@@ -5,6 +5,7 @@ export interface AnyObject {
 }
 
 export type ModifierCondition = (className: string, context: AnyObject) => boolean
+export interface Modifiers {[name: string]: ModifierCondition}
 
 export interface Options {
   method: string,
@@ -20,4 +21,9 @@ export interface Options {
 }
 
 export type StyleGenerator = (t: AnyObject, css: Function, $: AnyObject) => AnyObject
-export type RenderClasses = (base: AnyObject|string|null, propsOrRule?: any, props?: AnyObject) => string
+export type RenderClasses = (
+  base: AnyObject|string|null,
+  propsOrRule?: any,
+  props?: AnyObject,
+  modifiers?: Modifiers
+) => string

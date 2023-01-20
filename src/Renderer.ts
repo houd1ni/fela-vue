@@ -4,8 +4,8 @@ import embedded from 'fela-plugin-embedded'
 import prefixer from 'fela-plugin-prefixer'
 import fallback from 'fela-plugin-fallback-value'
 import unit from 'fela-plugin-unit'
-import { filter, identity, compose, toPairs, type, fromPairs, map } from 'pepka'
-import { AnyObject, RenderClasses, Options } from './types'
+import { filter, identity, compose, toPairs, type, fromPairs, map, qmergeShallow, mergeShallow } from 'pepka'
+import { AnyObject, RenderClasses, Options, Modifiers } from './types'
 import {getRules, setClasses} from './fns'
 import { memoize, types, isBrowser, emptyObject, tryNamedFn, preparePlugins } from './utils'
 
@@ -106,13 +106,14 @@ export class Renderer {
     this.renderClasses = (
       stylesheet: AnyObject,
       propsOrRule: any,
-      props: AnyObject = {}
+      props: AnyObject = emptyObject,
+      modifiers: Modifiers = emptyObject
     ): string => {
       const [name, rules] = getRules(
         memoize(() => fdefValue ? fdefValue(this) : emptyObject),
         stylesheet,
         propsOrRule,
-        opts.modifiers,
+        modifiers===emptyObject ? opts.modifiers : mergeShallow(opts.modifiers, modifiers),
         this
       )
       return renderer.renderRule(
@@ -126,16 +127,22 @@ export class Renderer {
     }
 
     // Should be bound to Renderer.
-    this.styl = (stylesheet: AnyObject): RenderClasses =>
-      (...args: [any?, AnyObject?]) => this.renderClasses(stylesheet, ...args)
+    this.styl = (stylesheet: AnyObject, modifiers?: Modifiers): RenderClasses =>
+      (propsOrRule: any, props?: AnyObject, submodifiers?: Modifiers) =>
+        this.renderClasses(
+          stylesheet, propsOrRule, props,
+          submodifiers ? mergeShallow(modifiers, submodifiers) : modifiers
+        )
 
     // Mixin creation.
     this._mixin = filter(identity, {
       methods: {
         /** propsOrRule: any, props?: AnyObject */
-        [method]: function(...args: any[]) {
+        [method]: function(propsOrRule: any, props?: AnyObject, submodifiers?: Modifiers) {
           return thisRenderer.renderClasses
-            .call(this, this.style, ...args)
+            .call(this, this.style, propsOrRule, props,
+              submodifiers ? mergeShallow(opts.modifiers, submodifiers) : this.styleMods
+            )
         } as RenderClasses
       },
       computed: fdef && {
