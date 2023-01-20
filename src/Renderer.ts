@@ -107,13 +107,13 @@ export class Renderer {
       stylesheet: AnyObject,
       propsOrRule: any,
       props: AnyObject = emptyObject,
-      modifiers: Modifiers = emptyObject
+      modifiers?: Modifiers
     ): string => {
       const [name, rules] = getRules(
         memoize(() => fdefValue ? fdefValue(this) : emptyObject),
         stylesheet,
         propsOrRule,
-        modifiers===emptyObject ? opts.modifiers : mergeShallow(opts.modifiers, modifiers),
+        modifiers ? mergeShallow(opts.modifiers, modifiers) : opts.modifiers,
         this
       )
       return renderer.renderRule(
@@ -141,7 +141,9 @@ export class Renderer {
         [method]: function(propsOrRule: any, props?: AnyObject, submodifiers?: Modifiers) {
           return thisRenderer.renderClasses
             .call(this, this.style, propsOrRule, props,
-              submodifiers ? mergeShallow(opts.modifiers, submodifiers) : this.styleMods
+              submodifiers
+              ? mergeShallow(opts.modifiers, submodifiers)
+              : 'styleMods' in this && this.styleMods
             )
         } as RenderClasses
       },
