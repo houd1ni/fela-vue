@@ -50,7 +50,7 @@
     "prod:es": "cross-env NODE_ENV=production BUILD=es rollup -c",
     "prod": "npm run gentypes && npm run prod:es && npm run prod:cjs"
   },
-  "version": "2.10.2",
+  "version": "2.10.3",
   "ava": {
     "files": [
       "./test/specs/*.js"
@@ -69,7 +69,7 @@
     "fela-plugin-fallback-value": "*",
     "fela-plugin-prefixer": "*",
     "fela-plugin-unit": "*",
-    "pepka": "^1.0.0-beta.2",
+    "pepka": "^1.0.0-beta.3",
     "zipnum": "^1.0.0"
   },
   "devDependencies": {

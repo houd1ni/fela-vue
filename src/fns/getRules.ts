@@ -1,9 +1,10 @@
 import { camelify, emptyObject, re, types } from "../utils"
-import { always, identity, AnyFunc, compose, split, qmap, qfilter, all, last, slice, length, head, tail } from "pepka"
+import { always, identity, AnyFunc, compose, split, qmap, qfilter, all, last, slice, length, head, tail, isEmpty } from "pepka"
 import { AnyObject, ModifierCondition } from "../types"
 
 const classModRE = re.class_mod
 const notMark = '!'
+const empty_str = ''
 
 // TODO: modifiers reactivity ?..
 const pickStyle = (style: AnyObject, name: string) =>
@@ -37,6 +38,7 @@ const pickStyles = (
     )
   }),
   qmap(split(classModRE)),
+  qfilter((s) => s===empty_str),
   split(/[,\s\t]+/g)
 )(names)
 
