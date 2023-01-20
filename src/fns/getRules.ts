@@ -38,7 +38,7 @@ const pickStyles = (
     )
   }),
   qmap(split(classModRE)),
-  qfilter((s) => s===empty_str),
+  qfilter((s) => s!==empty_str),
   split(/[,\s\t]+/g)
 )(names)
 
