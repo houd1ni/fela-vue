@@ -43,7 +43,7 @@ export class Renderer {
   private renderClasses: RenderClasses
 
   /** Vue Composition API endpoint. */
-  public styl: (stylesheet: AnyObject) => RenderClasses
+  public styl: (stylesheet: AnyObject, modifiers?: Modifiers) => RenderClasses
 
   /** @returns Vue Options API mixin. */
   public get mixin(): AnyObject {

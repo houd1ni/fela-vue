@@ -40,7 +40,7 @@ export declare class Renderer {
 	private _mixin;
 	private renderClasses;
 	/** Vue Composition API endpoint. */
-	styl: (stylesheet: AnyObject) => RenderClasses;
+	styl: (stylesheet: AnyObject, modifiers?: Modifiers) => RenderClasses;
 	/** @returns Vue Options API mixin. */
 	get mixin(): AnyObject;
 	/** @returns Entire css for SSR proposes. */
