@@ -6,10 +6,10 @@ margin margin-top margin-left margin-bottom margin-right justify-content
 border width height left border-radius background bottom position align-items
 center bottom absolute relative float right opacity z-index min-width
 min-height border-top border-bottom border-left border-right filter
-font-weight font-size none hidden auto display block inline inline-block
+font-family font-size font-weight none hidden auto display block inline inline-block
 padding padding-top padding-bottom padding-left padding-right text-align
-flex-direction column box-shadow rotate content text-decoration
-fixed color space-between overflow-x overflow-y
+flex-direction column box-shadow rotate content text-decoration max-width
+fixed color space-between overflow-x overflow-y background-size
 `.replace(/\s+/g, ',').split(/[, ]/g).filter(Boolean)
 
 const prepareCompressRule = () => {let i=0; return () => `a${zipnum(i++)}`}

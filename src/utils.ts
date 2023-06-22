@@ -108,6 +108,7 @@ export const re = {
   rule_free: /(^|\r|\n|;|{)\s*([a-z-]+)[ :][\t ]*?:?[\t ]*?([^;\r\n]+)/g,
   selector: /^(([\|~\$@>\*\.:&\(\)\^="\-\[\]]+).*[ ,]*)+:?$/,
   spread: /^\.\.\.(\S*)$/,
+  media: /^@media /,
   delim: /\s*,\s*/g,
   trailing_colon: /(.*):$/,
   class_mod: /[.&]/

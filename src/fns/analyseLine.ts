@@ -1,5 +1,5 @@
 import { camelify, re, unescape } from '../utils'
-import { when, compose, fromPairs, map, reverse, toPairs } from 'pepka'
+import { when, compose, fromPairs, map, reverse, toPairs, complement, replace, split, test, ifElse } from 'pepka'
 import { Levels } from '../classes/Levels'
 import { getDics } from '../compression/fela-compress'
 
@@ -12,6 +12,7 @@ export const analyseLine = (() => {
   const selectorRE = re.selector
   const spreadRE = re.spread
   const delimRE = re.delim
+  const mediaRE = re.media
   const trailingColonRE = re.trailing_colon
   const decompress = when(() => compression, (s) => dics.dicRev[s] || s)
   const getValue = (value: string) => {
@@ -43,9 +44,11 @@ export const analyseLine = (() => {
         break
       case (groups = selectorRE.exec(line)) !== null:
         names.splice(0)
-        names.push(...line.split(delimRE).map((selector) =>
-          selector.replace(trailingColonRE, '$1')
-        ))
+        names.push(...compose(
+            map(replace(trailingColonRE, '$1')),
+            ifElse(test(mediaRE), (l: string) => [l], split(delimRE))
+          )(line)
+        )
         break
     }
   }

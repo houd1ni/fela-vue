@@ -2,7 +2,7 @@
 import { splitNonEscaped, escape, re } from '../utils'
 import {
   compose, replace, forEach, type, map, trim,
-  complement, isEmpty, filter, always, not, when
+  complement, isEmpty, filter, always, not, when, explore
 } from 'pepka'
 import { Levels } from '../classes/Levels'
 import { analyseLine } from './analyseLine'
@@ -27,11 +27,10 @@ export const parse = (() => {
         }
       }),
       createFunctions(aug),
-      // when(always(not(aug)), createFunctions),
       filter(complement(isEmpty) as any),
       map(trim),
       splitNonEscaped(delimiters),
-      replace(/(\{|\})/g, (_, brace, offset, full) => {
+      replace(/(\{|\})/g, (_: any, brace: string, offset: number, full: string[]) => {
         if(!isDelimiter(full[offset-1])) brace = ';' + brace
         if(!isDelimiter(full[offset+1])) brace += ';'
         return brace

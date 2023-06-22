@@ -50,7 +50,7 @@
     "prod:es": "cross-env NODE_ENV=production BUILD=es rollup -c",
     "prod": "npm run gentypes && npm run prod:es && npm run prod:cjs"
   },
-  "version": "2.10.5",
+  "version": "2.10.6",
   "ava": {
     "files": [
       "./test/specs/*.js"
