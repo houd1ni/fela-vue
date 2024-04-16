@@ -1,1 +1,615 @@
-import{when as e,complement as t,isNil as r,replace as s,both as n,isEmpty as o,compose as i,equals as l,type as c,map as a,ifElse as u,identity as f,prop as d,toPairs as h,length as p,last as m,qmergeDeep as g,test as b,split as w,fromPairs as $,reverse as y,curry as x,join as C,forEach as v,filter as S,trim as k,always as N,qmap as j,qfilter as _,all as z,head as O,tail as A,slice as E,mergeShallow as P}from"pepka";import{createRenderer as q,combineRules as B}from"fela";import{renderToMarkup as F,rehydrate as M,render as R}from"fela-dom";import W from"fela-plugin-embedded";import L from"fela-plugin-prefixer";import U from"fela-plugin-fallback-value";import Z from"fela-plugin-unit";const D=Object.freeze({}),G=Object.freeze({f:"function",o:"object",s:"string"}),H=e=>e.replace(/-(\w)/gu,((e,t)=>t.toUpperCase())),I=(()=>{const e=/url\(.*?\)/g,t=/[,:;]/g;return r=>r.replace(e,(e=>e.replace(t,(e=>`\\${e}`))))})(),J=e(t(r),s(/([^\\])\\([^\\])/g,"$1$2")),K=n(t(o),t(r));i(l("Object"),c);const Q=i(l("Window"),c),T=(()=>{try{return Q(window)}catch{return!1}})(),V=a(u(i(l("Function"),c),f,d("default"))),X=(e,t)=>i(a((([e,r])=>((e,t,r)=>r(...e[t]||[]))(t,e,r))),h,V)(e),Y=/((\s+?\/\/.*$)|\/\*(.|[\n\r])*?\*\/)/gm,ee=/(^|\r|\n)+[\t ]+/g,te=/([;\n\r]){2,}/g,re=/(?:(}|{|]|)^[;\n\r ]+)|(?:[;\n\r ]+($|}|{|]))/g,se=/^([\w-]+)(: *| +)(.*)$/,ne=/[^\$](^|\r|\n|;|{)\s*([a-z-]+)[ :][\t ]*?:?[\t ]*?([^;\r\n]+)/g,oe=/^(([\|~\$@>\*\.:&\(\)\^="\-\[\]]+).*[ ,]*)+:?$/,ie=/^\.\.\.(\S*)$/,le=/^@media /,ce=/\s*,\s*/g,ae=/(.*):$/,ue=/[.&]/,fe=/[\n\r]/g,de=/css\`((.|\s)*?)\`/g,he=/\${(?:[^{}]|{(?:[^{}]|{[^{}]*})*})*}/g;class pe{s;rules={};__selector__=!0;get complex(){return null!==this.s.className&&null!==this.s.modifier}static isSelector(e){return Boolean(e&&e.__selector__)}serialize(){const{className:e,modifier:t}=this.s;return(e?`.${e}`:"")+(t||"")}findClass(e,t=this){if(t.s.className===e)return t;for(const r in t.rules){const s=t.rules[r];if(pe.isSelector(s)){const t=s.findClass(e);if(t)return t}}return null}constructor(e){const t=e.match(/^\.[\w-_]+/);this.s={className:t?t[0].slice(1):null,modifier:t?e.slice(t[0].length)||null:e}}}const me=(e,t=0)=>{const r={};let s,n,o,i,l;for(l in e.rules)s=e.rules[l],pe.isSelector(s)?(n=s.complex?s.s.className:s.serialize(),o=0==t&&"."==n[0]?n.slice(1):"."==n[0]?`& ${n}`:n,i=s.complex?{[s.s.modifier]:me(s,t+1)}:me(s,t+1),r[o]?g(r[o],i):r[o]=i):r[l]=s;return r};class ge{path=[];get out(){return me(this.path[0][0])}get depth(){return this.path.length}add(e){const t=m(this.path),r=[];for(const s of e){const e=new pe(s);for(const s of t){const t=e.serialize(),n=s.rules[t];r.push(n||e),n||(s.rules[t]=e)}}this.path.push(r)}merge(e,t){if(K(t)&&K(e))for(const r of m(this.path))r.rules[e]=t}findClass(e){for(const t of this.path)for(const r of t){const t=r.findClass(e);if(t)return t}return null}pop(){return this.path.pop()}constructor(){this.path.push([new pe("__root")])}}const be=Symbol("Placeholder"),we=e=>{let t=0;for(const r of e)r!==be&&t++;return t},$e=(e,t)=>{const r=e.length,s=e.slice(),n=t.length;let o=n,i=0;for(;o&&i<r;i++)s[i]===be&&(s[i]=t[n-o],o--);for(i=r;o;i++,o--)s[i]=t[n-o];return s},ye=(e,t,r)=>{const s=e.length-t.length-we(r);if(s<1)return e(...$e(t,r));{const n=(...s)=>ye(e,$e(t,r),s);return n.$args_left=s,n}},xe=e=>(...t)=>e.length>we(t)?ye(e,[],t):e(...t);function Ce(e){return function(t,r){const s=t===be;if(1===arguments.length&&s)throw new Error("Senseless placeholder usage.");return arguments.length>1?s?(e=>function(t){return t===be?e:e(t)})((t=>e(t,r))):e(t,r):r=>e(t,r)}}function ve(e){return xe(e)}const Se=void 0,ke=1/0,Ne=e=>typeof e,je=e=>null===e,_e={u:"U",b:"B",n:"N",s:"S",f:"F"},ze=e=>{const t=Ne(e);return"object"===t?je(e)?"Null":e.constructor.name:_e[t[0]]+t.slice(1)},Oe=Ce(((e,t)=>(t.push(e),t))),Ae=ve(((e,t,r)=>r.reduce(e,t))),Ee=ve(((e,t,r)=>{for(let s in r)switch(ze(r[s])){case"Array":if(e>1&&"Array"===ze(t[s]))switch(e){case 2:const n=t[s],o=r[s];for(const t in o)n[t]?Ee(e,n[t],o[t]):n[t]=o[t];break;case 3:t[s].push(...r[s])}else t[s]=r[s];break;case"Object":if("Object"===ze(t[s])){Ee(e,t[s],r[s]);break}default:t[s]=r[s]}return t}));Ee(1),Ee(2),Ee(3);const Pe=Ce(((e,t)=>{const r=ze(e);if(r===ze(t)&&("Object"===r||"Array"==r)){if(je(e)||je(t))return e===t;if(e===t)return!0;for(const r of[e,t])for(const s in r)if(!(r===t&&s in e||r===e&&s in t&&Pe(e[s],t[s])))return!1;return!0}return e===t})),qe=xe(((e,t,r,s)=>e(s)?t(s):r(s))),Be=(...e)=>(...t)=>{let r,s=!0;for(let n=Ue(e)-1;n>-1;n--)s?(s=!1,r=e[n](...t)):r=r===be?e[n]():e[n](r);return r},Fe=Ce(((e,t)=>t[e])),Me=Ce(((e,t)=>{if((e=>"string"===Ne(e))(t))return t.includes(e);for(const r of t)if(Pe(r,e))return!0;return!1})),Re=ve(((e,t,r)=>r.slice(e,(e=>"number"==Ne(e))(t)?t:ke))),We=Fe(0);Re(1,ke);const Le=e=>je(e)||(e=>e===Se)(e),Ue=e=>e.length,Ze=e=>()=>e,De=Ce(((e,t)=>t.split(e))),Ge=e=>Ae(((e,t)=>Me(t,e)?e:Oe(t,e)),[],e),He=ve(((e,t,r)=>({...r,[e]:t}))),Ie=Ce(((e,t)=>t[e])),Je=ve(((e,t,r)=>qe(Ue,(()=>Le(r)?e:Be(qe(Le,Ze(e),(r=>Je(e,Re(1,ke,t),r))),(e=>Ce(((t,r)=>e(r,t))))(Ie)(r),We)(t)),Ze(r),t)));Je(Se);const Ke=/^(.*?)(8|16|32|64)(Clamped)?Array$/,Qe=(e,t=!1)=>{const r=ze(e);switch(r){case"Null":case"String":case"Number":case"Boolean":case"Symbol":return e;case"Array":return t?[...e]:Ve(Be(Qe,((...e)=>e[0])),e);case"Object":if(t)return{...e};const s={};for(let t in e)s[t]=Qe(e[t]);return s;default:return Ke.test(r)?e.constructor.from(e):e}},Te=ve(((e,t,r)=>Ae(e,Qe(t),r))),Ve=Ce(((e,t)=>t.map(e))),{floor:Xe}=Math;let Ye,et;const tt=Be((e=>Te(((e,t)=>He(...t,e)),{},e)),Ve(((e,t)=>[e,t])),De(""));(e=>{if(!(e=>Be(Pe(Ue(e)),Ue,Ge,De(""))(e))(e))throw new Error("Not all chars are unique!");Ye=e,et=Ye.length,tt(Ye)})("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");const rt="\ntop flex grid overflow transform transition-duration max-height 100%\nmargin margin-top margin-left margin-bottom margin-right justify-content\nborder width height left border-radius background bottom position align-items\ncenter bottom absolute relative float right opacity z-index min-width\nmin-height border-top border-bottom border-left border-right filter\nfont-family font-size font-weight none hidden auto display block inline inline-block\npadding padding-top padding-bottom padding-left padding-right text-align\nflex-direction column box-shadow rotate content text-decoration max-width\nfixed color space-between overflow-x overflow-y background-size\n".replace(/\s+/g,",").split(/[, ]/g).filter(Boolean),st=()=>{let e=0;return()=>`a${(e=>{let t="";for(;e>0;)t=Ye[e%et]+t,e=Xe(e/et);return t||"0"})(e++)}`},nt=e=>{const t=st(),{compose:r,fromPairs:s,map:n,qreverse:o,toPairs:i}=e,l=r(s,n((e=>[e,t()])))(rt);return{dic:l,dicRev:r(s,o,i)(l)}};let ot=!1;const it=e=>ot=e,lt=nt({compose:i,fromPairs:$,map:a,reverse:y,toPairs:h}),ct=(()=>{const t=se,r=oe,n=ie,o=ce,l=le,c=ae,f=e((()=>ot),(e=>lt.dicRev[e]||e));return(d,h,p)=>{let m;switch(!0){case"{"==h:d.add(p);break;case"}"==h:d.pop();break;case null!==(m=n.exec(h)):const g=d.findClass(m[1]);if(g)for(const e in g.rules)d.merge(e,g.rules[e]);break;case null!==(m=t.exec(h)):d.merge(J(H(f(m[1]))),e(isNaN,J,(e=>{switch(e){case"undefined":case"false":case"":return;case"null":return null;default:return isNaN(+e)?e:+e}})(f(m[3]))));break;case null!==(m=r.exec(h)):p.splice(0),p.push(...i(a(s(c,"$1")),u(b(l),(e=>[e]),w(o)))(h))}}})(),at=x((([e,t],r)=>{let s,n,o=r.length,i=e.length,l=0,c=[];for(s=0;s<o;s++)switch(r.slice(s,s+i)){case e:s+=i-1,0==l&&(n=s),l++;break;case t:if(s+=i-1,l--,0==l)c.push([n,s]);else if(l<0)throw new Error("fela-vue literal: unbalanced delimeter in functional expression !")}return c})),ut=i(C("\n"),a((e=>{const t=[];let r=0;for(let[s,n]of at(["[","]"],e))t.push(e.slice(r,s),`\${${e.slice(s+1,n).replace(/(\W|^)\$([a-zA-Z_]+)\b/g,"$1$$ps.$2").replace(/(\W|^)@(.+?)\b/g,"$1$t.$2")}}`),r=n+1;return t.push(e.slice(r)),t.join("")}))),ft=e=>t=>{const r=[];let s,n,o,i=0,l=[];for(s of t)if(i>0)switch(s){case"{":i++,l[l.length-1]+=s;break;case"}":if(1==--i){if(e){const e=`($ps, $t) => css\`${ut(l)}\``;r.push([o,e])}else{const e=new Function("$t,css,$ps",`return css\`\n                ${ut(l)}\n              \``);r.push([o,(t,r)=>e(r,wt,t)])}i=0,l.splice(0)}else l[l.length-1]+=s;break;default:l.push(s)}else n=s.indexOf("=>"),~n?(i=1,o=s.slice(0,n).trim().replace(/^\./,"")):r.push(s);return r},dt=(()=>{const e=["\n","\r",";"],r=t=>e.includes(t),n=Y;return(l,u=!1)=>{const f=new ge,d=[];return i((()=>f.out),v((e=>{if("Array"==c(e))f.merge(e[0],e[1]);else if(e&&ct(f,e,d),f.depth<1)throw new Error("lit-css parse error: unbalanced {} braces !")})),ft(u),S(t(o)),a(k),(h=e,e=>{const t=a(p,h),r=[];let s,n,o=0,i=h.length,l=e.length;for(s=0;s<l;s++)for(n=0;n<i;n++)e.slice(s,s+t[n])===h[n]&&"\\"!==e[s-1]&&(r.push(e.slice(o,s)),s+=t[n]-1,o=s+1);return o!==e.length-1&&r.push(e.slice(o)),r}),s(/(\{|\})/g,((e,t,s,n)=>(r(n[s-1])||(t=";"+t),r(n[s+1])||(t+=";"),t))),I,s(n,""))(l);var h}})(),ht=ue,pt=(e,t)=>e[t]||e[H(t)],mt=(e,t,r,s,n)=>{switch(t||(t=D),typeof r){case G.f:return[r.name,[e=>r(e,n)]];case G.o:return[r.className,[N(r)]];case G.s:const o=((e,t,r,s,n)=>i(j((r=>[r,pt(t,r)||pt(e(),r)||D])),j(m),_((e=>{if(p(e)<2)return!0;const t=m(e);let r,o,i;return z((e=>{if(o="!"===O(e),o&&(e=A(e)),r=s[e],!r)throw new Error(`[fela-vue] Class modifier with name ${e} not found.`);return i=r(t,n),o?!i:i}),E(0,-1,e))})),j(w(ht)),_((e=>""!==e)),w(/[,\s\t]+/g))(r))(e,t,r,s,n),l=[],c=[];for(const[r,i]of o)l.push(r),c.push(...mt(e,t,i,s,n)[1]);return[l.join("_"),c];default:return["",[f]]}},gt=function(e,t){if(T)for(const r in e){const s=e[r],n=[];for(const e in s){const t=s[e];"Object"==c(t)?this.setClasses(t,document.querySelectorAll(r+e)):n.push([e,t])}if(n.length){const e=(0,this.renderClasses)(null,$(n)).split(" ");(t||document.querySelectorAll(r)).forEach((t=>t.classList.add(...e)))}}},bt=e=>(t,...r)=>dt(((e,t)=>e.reduce(((e,r,s)=>e+r+(t.length>s?t[s]:"")),""))(t,r),e),wt=bt(!1),$t=bt(!0),yt={method:"f",defStyles:void 0,modifiers:{},plugins:[],enhancers:[],preset:{unit:[]},ssr:!1};class xt{static devClassNames=!1;renderer;_mixin;renderClasses;styl;get mixin(){return Object.freeze(this._mixin)}get style(){return F(this.renderer)}setClasses=gt;constructor(e={}){const{method:t,ssr:r,preset:s,plugins:n,enhancers:o,...l}=((e,t={})=>i($,a((([e,r])=>{switch(c(r)){case"Array":return[e,[...r,...t[e]||[]]];case"Object":return[e,{...r,...t[e]||{}}];default:return[e,t[e]||r]}})),h)(e))(yt,e),u={...yt.preset,...s||{}},d=this;if(e.fdef)throw new Error("fela-vue: Change deprecated `fdef` to `defStyles`!");this.renderer=q({...l,enhancers:o,plugins:X([Z,W,L,U,...n],{0:u.unit})});const{renderer:p}=this,m=e.defStyles;let g,b;switch(typeof m){case G.o:[g,b]=[m.key,m.value];break;case G.f:[g,b]=["fdef",m]}T&&(r?M(p):R(p)),this.renderClasses=(t,r,s=D,n)=>{const[o,i]=mt((e=>{let t,r=!1;return()=>r?t:(r=!0,t=e())})((()=>b?b(this):D)),t,r,n?P(e.modifiers,n):e.modifiers,this);return p.renderRule(((e,t,r)=>{if(r&&t&&"anonymous"!==t)return{[t]:(t,r)=>e(t,r)}[t];return e})(B(...i),o,xt.devClassNames),s)||void 0},this.styl=(e,t)=>(r,s,n)=>this.renderClasses(e,r,s,n?P(t,n):t),this._mixin=S(f,{methods:{[t]:function(t,r,s){return d.renderClasses.call(this,this.style,t,r,s?P(e.modifiers,s):"styleMods"in this&&this.styleMods)}},computed:m&&{[g](){return b(this)}}})}}class Ct extends xt{static get devClassNames(){return xt.devClassNames}static set devClassNames(e){xt.devClassNames=e}f;fdef;getCSS(){return e=>{const t={style:e,fdef:this.fdef};return(e,r)=>this.f.call(t,e,r)}}getLiteralCSS(){const e=this.getCSS();return(...t)=>e(wt(...t))}constructor(e={}){super(e);const t=this.mixin;this.f=t.methods.f,this.fdef="function"==typeof e.defStyles?t.computed.fdef:e.defStyles&&t.computed[e.defStyles.key]}}let vt=null;const St=function(){return{name:"fela-vue-compression",async transform(e){const t=await import("pepka"),{compose:r,take:s,replace:n}=t;vt||(vt=nt(t));const o=((e,t)=>{const{compose:r,replace:s,trim:n}=t;return r(s(re,"$2"),s(te,"$1"),s(ee,"$1"),s(Y,""),s(ne,((t,r,s,o)=>o?r+(s&&o?`${n(e.dic[s]||s)}:${n(e.dic[o]||o)};`:n(s?t.replace(s,e.dic[s]||s):o?t.replace(s,e.dic[o]||o):t)):"")))})(vt,t);let i="";try{i=e.replace(de,r((e=>`css\`${o(e)}\``),n(he,n(fe," ")),s(1)))}catch(e){console.warn(e)}return{code:i||e,map:null}}}};export{xt as Renderer,Ct as SvelteRenderer,$t as __specialcss,wt as css,St as rollupCSSCompression,it as setCompression};
+import { when, complement, isNil, replace, both, isEmpty, compose, equals, type, map, ifElse, identity, prop, toPairs, length, last, qmergeDeep, test, split, fromPairs, qreverse, curry, join as join$1, forEach, filter, trim, always, qmap, qfilter, all, head, tail, slice, mergeShallow } from 'pepka';
+import { createRenderer, combineRules } from 'fela';
+import { renderToMarkup, rehydrate, render } from 'fela-dom';
+import embedded from 'fela-plugin-embedded';
+import prefixer from 'fela-plugin-prefixer';
+import fallback from 'fela-plugin-fallback-value';
+import unit from 'fela-plugin-unit';
+
+const emptyObject = Object.freeze({});
+const types = Object.freeze({ f: 'function', o: 'object', s: 'string' });
+const camelify = (str) => str.replace(/-(\w)/gu, (_s, l) => l.toUpperCase());
+const memoize = (fn) => {
+    let cache;
+    let cached = false;
+    return () => cached ? cache : (cached = true, cache = fn());
+};
+const splitNonEscaped = (delims) => (str) => {
+    const delims_lns = map(length, delims);
+    const out = [];
+    let i, j, last_index = 0, delims_count = delims.length, str_len = str.length;
+    for (i = 0; i < str_len; i++) {
+        for (j = 0; j < delims_count; j++) {
+            if (str.slice(i, i + delims_lns[j]) === delims[j]
+                && str[i - 1] !== '\\') {
+                out.push(str.slice(last_index, i));
+                i += delims_lns[j] - 1;
+                last_index = i + 1;
+            }
+        }
+    }
+    if (last_index !== str.length - 1) {
+        out.push(str.slice(last_index));
+    }
+    return out;
+};
+const escape = (() => {
+    const patternRE = /url\(.*?\)/g;
+    const signsRE = /[,:;]/g;
+    return (v) => v.replace(patternRE, (v) => v.replace(signsRE, (s) => `\\${s}`));
+})();
+const unescape = when(complement(isNil), replace(/([^\\])\\([^\\])/g, '$1$2'));
+const valuable = both(complement(isEmpty), complement(isNil));
+const join = (strings, values) => strings.reduce((accum, str, i) => accum + str + (values.length > i ? values[i] : ''), '');
+compose(equals('Object'), type);
+const isWindow = compose(equals('Window'), type);
+const tryNamedFn = (rule, name, useNamed) => {
+    if (useNamed && name && name !== 'anonymous') {
+        const tmpObj = {
+            [name]: (props, renderer) => rule(props, renderer)
+        };
+        return tmpObj[name];
+    }
+    else
+        return rule;
+};
+const isBrowser = (() => {
+    try {
+        return isWindow(window);
+    }
+    catch {
+        return false;
+    }
+})();
+const tryUnwrap = map(ifElse(compose(equals('Function'), type), identity, prop('default')));
+const callWith = (args, i, fn) => fn(...(args[i] || []));
+const preparePlugins = (plugins, args) => compose(map(([i, p]) => callWith(args, i, p)), toPairs, tryUnwrap)(plugins);
+const re = {
+    comment: /((\s+?\/\/.*$)|\/\*(.|[\n\r])*?\*\/)/gm,
+    // senseless_lines: /[\n\r]{2,}|(?:;\s)/g,
+    trailing_ws: /(^|\r|\n)+[\t ]+/g,
+    repeatingSeps: /([;\n\r]){2,}/g,
+    trailingSeps: /(?:(}|{|]|)^[;\n\r ]+)|(?:[;\n\r ]+($|}|{|]))/g,
+    rule: /^([\w-]+)(: *| +)(.*)$/,
+    rule_free: /[^\$](^|\r|\n|;|{)\s*([a-z-]+)[ :][\t ]*?:?[\t ]*?([^;\r\n]+)/g,
+    selector: /^(([\|~\$@>\*\.:&\(\)\^="\-\[\]]+).*[ ,]*)+:?$/,
+    spread: /^\.\.\.(\S*)$/,
+    media: /^@media /,
+    delim: /\s*,\s*/g,
+    trailing_colon: /(.*):$/,
+    class_mod: /[.&]/,
+    eol: /[\n\r]/g,
+    tliterals: /css\`((.|\s)*?)\`/g,
+    interp: /\${(?:[^{}]|{(?:[^{}]|{[^{}]*})*})*}/g
+};
+
+class Selector {
+    s;
+    rules = {};
+    // @ts-disable-next it is being read in Selector.isSelector()
+    __selector__ = true;
+    get complex() {
+        return this.s.className !== null && this.s.modifier !== null;
+    }
+    static isSelector(x) {
+        return Boolean(x && x.__selector__);
+    }
+    serialize() {
+        const { className, modifier } = this.s;
+        return (className ? `.${className}` : '') + (modifier || '');
+    }
+    findClass(name, s = this) {
+        if (s.s.className === name)
+            return s;
+        else
+            for (const ruleName in s.rules) {
+                const rule = s.rules[ruleName];
+                if (Selector.isSelector(rule)) {
+                    const res = rule.findClass(name);
+                    if (res)
+                        return res;
+                }
+            }
+        return null;
+    }
+    constructor(selector) {
+        const cls = selector.match(/^\.[\w-_]+/);
+        this.s = {
+            className: cls ? cls[0].slice(1) : null,
+            modifier: cls ? selector.slice(cls[0].length) || null : selector
+        };
+    }
+}
+
+const extractRules = (s, depth = 0) => {
+    const o = {};
+    let tmp, full, key, newRules, k;
+    for (k in s.rules) {
+        tmp = s.rules[k];
+        if (Selector.isSelector(tmp)) {
+            tmp = tmp; // will get erased by minifier.
+            full = tmp.complex ? tmp.s.className : tmp.serialize();
+            key = (depth == 0 && full[0] == '.')
+                ? full.slice(1)
+                : full[0] == '.' ? `& ${full}` : full;
+            newRules = tmp.complex
+                ? { [tmp.s.modifier]: extractRules(tmp, depth + 1) }
+                : extractRules(tmp, depth + 1);
+            if (o[key])
+                qmergeDeep(o[key], newRules);
+            else
+                o[key] = newRules;
+        }
+        else
+            o[k] = tmp;
+    }
+    return o;
+};
+/** Keeps the structure of CSS to navigate and change the tree. */
+class Levels {
+    path = [];
+    get out() {
+        return extractRules(this.path[0][0]);
+    }
+    get depth() {
+        return this.path.length;
+    }
+    add(selectors) {
+        const curSelectors = last(this.path);
+        const newCurs = [];
+        for (const rawSel of selectors) {
+            const sel = new Selector(rawSel);
+            for (const curSel of curSelectors) {
+                const fullSelector = sel.serialize();
+                const old = curSel.rules[fullSelector];
+                newCurs.push(old || sel);
+                if (!old) {
+                    curSel.rules[fullSelector] = sel;
+                }
+            }
+        }
+        this.path.push(newCurs);
+    }
+    merge(k, v) {
+        if (valuable(v) && valuable(k)) {
+            for (const o of last(this.path)) {
+                o.rules[k] = v;
+            }
+        }
+    }
+    findClass(name) {
+        for (const group of this.path)
+            for (const s of group) {
+                const res = s.findClass(name);
+                if (res)
+                    return res;
+            }
+        return null;
+    }
+    pop() {
+        return this.path.pop();
+    }
+    constructor() {
+        this.path.push([new Selector('__root')]);
+    }
+}
+
+const r=Symbol("Placeholder"),t=t=>{let e=0;for(const n of t)n!==r&&e++;return e},e=(t,e)=>{const n=t.length,o=t.slice(),s=e.length;let c=s,u=0;for(;c&&u<n;u++)o[u]===r&&(o[u]=e[s-c],c--);for(u=n;c;u++,c--)o[u]=e[s-c];return o},n=(r,o,s)=>{const c=r.length-o.length-t(s);if(c<1)return r(...e(o,s));{const t=(...t)=>n(r,e(o,s),t);return t.$args_left=c,t}},o=r=>(...e)=>r.length>t(e)?n(r,[],e):r(...e),s=t=>function(e){return e===r?t:t(e)};function c(t){return function(e,n){const o=e===r,c=arguments.length;if(1===c&&o)throw new Error("Senseless placeholder usage.");return arguments.length>1?o?s((r=>t(r,n))):t(e,n):r=>t(e,r)}}function u(r){return o(r)}const l=void 0,f=1/0,i=r=>typeof r,a=r=>null===r,h={u:"U",b:"B",n:"N",s:"S",f:"F"},g=r=>{const t=i(r);return "object"===t?a(r)?"Null":r.constructor.name:h[t[0]]+t.slice(1)},b=c(((r,t)=>(t.push(r),t))),p=u(((r,t,e)=>e.reduce(r,t))),d=u(((r,t,e)=>{for(let n in e)switch(g(e[n])){case"Array":if(r>1&&"Array"===g(t[n]))switch(r){case 2:const o=t[n],s=e[n];for(const t in s)o[t]?d(r,o[t],s[t]):o[t]=s[t];break;case 3:t[n].push(...e[n]);}else t[n]=e[n];break;case"Object":if("Object"===g(t[n])){d(r,t[n],e[n]);break}default:t[n]=e[n];}return t}));d(1),d(2),d(3);const m=c(((r,t)=>{const e=g(r);if(e===g(t)&&("Object"===e||"Array"==e)){if(a(r)||a(t))return r===t;if(r===t)return !0;for(const e of [r,t])for(const n in e)if(!(e===t&&n in r||e===r&&n in t&&m(r[n],t[n])))return !1;return !0}return r===t})),y=o(((r,t,e,n)=>r(n)?t(n):e(n))),w=(...t)=>(...e)=>{let n,o=!0;for(let s=k(t)-1;s>-1;s--)o?(o=!1,n=t[s](...e)):n=n===r?t[s]():t[s](n);return n},j=c(((r,t)=>t[r])),A=c(((r,t)=>{if((r=>"string"===i(r))(t))return t.includes(r);for(const e of t)if(m(e,r))return !0;return !1})),N=u(((r,t,e)=>e.slice(r,(r=>"number"==i(r))(t)?t:f))),S=j(0);N(1,f);const O=r=>a(r)||(r=>r===l)(r),k=r=>r.length,B=r=>()=>r,E=c(((r,t)=>t.split(r))),q=r=>p(((r,t)=>A(t,r)?r:b(t,r)),[],r),v=u(((r,t,e)=>({...e,[r]:t}))),x=c(((r,t)=>t[r])),C=u(((r,t,e)=>y(k,(()=>O(e)?r:w(y(O,B(r),(e=>C(r,N(1,f,t),e))),(r=>c(((t,e)=>r(e,t))))(x)(e),S)(t)),B(e),t)));C(l);const F=/^(.*?)(8|16|32|64)(Clamped)?Array$/,I=(r,t=!1)=>{const e=g(r);switch(e){case"Null":case"String":case"Number":case"Boolean":case"Symbol":return r;case"Array":return t?[...r]:P(w(I,(r=>(...t)=>t[r])(0)),r);case"Object":if(t)return {...r};const n={};for(let t in r)n[t]=I(r[t]);return n;default:return F.test(e)?r.constructor.from(r):r}},M=u(((r,t,e)=>p(r,I(t),e))),P=c(((r,t)=>t.map(r))),{floor:U}=Math;let W,$,G="0123456789abcdefghijklmnopqrstuvwxyz";const H=w((r=>M(((r,t)=>v(...t,r)),{},r)),P(((r,t)=>[r,t])),E("")),J=r=>{if(!(r=>w(m(k(r)),k,q,E(""))(r))(r))throw new Error("Not all chars are unique!");W=r,$=W.length,H(W);};J(G+"ABCDEFGHIJKLMNOPQRSTUVWXYZ");const K=r=>{let t="";for(;r>0;)t=W[r%$]+t,r=U(r/$);return t||"0"};
+
+const rules = `
+top flex grid overflow transform transition-duration max-height 100%
+margin margin-top margin-left margin-bottom margin-right justify-content
+border width height left border-radius background bottom position align-items
+center bottom absolute relative float right opacity z-index min-width
+min-height border-top border-bottom border-left border-right filter
+font-family font-size font-weight none hidden auto display block inline inline-block
+padding padding-top padding-bottom padding-left padding-right text-align
+flex-direction column box-shadow rotate content text-decoration max-width
+fixed color space-between overflow-x overflow-y background-size
+`.replace(/\s+/g, ',').split(/[, ]/g).filter(Boolean);
+const prepareCompressRule = () => { let i = 0; return () => `a${K(i++)}`; };
+const getDics = (pepka) => {
+    const compressRule = prepareCompressRule();
+    const { compose, fromPairs, map, qreverse, toPairs } = pepka;
+    const dic = compose(fromPairs, map((rule) => [rule, compressRule()]))(rules);
+    return { dic, dicRev: compose(fromPairs, qreverse, toPairs)(dic) };
+};
+
+let compression = false;
+const setCompression = (to) => compression = to;
+const dics$1 = getDics({ compose, fromPairs, map, qreverse, toPairs });
+const analyseLine = (() => {
+    const ruleRE = re.rule;
+    const selectorRE = re.selector;
+    const spreadRE = re.spread;
+    const delimRE = re.delim;
+    const mediaRE = re.media;
+    const trailingColonRE = re.trailing_colon;
+    const decompress = when(() => compression, (s) => dics$1.dicRev[s] || s);
+    const getValue = (value) => {
+        switch (value) {
+            case 'undefined':
+            case 'false':
+            case '': return undefined;
+            case 'null': return null;
+            default: return isNaN(+value) ? value : +value;
+        }
+    };
+    return (levels, line, names) => {
+        let groups;
+        switch (true) {
+            case line == '{':
+                levels.add(names);
+                break;
+            case line == '}':
+                levels.pop();
+                break;
+            case (groups = spreadRE.exec(line)) !== null:
+                const cls = levels.findClass(groups[1]);
+                if (cls)
+                    for (const name in cls.rules)
+                        levels.merge(name, cls.rules[name]);
+                break;
+            case (groups = ruleRE.exec(line)) !== null:
+                levels.merge(unescape(camelify(decompress(groups[1]))), when(isNaN, unescape, getValue(decompress(groups[3]))));
+                break;
+            case (groups = selectorRE.exec(line)) !== null:
+                names.splice(0);
+                names.push(...compose(map(replace(trailingColonRE, '$1')), ifElse(test(mediaRE), (l) => [l], split(delimRE)))(line));
+                break;
+        }
+    };
+})();
+
+const errorString = 'fela-vue literal: unbalanced delimeter in functional expression !';
+/** returns first and last indexes of entries themselves. */
+const findEntries = curry(([start, end], str) => {
+    let i, startI, str_len = str.length, delim_len = start.length, balance = 0, entries = [];
+    for (i = 0; i < str_len; i++)
+        switch (str.slice(i, i + delim_len)) {
+            case start:
+                i += delim_len - 1;
+                if (balance == 0)
+                    startI = i;
+                balance++;
+                break;
+            case end:
+                i += delim_len - 1;
+                balance--;
+                if (balance == 0)
+                    entries.push([startI, i]);
+                else if (balance < 0)
+                    throw new Error(errorString);
+        }
+    return entries;
+});
+const injectExpressions = (line) => {
+    const accum = [];
+    let lastI = 0;
+    for (let [from, to] of findEntries(['[', ']'], line)) {
+        accum.push(line.slice(lastI, from), `\${${line
+            .slice(from + 1, to)
+            .replace(/(\W|^)\$([a-zA-Z_]+)\b/g, '$1$$ps.$2')
+            .replace(/(\W|^)@(.+?)\b/g, '$1$t.$2')}}`);
+        lastI = to + 1;
+    }
+    accum.push(line.slice(lastI));
+    return accum.join('');
+};
+const intoExpression = compose(join$1('\n'), map(injectExpressions));
+const createFunctions = (aug) => (lines) => {
+    const out = [];
+    let line, arrowI, selector, balance = 0, accum = [];
+    for (line of lines) {
+        if (balance > 0) {
+            switch (line) {
+                case '{':
+                    balance++;
+                    accum[accum.length - 1] += line;
+                    break;
+                case '}':
+                    if (--balance == 1) {
+                        if (aug) {
+                            const gen = `($ps, $t) => css\`${intoExpression(accum)}\``;
+                            out.push([selector, gen]); // only for internal aug stuff.
+                        }
+                        else {
+                            const gen = new Function('$t,css,$ps', `return css\`
+                ${intoExpression(accum)}
+              \``);
+                            out.push([selector, (props, t) => gen(t, css, props)]);
+                        }
+                        balance = 0;
+                        accum.splice(0);
+                    }
+                    else {
+                        accum[accum.length - 1] += line;
+                    }
+                    break;
+                default:
+                    accum.push(line);
+            }
+        }
+        else {
+            arrowI = line.indexOf('=>');
+            if (~arrowI) {
+                balance = 1;
+                selector = line.slice(0, arrowI).trim().replace(/^\./, '');
+            }
+            else {
+                out.push(line);
+            }
+        }
+    }
+    return out;
+};
+
+const parse = (() => {
+    const delimiters = ['\n', '\r', ';'];
+    const isDelimiter = (s) => delimiters.includes(s);
+    const commentRE = re.comment;
+    return (css, aug = false) => {
+        const levels = new Levels();
+        const names = []; // selector names, class names.
+        return compose(() => levels.out, forEach((line) => {
+            if (type(line) == 'Array')
+                levels.merge(line[0], line[1]);
+            else {
+                if (line)
+                    analyseLine(levels, line, names);
+                if (levels.depth < 1)
+                    throw new Error('lit-css parse error: unbalanced {} braces !');
+            }
+        }), createFunctions(aug), filter(complement(isEmpty)), map(trim), splitNonEscaped(delimiters), replace(/(\{|\})/g, (_, brace, offset, full) => {
+            if (!isDelimiter(full[offset - 1]))
+                brace = ';' + brace;
+            if (!isDelimiter(full[offset + 1]))
+                brace += ';';
+            return brace;
+        }), escape, replace(commentRE, ''))(css);
+    };
+})();
+
+const classModRE = re.class_mod;
+const notMark = '!';
+const empty_str = '';
+// TODO: modifiers reactivity ?..
+const pickStyle = (style, name) => style[name] || style[camelify(name)];
+const pickStyles = (getDefStyle, style, names, modifiers, context) => compose(qmap((name) => [
+    name,
+    pickStyle(style, name) || pickStyle(getDefStyle(), name) || emptyObject
+]), qmap(last), qfilter((mods_and_name) => {
+    if (length(mods_and_name) < 2)
+        return true;
+    const className = last(mods_and_name);
+    let mod, invert, res;
+    return all((mod_name) => {
+        invert = head(mod_name) === notMark;
+        if (invert)
+            mod_name = tail(mod_name);
+        mod = modifiers[mod_name];
+        if (!mod)
+            throw new Error(`[fela-vue] Class modifier with name ${mod_name} not found.`);
+        res = mod(className, context);
+        return invert ? !res : res;
+    }, slice(0, -1, mods_and_name));
+}), qmap(split(classModRE)), qfilter((s) => s !== empty_str), split(/[,\s\t]+/g))(names);
+const getRules = (getDefStyle, style, propsOrRule, modifiers, context) => {
+    if (!style)
+        style = emptyObject;
+    switch (typeof propsOrRule) {
+        case types.f:
+            return [
+                propsOrRule.name,
+                [(props) => propsOrRule(props, context)]
+            ];
+        case types.o:
+            return [propsOrRule.className, [always(propsOrRule)]];
+        case types.s:
+            const styles = pickStyles(getDefStyle, style, propsOrRule, modifiers, context);
+            const names = [];
+            const rules = [];
+            for (const [name, rule] of styles) {
+                names.push(name);
+                rules.push(...getRules(getDefStyle, style, rule, modifiers, context)[1]);
+            }
+            return [names.join('_'), rules];
+        default:
+            return ['', [identity]];
+    }
+};
+
+// TODO: make it reactive by caching classes added by it.
+const setClasses = function (sheet, root) {
+    if (isBrowser)
+        for (const tag in sheet) {
+            const rules = sheet[tag];
+            const simpleRules = [];
+            for (const p in rules) {
+                const rule = rules[p];
+                if (type(rule) == 'Object') // p is a subselector.
+                    this.setClasses(rule, document.querySelectorAll(tag + p));
+                else // p is a rule
+                    simpleRules.push([p, rule]);
+            }
+            if (simpleRules.length) {
+                const renderClasses = this.renderClasses;
+                const classes = renderClasses(null, fromPairs(simpleRules)).split(' ');
+                (root || document.querySelectorAll(tag))
+                    .forEach((el) => el.classList.add(...classes));
+            }
+        }
+};
+
+// TODO: make this inside of a ww.
+const _css = (aug) => {
+    return (strings, ...values) => {
+        return parse(join(strings, values), aug);
+    };
+};
+const css = _css(false);
+const __specialcss = _css(true);
+
+const mergeProps = (defaults, opts = {}) => compose(fromPairs, map(([k, v]) => {
+    switch (type(v)) {
+        case 'Array': return [k, [...v, ...(opts[k] || [])]];
+        case 'Object': return [k, { ...v, ...(opts[k] || {}) }];
+        default: return [k, opts[k] || v];
+    }
+}), toPairs)(defaults);
+const defaultOpts = {
+    method: 'f',
+    defStyles: undefined,
+    modifiers: {},
+    plugins: [],
+    enhancers: [],
+    preset: { unit: [] },
+    ssr: false
+};
+class Renderer {
+    /** To use with fela-monolithic enhancer. */
+    static devClassNames = false;
+    renderer;
+    _mixin;
+    renderClasses;
+    /** Vue Composition API endpoint. */
+    styl;
+    /** @returns Vue Options API mixin. */
+    get mixin() {
+        return Object.freeze(this._mixin);
+    }
+    /** @returns Entire css for SSR proposes. */
+    get style() {
+        return renderToMarkup(this.renderer);
+    }
+    /** Sets classes to DOM elements what match. Just like CSS. */
+    setClasses = setClasses;
+    constructor(opts = {}) {
+        const { method, ssr, preset, plugins, enhancers, ...miscRenderOpts } = mergeProps(defaultOpts, opts);
+        const presetConfig = { ...defaultOpts.preset, ...(preset || {}) };
+        const thisRenderer = this;
+        if (opts.fdef) {
+            throw new Error('fela-vue: Change deprecated `fdef` to `defStyles`!');
+        }
+        // Fela renderer creation. 
+        this.renderer = createRenderer({
+            ...miscRenderOpts,
+            enhancers,
+            plugins: preparePlugins([
+                unit,
+                embedded,
+                prefixer,
+                fallback,
+                ...plugins
+            ], { 0: presetConfig.unit })
+        });
+        const { renderer } = this;
+        // Default styles.
+        const fdef = opts.defStyles;
+        let fdefKey, fdefValue;
+        switch (typeof fdef) {
+            case types.o:
+                [fdefKey, fdefValue] = [fdef.key, fdef.value];
+                break;
+            case types.f:
+                [fdefKey, fdefValue] = ['fdef', fdef];
+                break;
+        }
+        // Fela mounting.
+        if (isBrowser)
+            if (ssr)
+                rehydrate(renderer);
+            else
+                render(renderer);
+        this.renderClasses = (stylesheet, propsOrRule, props = emptyObject, modifiers) => {
+            const [name, rules] = getRules(memoize(() => fdefValue ? fdefValue(this) : emptyObject), stylesheet, propsOrRule, modifiers ? mergeShallow(opts.modifiers, modifiers) : opts.modifiers, this);
+            return renderer.renderRule(tryNamedFn(combineRules(...rules), name, Renderer.devClassNames), props) || undefined;
+        };
+        // Should be bound to Renderer.
+        this.styl = (stylesheet, modifiers) => (propsOrRule, props, submodifiers) => this.renderClasses(stylesheet, propsOrRule, props, submodifiers ? mergeShallow(modifiers, submodifiers) : modifiers);
+        // Mixin creation.
+        this._mixin = filter(identity, {
+            methods: {
+                /** propsOrRule: any, props?: AnyObject */
+                [method]: function (propsOrRule, props, submodifiers) {
+                    return thisRenderer.renderClasses
+                        .call(this, this.style, propsOrRule, props, submodifiers
+                        ? mergeShallow(opts.modifiers, submodifiers)
+                        : 'styleMods' in this && this.styleMods);
+                }
+            },
+            computed: fdef && {
+                [fdefKey]() {
+                    return fdefValue(this);
+                }
+            }
+        });
+    }
+}
+
+class SvelteRenderer extends Renderer {
+    static get devClassNames() {
+        return Renderer.devClassNames;
+    }
+    /** To use with fela-monolithic enhancer. */
+    static set devClassNames(x) {
+        Renderer.devClassNames = x;
+    }
+    f;
+    fdef;
+    getCSS() {
+        return (rules) => {
+            const context = { style: rules, fdef: this.fdef };
+            return (className, attrs) => this.f.call(context, className, attrs);
+        };
+    }
+    getLiteralCSS() {
+        const rulz = this.getCSS();
+        return (...template) => rulz(css(...template));
+    }
+    constructor(opts = {}) {
+        super(opts);
+        const mixin = this.mixin;
+        this.f = mixin.methods.f;
+        this.fdef = typeof opts.defStyles == 'function'
+            ? mixin.computed.fdef
+            : opts.defStyles && mixin.computed[opts.defStyles.key];
+    }
+}
+
+const prepareCompressRules = (dics, pepka) => {
+    const { compose, replace, trim } = pepka;
+    return compose(replace(re.trailingSeps, '$2'), replace(re.repeatingSeps, '$1'), 
+    // replace(re.senseless_lines, '\n'),
+    replace(re.trailing_ws, '$1'), replace(re.comment, ''), replace(re.rule_free, (s, trailing, k, v) => v
+        ? trailing +
+            (k && v
+                ? `${trim(dics.dic[k] || k)}:${trim(dics.dic[v] || v)};`
+                : trim(k ? s.replace(k, dics.dic[k] || k)
+                    : v ? s.replace(k, dics.dic[v] || v)
+                        : s))
+        : ''));
+};
+let dics = null;
+const rollupCSSCompression = function () {
+    return {
+        name: 'fela-vue-compression',
+        async transform(code) {
+            const pepka = await import('pepka');
+            const { compose, take, replace } = pepka;
+            if (!dics)
+                dics = getDics(pepka);
+            const compressRules = prepareCompressRules(dics, pepka);
+            let res = '';
+            try {
+                res = code.replace(re.tliterals, compose((a) => `css\`${compressRules(a)}\``, replace(re.interp, replace(re.eol, ' ')), take(1)));
+            }
+            catch (e) {
+                console.warn(e);
+            }
+            return { code: res || code, map: null };
+        }
+    };
+};
+
+export { Renderer, SvelteRenderer, __specialcss, css, rollupCSSCompression, setCompression };

@@ -1,11 +1,11 @@
 import { camelify, re, unescape } from '../utils'
-import { when, compose, fromPairs, map, reverse, toPairs, complement, replace, split, test, ifElse } from 'pepka'
+import { when, compose, fromPairs, map, qreverse, toPairs, replace, split, test, ifElse } from 'pepka'
 import { Levels } from '../classes/Levels'
 import { getDics } from '../compression/fela-compress'
 
 let compression = false
 export const setCompression = (to: boolean) => compression=to
-const dics = getDics({ compose, fromPairs, map, reverse, toPairs })
+const dics = getDics({ compose, fromPairs, map, qreverse, toPairs })
 
 export const analyseLine = (() => {
   const ruleRE = re.rule

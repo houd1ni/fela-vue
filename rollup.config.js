@@ -1,6 +1,5 @@
 import commonjs from '@rollup/plugin-commonjs'
 import resolve from '@rollup/plugin-node-resolve'
-import terser from '@rollup/plugin-terser'
 import replace from '@rollup/plugin-replace'
 import typescript from 'typescript'
 import typescript2 from 'rollup-plugin-typescript2'
@@ -35,7 +34,6 @@ export default {
         }
       }
     }),
-    process.env.NODE_ENV!='development' && terser(),
     replace({
       preventAssignment: true,
       values: {

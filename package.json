@@ -5,7 +5,6 @@
   "bugs": {
     "url": "https://github.com/houd1ni/fela-vue/issues"
   },
-  "bundleDependencies": [],
   "deprecated": false,
   "description": "Fela toolkit for Vue (and Svelte!) designed for flexibility yet team-oriented.",
   "homepage": "https://houd1ni.github.io/fela-vue/",
@@ -51,7 +50,7 @@
     "prod:es": "cross-env NODE_ENV=production BUILD=es rollup -c",
     "prod": "npm run gentypes && npm run prod:es && npm run prod:cjs"
   },
-  "version": "2.10.9",
+  "version": "2.10.11",
   "ava": {
     "files": [
       "./test/specs/*.js"
@@ -79,7 +78,6 @@
     "@rollup/plugin-commonjs": "^25.0.7",
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-replace": "^5.0.5",
-    "@rollup/plugin-terser": "^0.4.4",
     "@types/node": "^20.12.7",
     "ava": "^6.1.2",
     "codecov": "^3.8.3",
