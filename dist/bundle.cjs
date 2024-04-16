@@ -68,12 +68,11 @@ const callWith = (args, i, fn) => fn(...(args[i] || []));
 const preparePlugins = (plugins, args) => pepka.compose(pepka.map(([i, p]) => callWith(args, i, p)), pepka.toPairs, tryUnwrap)(plugins);
 const re = {
     comment: /((\s+?\/\/.*$)|\/\*(.|[\n\r])*?\*\/)/gm,
-    // senseless_lines: /[\n\r]{2,}|(?:;\s)/g,
     trailing_ws: /(^|\r|\n)+[\t ]+/g,
-    repeatingSeps: /([;\n\r]){2,}/g,
+    repeatingSeps: /([;\s]+|\s{2,})/g,
     trailingSeps: /(?:(}|{|]|)^[;\n\r ]+)|(?:[;\n\r ]+($|}|{|]))/g,
     rule: /^([\w-]+)(: *| +)(.*)$/,
-    rule_free: /[^\$](^|\r|\n|;|{)\s*([a-z-]+)[ :][\t ]*?:?[\t ]*?([^;\r\n]+)/g,
+    rule_free: /(^|\r|\n|;|{)\s*([a-z-]+)[ :][\t ]*?:?[\t ]*?([^;\r\n]+)/g,
     selector: /^(([\|~\$@>\*\.:&\(\)\^="\-\[\]]+).*[ ,]*)+:?$/,
     spread: /^\.\.\.(\S*)$/,
     media: /^@media /,
@@ -212,14 +211,14 @@ fixed color space-between overflow-x overflow-y background-size
 const prepareCompressRule = () => { let i = 0; return () => `a${K(i++)}`; };
 const getDics = (pepka) => {
     const compressRule = prepareCompressRule();
-    const { compose, fromPairs, map, qreverse, toPairs } = pepka;
-    const dic = compose(fromPairs, map((rule) => [rule, compressRule()]))(rules);
-    return { dic, dicRev: compose(fromPairs, qreverse, toPairs)(dic) };
+    const { compose, fromPairs, qmap, qreverse, toPairs } = pepka;
+    const dic = compose(fromPairs, qmap((rule) => [rule, compressRule()]))(rules);
+    return { dic, dicRev: compose(fromPairs, qmap(qreverse), toPairs)(dic) };
 };
 
 let compression = false;
 const setCompression = (to) => compression = to;
-const dics$1 = getDics({ compose: pepka.compose, fromPairs: pepka.fromPairs, map: pepka.map, qreverse: pepka.qreverse, toPairs: pepka.toPairs });
+const dics$1 = getDics({ compose: pepka.compose, fromPairs: pepka.fromPairs, qmap: pepka.qmap, qreverse: pepka.qreverse, toPairs: pepka.toPairs });
 const analyseLine = (() => {
     const ruleRE = re.rule;
     const selectorRE = re.selector;
@@ -257,7 +256,7 @@ const analyseLine = (() => {
                 break;
             case (groups = selectorRE.exec(line)) !== null:
                 names.splice(0);
-                names.push(...pepka.compose(pepka.map(pepka.replace(trailingColonRE, '$1')), pepka.ifElse(pepka.test(mediaRE), (l) => [l], pepka.split(delimRE)))(line));
+                names.push(...pepka.compose(pepka.qmap(pepka.replace(trailingColonRE, '$1')), pepka.ifElse(pepka.test(mediaRE), (l) => [l], pepka.split(delimRE)))(line));
                 break;
         }
     };
@@ -579,18 +578,18 @@ class SvelteRenderer extends Renderer {
     }
 }
 
+const sc = ';';
+const sp = ' ';
 const prepareCompressRules = (dics, pepka) => {
     const { compose, replace, trim } = pepka;
-    return compose(replace(re.trailingSeps, '$2'), replace(re.repeatingSeps, '$1'), 
-    // replace(re.senseless_lines, '\n'),
-    replace(re.trailing_ws, '$1'), replace(re.comment, ''), replace(re.rule_free, (s, trailing, k, v) => v
+    return compose(replace(re.trailingSeps, '$2'), replace(re.repeatingSeps, (s) => s.includes(sc) ? sc : sp), replace(re.trailing_ws, '$1'), replace(re.rule_free, (s, trailing, k, v) => v
         ? trailing +
             (k && v
                 ? `${trim(dics.dic[k] || k)}:${trim(dics.dic[v] || v)};`
                 : trim(k ? s.replace(k, dics.dic[k] || k)
                     : v ? s.replace(k, dics.dic[v] || v)
                         : s))
-        : ''));
+        : ''), replace(re.comment, ''));
 };
 let dics = null;
 const rollupCSSCompression = function () {

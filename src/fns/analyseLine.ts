@@ -1,11 +1,11 @@
 import { camelify, re, unescape } from '../utils'
-import { when, compose, fromPairs, map, qreverse, toPairs, replace, split, test, ifElse } from 'pepka'
+import { when, compose, fromPairs, qreverse, toPairs, replace, split, test, ifElse, qmap } from 'pepka'
 import { Levels } from '../classes/Levels'
 import { getDics } from '../compression/fela-compress'
 
 let compression = false
 export const setCompression = (to: boolean) => compression=to
-const dics = getDics({ compose, fromPairs, map, qreverse, toPairs })
+const dics = getDics({ compose, fromPairs, qmap, qreverse, toPairs })
 
 export const analyseLine = (() => {
   const ruleRE = re.rule
@@ -14,7 +14,7 @@ export const analyseLine = (() => {
   const delimRE = re.delim
   const mediaRE = re.media
   const trailingColonRE = re.trailing_colon
-  const decompress = when(() => compression, (s) => dics.dicRev[s] || s)
+  const decompress = when(() => compression, (s: string) => dics.dicRev[s] || s)
   const getValue = (value: string) => {
     switch(value) {
       case 'undefined': case 'false': case '': return undefined
@@ -45,7 +45,7 @@ export const analyseLine = (() => {
       case (groups = selectorRE.exec(line)) !== null:
         names.splice(0)
         names.push(...compose(
-            map(replace(trailingColonRE, '$1')),
+            qmap(replace(trailingColonRE, '$1')),
             ifElse(test(mediaRE), (l: string) => [l], split(delimRE))
           )(line)
         )

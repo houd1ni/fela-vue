@@ -3,15 +3,16 @@ import { AnyObject } from 'pepka'
 import { re } from '../utils'
 import { getDics } from './fela-compress'
 
+const sc = ';'
+const sp = ' '
+
 const prepareCompressRules = (dics: AnyObject, pepka: typeof import('pepka')) => {
   const { compose, replace, trim } = pepka
  
   return compose(
     replace(re.trailingSeps, '$2'),
-    replace(re.repeatingSeps, '$1'),
-    // replace(re.senseless_lines, '\n'),
+    replace(re.repeatingSeps,  (s: string) => s.includes(sc) ? sc : sp),
     replace(re.trailing_ws, '$1'),
-    replace(re.comment, ''),
     replace(re.rule_free, (s: string, trailing: string, k: string, v: string) =>
       v
       ? trailing +
@@ -21,7 +22,8 @@ const prepareCompressRules = (dics: AnyObject, pepka: typeof import('pepka')) =>
           : v ? s.replace(k, dics.dic[v] || v)
             : s))
       : ''
-    )
+    ),
+    replace(re.comment, '')
   )
 }
 

@@ -16,7 +16,7 @@ const prepareCompressRule = () => {let i=0; return () => `a${zipnum(i++)}`}
 
 export const getDics = (pepka: Partial<typeof import('pepka')>) => {
   const compressRule = prepareCompressRule()
-  const { compose, fromPairs, map, qreverse, toPairs } = pepka
-  const dic = compose(fromPairs, map((rule) => [rule, compressRule()]))(rules)
-  return { dic, dicRev: compose(fromPairs, qreverse, toPairs)(dic) }
+  const { compose, fromPairs, qmap, qreverse, toPairs } = pepka
+  const dic = compose(fromPairs, qmap((rule) => [rule, compressRule()]))(rules)
+  return { dic, dicRev: compose(fromPairs, qmap(qreverse), toPairs)(dic) }
 }
