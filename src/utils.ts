@@ -100,16 +100,19 @@ export const preparePlugins = (
 
 export const re = {
   comment: /((\s+?\/\/.*$)|\/\*(.|[\n\r])*?\*\/)/gm,
-  senseless_lines: /[\n\r]{2,}|(?:;\s)/g,
+  // senseless_lines: /[\n\r]{2,}|(?:;\s)/g,
   trailing_ws: /(^|\r|\n)+[\t ]+/g,
-  repeatingSeps: /[;\n\r]+/g,
+  repeatingSeps: /([;\n\r]){2,}/g,
   trailingSeps: /(?:(}|{|]|)^[;\n\r ]+)|(?:[;\n\r ]+($|}|{|]))/g,
   rule: /^([\w-]+)(: *| +)(.*)$/,
-  rule_free: /(^|\r|\n|;|{)\s*([a-z-]+)[ :][\t ]*?:?[\t ]*?([^;\r\n]+)/g,
+  rule_free: /[^\$](^|\r|\n|;|{)\s*([a-z-]+)[ :][\t ]*?:?[\t ]*?([^;\r\n]+)/g,
   selector: /^(([\|~\$@>\*\.:&\(\)\^="\-\[\]]+).*[ ,]*)+:?$/,
   spread: /^\.\.\.(\S*)$/,
   media: /^@media /,
   delim: /\s*,\s*/g,
   trailing_colon: /(.*):$/,
-  class_mod: /[.&]/
+  class_mod: /[.&]/,
+  eol: /[\n\r]/g,
+  tliterals: /css\`((.|\s)*?)\`/g,
+  interp: /\${(?:[^{}]|{(?:[^{}]|{[^{}]*})*})*}/g
 }

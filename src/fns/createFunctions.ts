@@ -14,25 +14,18 @@ const findEntries = curry((
       delim_len = start.length,
       balance = 0,
       entries: [number, number][] = []
-  for(i=0; i<str_len; i++) {
-    switch(str.slice(i, i+delim_len)) {
-      case start:
-        i += delim_len - 1
-        if(balance==0) {
-          startI = i
-        }
-        balance++
-        break
-      case end:
-        i += delim_len - 1
-        balance--
-        if(balance==0) {
-          entries.push([startI, i])
-        } else if(balance<0) {
-          throw new Error(errorString)
-        }
-      default: break
-    }
+  for(i=0; i<str_len; i++) switch(str.slice(i, i+delim_len)) {
+    case start:
+      i += delim_len - 1
+      if(balance==0) startI = i
+      balance++
+      break
+    case end:
+      i += delim_len - 1
+      balance--
+      if(balance==0) entries.push([startI, i])
+      else if(balance<0) throw new Error(errorString)
+    default: break
   }
   return entries
 })
