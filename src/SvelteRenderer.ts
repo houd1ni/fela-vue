@@ -1,15 +1,9 @@
 import { Renderer, css } from './main'
 import { Options, AnyObject } from './types'
 import { AnyFunc } from 'pepka'
+import { isFunction } from './utils'
 
 export class SvelteRenderer extends Renderer {
-  static get devClassNames() {
-    return Renderer.devClassNames
-  }
-  /** To use with fela-monolithic enhancer. */
-  static set devClassNames(x) {
-    Renderer.devClassNames = x
-  }
   private f: Function
   private fdef: Function
   public getCSS() {
@@ -29,8 +23,8 @@ export class SvelteRenderer extends Renderer {
     super(opts)
     const mixin = this.mixin
     this.f = mixin.methods.f
-    this.fdef = typeof opts.defStyles == 'function'
+    this.fdef = isFunction(opts.defStyles)
       ? mixin.computed.fdef
-      : opts.defStyles && mixin.computed[opts.defStyles.key]
+      : opts.defStyles && mixin.computed[(opts.defStyles as AnyObject).key]
   }
 }

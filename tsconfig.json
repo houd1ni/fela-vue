@@ -5,8 +5,8 @@
       "esnext"
     ],
     "target": "esnext",
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "module": "esnext",
+    "moduleResolution": "bundler",
     "allowJs": false,
     "sourceMap": true,
     "emitDecoratorMetadata": true,

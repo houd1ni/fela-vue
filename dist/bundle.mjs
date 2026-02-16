@@ -1,19 +1,13 @@
-import { when, complement, isNil, replace, both, isEmpty, compose, equals, type, map, ifElse, identity, prop, toPairs, length, last, qmergeDeep, qmap, test, split, fromPairs, qreverse, curry, join as join$1, forEach, filter, trim, always, qfilter, all, head, tail, slice, mergeShallow } from 'pepka';
+import { when, complement, isNil, replace, both, isEmpty, typeIs, map, ifElse, identity, prop, compose, toPairs, length, last, qmergeDeep, qmap, test, split, fromPairs, qreverse, curry, join as join$1, forEach, type, qfilter, trim, qassoc, all, head, tail, slice, always, eq, mergeShallow, once } from 'pepka';
 import { createRenderer, combineRules } from 'fela';
 import { renderToMarkup, rehydrate, render } from 'fela-dom';
 import embedded from 'fela-plugin-embedded';
-import prefixer from 'fela-plugin-prefixer';
 import fallback from 'fela-plugin-fallback-value';
 import unit from 'fela-plugin-unit';
 
 const emptyObject = Object.freeze({});
 const types = Object.freeze({ f: 'function', o: 'object', s: 'string' });
 const camelify = (str) => str.replace(/-(\w)/gu, (_s, l) => l.toUpperCase());
-const memoize = (fn) => {
-    let cache;
-    let cached = false;
-    return () => cached ? cache : (cached = true, cache = fn());
-};
 const splitNonEscaped = (delims) => (str) => {
     const delims_lns = map(length, delims);
     const out = [];
@@ -41,18 +35,9 @@ const escape = (() => {
 const unescape = when(complement(isNil), replace(/([^\\])\\([^\\])/g, '$1$2'));
 const valuable = both(complement(isEmpty), complement(isNil));
 const join = (strings, values) => strings.reduce((accum, str, i) => accum + str + (values.length > i ? values[i] : ''), '');
-compose(equals('Object'), type);
-const isWindow = compose(equals('Window'), type);
-const tryNamedFn = (rule, name, useNamed) => {
-    if (useNamed && name && name !== 'anonymous') {
-        const tmpObj = {
-            [name]: (props, renderer) => rule(props, renderer)
-        };
-        return tmpObj[name];
-    }
-    else
-        return rule;
-};
+typeIs('Object');
+const isFunction = typeIs('Function');
+const isWindow = typeIs('Window');
 const isBrowser = (() => {
     try {
         return isWindow(window);
@@ -61,7 +46,7 @@ const isBrowser = (() => {
         return false;
     }
 })();
-const tryUnwrap = map(ifElse(compose(equals('Function'), type), identity, prop('default')));
+const tryUnwrap = map(ifElse(isFunction, identity, prop('default')));
 const callWith = (args, i, fn) => fn(...(args[i] || []));
 const preparePlugins = (plugins, args) => compose(map(([i, p]) => callWith(args, i, p)), toPairs, tryUnwrap)(plugins);
 const re = {
@@ -193,7 +178,7 @@ class Levels {
     }
 }
 
-const r=Symbol("Placeholder"),t=t=>{let e=0;for(const n of t)n!==r&&e++;return e},e=(t,e)=>{const n=t.length,o=t.slice(),s=e.length;let c=s,u=0;for(;c&&u<n;u++)o[u]===r&&(o[u]=e[s-c],c--);for(u=n;c;u++,c--)o[u]=e[s-c];return o},n=(r,o,s)=>{const c=r.length-o.length-t(s);if(c<1)return r(...e(o,s));{const t=(...t)=>n(r,e(o,s),t);return t.$args_left=c,t}},o=r=>(...e)=>r.length>t(e)?n(r,[],e):r(...e),s=t=>function(e){return e===r?t:t(e)};function c(t){return function(e,n){const o=e===r,c=arguments.length;if(1===c&&o)throw new Error("Senseless placeholder usage.");return arguments.length>1?o?s((r=>t(r,n))):t(e,n):r=>t(e,r)}}function u(r){return o(r)}const l=void 0,f=1/0,i=r=>typeof r,a=r=>null===r,h={u:"U",b:"B",n:"N",s:"S",f:"F"},g=r=>{const t=i(r);return "object"===t?a(r)?"Null":r.constructor.name:h[t[0]]+t.slice(1)},b=c(((r,t)=>(t.push(r),t))),p=u(((r,t,e)=>e.reduce(r,t))),d=u(((r,t,e)=>{for(let n in e)switch(g(e[n])){case"Array":if(r>1&&"Array"===g(t[n]))switch(r){case 2:const o=t[n],s=e[n];for(const t in s)o[t]?d(r,o[t],s[t]):o[t]=s[t];break;case 3:t[n].push(...e[n]);}else t[n]=e[n];break;case"Object":if("Object"===g(t[n])){d(r,t[n],e[n]);break}default:t[n]=e[n];}return t}));d(1),d(2),d(3);const m=c(((r,t)=>{const e=g(r);if(e===g(t)&&("Object"===e||"Array"==e)){if(a(r)||a(t))return r===t;if(r===t)return !0;for(const e of [r,t])for(const n in e)if(!(e===t&&n in r||e===r&&n in t&&m(r[n],t[n])))return !1;return !0}return r===t})),y=o(((r,t,e,n)=>r(n)?t(n):e(n))),w=(...t)=>(...e)=>{let n,o=!0;for(let s=k(t)-1;s>-1;s--)o?(o=!1,n=t[s](...e)):n=n===r?t[s]():t[s](n);return n},j=c(((r,t)=>t[r])),A=c(((r,t)=>{if((r=>"string"===i(r))(t))return t.includes(r);for(const e of t)if(m(e,r))return !0;return !1})),N=u(((r,t,e)=>e.slice(r,(r=>"number"==i(r))(t)?t:f))),S=j(0);N(1,f);const O=r=>a(r)||(r=>r===l)(r),k=r=>r.length,B=r=>()=>r,E=c(((r,t)=>t.split(r))),q=r=>p(((r,t)=>A(t,r)?r:b(t,r)),[],r),v=u(((r,t,e)=>({...e,[r]:t}))),x=c(((r,t)=>t[r])),C=u(((r,t,e)=>y(k,(()=>O(e)?r:w(y(O,B(r),(e=>C(r,N(1,f,t),e))),(r=>c(((t,e)=>r(e,t))))(x)(e),S)(t)),B(e),t)));C(l);const F=/^(.*?)(8|16|32|64)(Clamped)?Array$/,I=(r,t=!1)=>{const e=g(r);switch(e){case"Null":case"String":case"Number":case"Boolean":case"Symbol":return r;case"Array":return t?[...r]:P(w(I,(r=>(...t)=>t[r])(0)),r);case"Object":if(t)return {...r};const n={};for(let t in r)n[t]=I(r[t]);return n;default:return F.test(e)?r.constructor.from(r):r}},M=u(((r,t,e)=>p(r,I(t),e))),P=c(((r,t)=>t.map(r))),{floor:U}=Math;let W,$,G="0123456789abcdefghijklmnopqrstuvwxyz";const H=w((r=>M(((r,t)=>v(...t,r)),{},r)),P(((r,t)=>[r,t])),E("")),J=r=>{if(!(r=>w(m(k(r)),k,q,E(""))(r))(r))throw new Error("Not all chars are unique!");W=r,$=W.length,H(W);};J(G+"ABCDEFGHIJKLMNOPQRSTUVWXYZ");const K=r=>{let t="";for(;r>0;)t=W[r%$]+t,r=U(r/$);return t||"0"};
+const t=Symbol("Placeholder"),n=n=>{let r=0;for(const e of n)e!==t&&r++;return r},r=(n,r)=>{const e=n.length,o=n.slice(),s=r.length;let c=s,l=0;for(;c&&l<e;l++)o[l]===t&&(o[l]=r[s-c],c--);for(l=e;c;l++,c--)o[l]=r[s-c];return o},e=(t,o,s)=>{const c=t.length-o.length-n(s);if(c<1)return t(...r(o,s));{const n=(...n)=>e(t,r(o,s),n);return n.$args_left=c,n}},o=t=>(...r)=>t.length>n(r)?e(t,[],r):t(...r);function s(n){return function(r,e){const o=r===t,s=arguments.length;if(1===s&&o)throw new Error("Senseless placeholder usage.");return s>1?o?(n=>function(r){return r===t?n:n(r)})((t=>n(t,e))):n(r,e):t=>n(r,t)}}function c(t){return o(t)}const l=void 0,i=1/0,u=t=>typeof t,a=t=>null===t,f=t=>"number"==u(t),h={u:"U",b:"B",n:"N",s:"S",f:"F"},b=Symbol(),d=t=>{const n=u(t);return "object"===n?a(t)?"Null":t.constructor.name:h[n[0]]+n.slice(1)},p=t=>t.length,g=t=>a(t)||(t=>t===l)(t),m=s(((t,n)=>t===n)),w=s(((t,n)=>{const r=d(t);if(m(r,d(n))&&(m(r,"Object")||m(r,"Array"))){if(a(t)||a(n))return m(t,n);if(m(t,n))return  true;for(const r of [t,n])for(const e in r)if(!(m(r,n)&&e in t||m(r,t)&&e in n&&w(t[e],n[e])))return  false;return  true}return m(t,n)})),y=s(((t,n)=>(n.push(t),n))),z=c(((t,n,r)=>r.reduce(t,n))),A=o(((t,n,r,e)=>t(e)?n(e):r(e))),B=(...n)=>(...r)=>{let e,o=true;for(let s=p(n)-1;s>-1;s--)o?(o=false,e=n[s](...r)):e=e===t?n[s]():n[s](e);return e},S=s(((t,n)=>n[t])),j=c(((t,n,r)=>r.slice(t,f(n)?n:i))),C=S(0);j(1,i);const E=s(((t,n)=>n.find(t))),N=t=>()=>t,v=s(((t,n)=>n.split(t))),O=N(true),q=N(false),x=s(((t,n)=>z(((n,r)=>E((n=>t(r,n)),n)?n:y(r,n)),[],n)))(w),F=c(((t,n,r)=>p(n)?g(r)?t:B((e=>e in r?F(t,j(1,i,n),r[e]):t),C)(n):r));F(l),B(A(w(b),q,O),F(b));const I=s(((t,n)=>n.map(t))),{floor:M}=Math,P="0123456789abcdefghijklmnopqrstuvwxyz",U=B((t=>Object.fromEntries(t)),I(((t,n)=>[t,n])),v(""));class W{abc;abclen;c2pos;standard;setABC(t){if(!B(w(p(n=t)),p,x,v(""))(n))throw new Error("Not all chars are unique!");var n;this.abc=t,this.abclen=t.length,this.standard=P.startsWith(t),this.c2pos=U(t);}zip(t){const{abc:n,abclen:r}=this;let e="";for(;t>0;)e=n[t%r]+e,t=M(t/r);return e||"0"}unzip(t){const{standard:n,abclen:r,c2pos:e}=this;if(n)return parseInt(t,r);const o=t.length;let s=0;for(let n=0;n<o;n++)s+=e[t[n]]*r**(o-n-1);return s}constructor(t){this.setABC(t||P+"ABCDEFGHIJKLMNOPQRSTUVWXYZ");}}const k=new W;k.setABC.bind(k);k.zip.bind(k);k.unzip.bind(k);
 
 const rules = `
 top flex grid overflow transform transition-duration max-height 100%
@@ -203,10 +188,11 @@ center bottom absolute relative float right opacity z-index min-width
 min-height border-top border-bottom border-left border-right filter
 font-family font-size font-weight none hidden auto display block inline inline-block
 padding padding-top padding-bottom padding-left padding-right text-align
-flex-direction column box-shadow rotate content text-decoration max-width
+flex-direction gap column box-shadow rotate content text-decoration max-width
 fixed color space-between overflow-x overflow-y background-size
 `.replace(/\s+/g, ',').split(/[, ]/g).filter(Boolean);
-const prepareCompressRule = () => { let i = 0; return () => `a${K(i++)}`; };
+const zipnum = new W();
+const prepareCompressRule = () => { let i = 0; return () => `a${zipnum.zip(i++)}`; };
 const getDics = (pepka) => {
     const compressRule = prepareCompressRule();
     const { compose, fromPairs, qmap, qreverse, toPairs } = pepka;
@@ -359,7 +345,7 @@ const parse = (() => {
                 if (levels.depth < 1)
                     throw new Error('lit-css parse error: unbalanced {} braces !');
             }
-        }), createFunctions(aug), filter(complement(isEmpty)), map(trim), splitNonEscaped(delimiters), replace(/(\{|\})/g, (_, brace, offset, full) => {
+        }), createFunctions(aug), qfilter(complement(isEmpty)), qmap(trim), splitNonEscaped(delimiters), replace(/(\{|\})/g, (_, brace, offset, full) => {
             if (!isDelimiter(full[offset - 1]))
                 brace = ';' + brace;
             if (!isDelimiter(full[offset + 1]))
@@ -393,28 +379,32 @@ const pickStyles = (getDefStyle, style, names, modifiers, context) => compose(qm
         return invert ? !res : res;
     }, slice(0, -1, mods_and_name));
 }), qmap(split(classModRE)), qfilter((s) => s !== empty_str), split(/[,\s\t]+/g))(names);
-const getRules = (getDefStyle, style, propsOrRule, modifiers, context) => {
+const addClassName = qassoc('className');
+const addName = (name) => compose(when(always(name), addClassName(name)), when(eq(emptyObject), always({})) // Base emptyObject is frozen.
+);
+const getRules = (getDefStyle, style, propsOrRule, modifiers, classNames, context, name) => {
     if (!style)
         style = emptyObject;
     switch (typeof propsOrRule) {
         case types.f:
-            return [
-                propsOrRule.name,
-                [(props) => propsOrRule(props, context)]
-            ];
+            // TODO: Better document them, the usecases?
+            const an = addName(name);
+            return [(props) => an(propsOrRule(props, context))];
         case types.o:
-            return [propsOrRule.className, [always(propsOrRule)]];
+            return [addName(name)(propsOrRule)];
         case types.s:
-            const styles = pickStyles(getDefStyle, style, propsOrRule, modifiers, context);
-            const names = [];
             const rules = [];
-            for (const [name, rule] of styles) {
-                names.push(name);
-                rules.push(...getRules(getDefStyle, style, rule, modifiers, context)[1]);
+            let combined_name = name || '';
+            for (const [name, rule] of pickStyles(getDefStyle, style, propsOrRule, modifiers, context)) {
+                if (classNames && name) {
+                    combined_name += (length(combined_name) ? '-' : '') + name;
+                    addName(combined_name)(rule);
+                }
+                rules.push(...getRules(getDefStyle, style, rule, modifiers, classNames, context, combined_name));
             }
-            return [names.join('_'), rules];
+            return rules;
         default:
-            return ['', [identity]];
+            return [identity];
     }
 };
 
@@ -463,11 +453,10 @@ const defaultOpts = {
     plugins: [],
     enhancers: [],
     preset: { unit: [] },
-    ssr: false
+    ssr: false,
+    classNames: false
 };
 class Renderer {
-    /** To use with fela-monolithic enhancer. */
-    static devClassNames = false;
     renderer;
     _mixin;
     renderClasses;
@@ -484,12 +473,9 @@ class Renderer {
     /** Sets classes to DOM elements what match. Just like CSS. */
     setClasses = setClasses;
     constructor(opts = {}) {
-        const { method, ssr, preset, plugins, enhancers, ...miscRenderOpts } = mergeProps(defaultOpts, opts);
+        const { method, ssr, preset, plugins, enhancers, classNames, ...miscRenderOpts } = mergeProps(defaultOpts, opts);
         const presetConfig = { ...defaultOpts.preset, ...(preset || {}) };
         const thisRenderer = this;
-        if (opts.fdef) {
-            throw new Error('fela-vue: Change deprecated `fdef` to `defStyles`!');
-        }
         // Fela renderer creation. 
         this.renderer = createRenderer({
             ...miscRenderOpts,
@@ -497,7 +483,6 @@ class Renderer {
             plugins: preparePlugins([
                 unit,
                 embedded,
-                prefixer,
                 fallback,
                 ...plugins
             ], { 0: presetConfig.unit })
@@ -521,13 +506,13 @@ class Renderer {
             else
                 render(renderer);
         this.renderClasses = (stylesheet, propsOrRule, props = emptyObject, modifiers) => {
-            const [name, rules] = getRules(memoize(() => fdefValue ? fdefValue(this) : emptyObject), stylesheet, propsOrRule, modifiers ? mergeShallow(opts.modifiers, modifiers) : opts.modifiers, this);
-            return renderer.renderRule(tryNamedFn(combineRules(...rules), name, Renderer.devClassNames), props) || undefined;
+            const rules = getRules(once(() => fdefValue ? fdefValue(this) : emptyObject), stylesheet, propsOrRule, modifiers ? mergeShallow(opts.modifiers, modifiers) : opts.modifiers, classNames, props);
+            return renderer.renderRule(combineRules(...rules), props);
         };
         // Should be bound to Renderer.
         this.styl = (stylesheet, modifiers) => (propsOrRule, props, submodifiers) => this.renderClasses(stylesheet, propsOrRule, props, submodifiers ? mergeShallow(modifiers, submodifiers) : modifiers);
         // Mixin creation.
-        this._mixin = filter(identity, {
+        this._mixin = qfilter(identity, {
             methods: {
                 /** propsOrRule: any, props?: AnyObject */
                 [method]: function (propsOrRule, props, submodifiers) {
@@ -547,13 +532,6 @@ class Renderer {
 }
 
 class SvelteRenderer extends Renderer {
-    static get devClassNames() {
-        return Renderer.devClassNames;
-    }
-    /** To use with fela-monolithic enhancer. */
-    static set devClassNames(x) {
-        Renderer.devClassNames = x;
-    }
     f;
     fdef;
     getCSS() {
@@ -570,7 +548,7 @@ class SvelteRenderer extends Renderer {
         super(opts);
         const mixin = this.mixin;
         this.f = mixin.methods.f;
-        this.fdef = typeof opts.defStyles == 'function'
+        this.fdef = isFunction(opts.defStyles)
             ? mixin.computed.fdef
             : opts.defStyles && mixin.computed[opts.defStyles.key];
     }

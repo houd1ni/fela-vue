@@ -1,6 +1,7 @@
 import { camelify, emptyObject, re, types } from "../utils"
-import { always, identity, AnyFunc, compose, split, qmap, qfilter, all, last, slice, length, head, tail, isEmpty } from "pepka"
+import { always, identity, compose, split, qmap, qfilter, all, last, slice, length, head, tail, qassoc, when, eq } from "pepka"
 import { AnyObject, ModifierCondition } from "../types"
+import { TRule } from "fela"
 
 const classModRE = re.class_mod
 const notMark = '!'
@@ -16,7 +17,7 @@ const pickStyles = (
   modifiers: {[name: string]: ModifierCondition},
   context: AnyObject
 ): [string, AnyObject][] => compose(
-  qmap((name) => [
+  qmap((name: string) => [
     name,
     pickStyle(style, name) || pickStyle(getDefStyle(), name) || emptyObject
   ]),
@@ -42,34 +43,41 @@ const pickStyles = (
   split(/[,\s\t]+/g)
 )(names)
 
+const addClassName = qassoc('className')
+const addName = (name?: string) => compose(
+  when(always(name), addClassName(name)),
+  when(eq(emptyObject), always({})) // Base emptyObject is frozen.
+)
+
 export const getRules = (
   getDefStyle: () => AnyObject,
   style: AnyObject | undefined,
   propsOrRule: any,
   modifiers: {[name: string]: ModifierCondition},
-  context: AnyObject
-): [string, AnyFunc[]] => {
+  classNames: boolean,
+  context: AnyObject,
+  name?: string
+): TRule[] => {
   if(!style) style = emptyObject
   switch(typeof propsOrRule) {
     case types.f:
-      return [
-        propsOrRule.name,
-        [(props: AnyObject) => propsOrRule(props, context)]
-      ]
+      // TODO: Better document them, the usecases?
+      const an = addName(name)
+      return [(props: AnyObject) => an(propsOrRule(props, context))]
     case types.o:
-      return [propsOrRule.className, [always(propsOrRule)]]
+      return [addName(name)(propsOrRule)]
     case types.s:
-      const styles = pickStyles(getDefStyle, style, propsOrRule, modifiers, context)
-      const names = []
       const rules = []
-      for(const [name, rule] of styles) {
-        names.push(name)
-        rules.push(
-          ...getRules(getDefStyle, style, rule, modifiers, context)[1]
-        )
+      let combined_name = name || ''
+      for(const [name, rule] of pickStyles(getDefStyle, style, propsOrRule, modifiers, context)) {
+        if(classNames && name) {
+          combined_name += (length(combined_name) ? '-' : '') + name
+          addName(combined_name)(rule)
+        }
+        rules.push(...getRules(getDefStyle, style, rule, modifiers, classNames, context, combined_name))
       }
-      return [names.join('_'), rules]
+      return rules
     default:
-      return ['', [identity]]
+      return [identity]
   }
 }

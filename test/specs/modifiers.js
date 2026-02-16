@@ -21,15 +21,16 @@ test('composition-api', async (t) => {
         }
       },
       modifiers: {
-        cen: () => true,
+        cen: (n, {test_prop}) => {
+          if(test_prop===undefined) throw new Error('No test_prop!')
+          return test_prop
+        },
         sp: () => false,
       }
     })
     const styl = renderer.styl
-    const f = styl({root: {
-      background: 'yellow'
-    }})
-    f('cen.!sp&center sp.spaced column root')
+    const f = styl({root: { background: 'yellow' }})
+    f('cen.!sp&center sp.spaced column root', {test_prop: true})
     const result = renderer.style
     t.snapshot(result)
   } catch(e) {

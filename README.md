@@ -11,7 +11,6 @@ Included as deps:
 - [fela](https://github.com/rofrischmann/fela)
 - [fela-dom](https://github.com/rofrischmann/fela/tree/master/packages/fela-dom)
 - [fela-plugin-embedded](https://github.com/rofrischmann/fela/tree/master/packages/fela-plugin-embedded)
-- [fela-plugin-prefixer](https://github.com/rofrischmann/fela/tree/master/packages/fela-plugin-prefixer)
 - [fela-plugin-fallback-value](https://github.com/rofrischmann/fela/tree/master/packages/fela-plugin-fallback-value)
 - [fela-plugin-unit](https://github.com/rofrischmann/fela/tree/master/packages/fela-plugin-unit)
 

@@ -18,6 +18,7 @@ export interface Options {
   plugins: TPlugin[]
   enhancers: TEnhancer[]
   ssr: boolean
+  classNames: boolean
 }
 
 export type StyleGenerator = (t: AnyObject, css: Function, $: AnyObject) => AnyObject

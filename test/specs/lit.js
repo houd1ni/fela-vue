@@ -125,7 +125,7 @@ test('lit-css', async (t) => {
         position flex
         margin 0
       }
-      .pa {
+      .pa { // TODO: Test it more hard: there are some bugs left.
         ...grandpa
         left 1
       }

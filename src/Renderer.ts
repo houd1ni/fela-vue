@@ -1,13 +1,12 @@
 import { createRenderer, combineRules, IRenderer } from 'fela'
 import { render, rehydrate, renderToMarkup } from 'fela-dom'
 import embedded from 'fela-plugin-embedded'
-import prefixer from 'fela-plugin-prefixer'
 import fallback from 'fela-plugin-fallback-value'
 import unit from 'fela-plugin-unit'
-import { filter, identity, compose, toPairs, type, fromPairs, map, qmergeShallow, mergeShallow } from 'pepka'
+import { identity, compose, toPairs, type, fromPairs, map, mergeShallow, once, qfilter } from 'pepka'
 import { AnyObject, RenderClasses, Options, Modifiers } from './types'
 import {getRules, setClasses} from './fns'
-import { memoize, types, isBrowser, emptyObject, tryNamedFn, preparePlugins } from './utils'
+import { types, isBrowser, emptyObject, preparePlugins } from './utils'
 
 const mergeProps = (
   defaults: Partial<Options>,
@@ -31,13 +30,12 @@ const defaultOpts: Options = {
   plugins: [],
   enhancers: [],
   preset: { unit: [] },
-  ssr: false
+  ssr: false,
+  classNames: false
 }
 
 
 export class Renderer {
-  /** To use with fela-monolithic enhancer. */
-  static devClassNames = false
   private renderer: IRenderer
   private _mixin: AnyObject
   private renderClasses: RenderClasses
@@ -65,14 +63,11 @@ export class Renderer {
       preset,
       plugins,
       enhancers,
+      classNames,
       ...miscRenderOpts
     } = mergeProps(defaultOpts, opts)
     const presetConfig = { ...defaultOpts.preset, ...(preset || {}) }
     const thisRenderer = this
-
-    if((opts as any).fdef) {
-      throw new Error('fela-vue: Change deprecated `fdef` to `defStyles`!')
-    }
 
     // Fela renderer creation. 
     this.renderer = createRenderer({      
@@ -81,7 +76,6 @@ export class Renderer {
       plugins: preparePlugins([
         unit,
         embedded,
-        prefixer,
         fallback,
         ...plugins
       ], {0: presetConfig.unit})
@@ -109,21 +103,18 @@ export class Renderer {
       props: AnyObject = emptyObject,
       modifiers?: Modifiers
     ): string => {
-      const [name, rules] = getRules(
-        memoize(() => fdefValue ? fdefValue(this) : emptyObject),
+      const rules = getRules(
+        once(() => fdefValue ? fdefValue(this) : emptyObject),
         stylesheet,
         propsOrRule,
         modifiers ? mergeShallow(opts.modifiers, modifiers) : opts.modifiers,
-        this
+        classNames,
+        props
       )
       return renderer.renderRule(
-        tryNamedFn(
-          combineRules(...rules),
-          name,
-          Renderer.devClassNames
-        ),
+        combineRules(...rules),
         props
-      ) || undefined
+      )
     }
 
     // Should be bound to Renderer.
@@ -135,7 +126,7 @@ export class Renderer {
         )
 
     // Mixin creation.
-    this._mixin = filter(identity, {
+    this._mixin = qfilter(identity, {
       methods: {
         /** propsOrRule: any, props?: AnyObject */
         [method]: function(propsOrRule: any, props?: AnyObject, submodifiers?: Modifiers) {

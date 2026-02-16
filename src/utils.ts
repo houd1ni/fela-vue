@@ -1,16 +1,12 @@
 import {
   replace, when, isNil, complement, map, length, both, toPairs,
-  isEmpty, compose, equals, type, AnyFunc, ifElse, identity, prop
+  isEmpty, compose, AnyFunc, ifElse, identity, prop,
+  typeIs
 } from 'pepka'
 
 export const emptyObject = Object.freeze({})
 export const types = Object.freeze({ f: 'function', o: 'object', s: 'string' })
 export const camelify = (str: string) => str.replace(/-(\w)/gu, (_s, l) => l.toUpperCase())
-export const memoize = (fn: Function) => {
-  let cache: any
-  let cached = false
-  return () => cached ? cache : (cached = true, cache = fn())
-}
 export const splitNonEscaped = (delims: string[]) => (str: string): string[] => {
   const delims_lns: number[] = map(length as (d: string) => number, delims)
   const out: string[] = []
@@ -56,17 +52,9 @@ export const join = (strings: string[], values: any[]) =>
     accum + str + (values.length>i ? values[i] : '')
   , '')
 
-export const isObject = compose(equals('Object'), type)
-export const isWindow = compose(equals('Window'), type)
-
-export const tryNamedFn = (rule: AnyFunc, name: string, useNamed: boolean) => {
-  if(useNamed && name && name!=='anonymous') {
-    const tmpObj = {
-      [name]: (props?: any, renderer?: any) => rule(props, renderer)
-    }
-    return tmpObj[name]
-  } else return rule
-}
+export const isObject = typeIs('Object')
+export const isFunction = typeIs('Function')
+export const isWindow = typeIs('Window')
 
 export const isBrowser: boolean = (() => {
   try {
@@ -77,7 +65,7 @@ export const isBrowser: boolean = (() => {
 })()
 
 const tryUnwrap = map(ifElse(
-  compose(equals('Function'), type),
+  isFunction,
   identity,
   prop('default')
 ))
