@@ -1,9 +1,8 @@
-import { css, __specialcss } from '../src/css-lit'
-import { Renderer, setCompression, SvelteRenderer } from '../src/main'
-import monolithic from 'fela-monolithic'
+import monolithic from 'fela-monolithic';
+import { __specialcss, css } from '../src/css-lit';
+import { Renderer, setCompression, SvelteRenderer } from '../src/main';
 
-Renderer.devClassNames = true
-;(window as any).setCompression = setCompression
+(window as any).setCompression = setCompression
 ;(window as any).css = css
 ;(window as any).specialcss = __specialcss
 ;(window as any).renderer = new Renderer({
