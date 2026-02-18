@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fela-Vue Transformer Tests</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #f5f5f5;
+    }
+    .test-container {
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #333;
+    }
+    h2 {
+      color: #666;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
+    }
+    .test-section {
+      margin-bottom: 30px;
+    }
+    .component-name {
+      font-weight: bold;
+      color: #0066cc;
+      margin-bottom: 10px;
+    }
+    .description {
+      color: #666;
+      margin-bottom: 15px;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <h1>Fela-Vue Transformer Tests</h1>
+  
+  <div class="test-section">
+    <h2>Test 1: Fela-Vue Component</h2>
+    <div class="description">Component using Fela-Vue - class attributes should be transformed to v-bind:class</div>
+    <div class="test-container">
+      <div class="component-name">test-fela.vue</div>
+      <test-fela-component />
+    </div>
+  </div>
+
+  <div class="test-section">
+    <h2>Test 2: Regular Component</h2>
+    <div class="description">Component without Fela-Vue - class attributes should NOT be transformed</div>
+    <div class="test-container">
+      <div class="component-name">test-regular.vue</div>
+      <test-regular-component />
+    </div>
+  </div>
+
+  <div class="test-section">
+    <h2>Test 3: Mixed Component</h2>
+    <div class="description">Component with Fela-Vue but also static classes - only Fela-Vue classes should be transformed</div>
+    <div class="test-container">
+      <div class="component-name">test-mixed.vue</div>
+      <test-mixed-component />
+    </div>
+  </div>
+
+  <div class="test-section">
+    <h2>Test 4: Nested Elements</h2>
+    <div class="description">Component with nested elements - all class attributes should be transformed</div>
+    <div class="test-container">
+      <div class="component-name">test-nested.vue</div>
+      <test-nested-component />
+    </div>
+  </div>
+
+  <div class="test-section">
+    <h2>Test 5: Preserve Directives</h2>
+    <div class="description">Component with existing v-bind:class directives - they should be preserved</div>
+    <div class="test-container">
+      <div class="component-name">test-preserve.vue</div>
+      <test-preserve-component />
+    </div>
+  </div>
+
+  <div class="test-section">
+    <h2>Test 6: Dynamic Classes</h2>
+    <div class="description">Component with dynamic classes - only static class attributes should be transformed</div>
+    <div class="test-container">
+      <div class="component-name">test-dynamic.vue</div>
+      <test-dynamic-component />
+    </div>
+  </div>
+
+  <div class="test-section">
+    <h2>Test 7: No Fela-Vue</h2>
+    <div class="description">Component without any Fela-Vue usage - class attributes should NOT be transformed</div>
+    <div class="test-container">
+      <div class="component-name">test-no-fela.vue</div>
+      <test-no-fela-component />
+    </div>
+  </div>
+</body>
+</html>

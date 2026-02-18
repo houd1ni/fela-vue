@@ -1,4 +1,4 @@
-import { AnyObject } from "../types"
+import { AnyObject } from "pepka"
 
 export interface SelectorSet {
   className: string | null

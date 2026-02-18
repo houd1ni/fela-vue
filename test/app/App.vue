@@ -1,23 +1,34 @@
 <template>
-<div :class="style('button')">
-    qwe !
-   <div class="pew meow">label!</div>
-</div>
-...
+  <div class="flex container column">
+    <div v-if="true" :class="f('label')"><CalendarIcon :class="f('calendar-icon')" /> qwe {{ label }}</div>
+     <form v-else :class="f('flex center full-width form')" action="/" method="post" @submit.prevent="true">
+        <div :class="f('inputs')">
+      </div>
+    </form>
+  </div>
 </template>
 
-<script setup lang="ts">
-import { computed } from 'vue';
-import { css } from '../../src/css-lit';
-import { styl } from './styles';
+<script setup lang="tsx">
+import { css, Renderer } from 'fela-vue'
+import { computed, ref } from 'vue'
 
+
+const label = ref('aaaaa')
+const renderer = new Renderer()
+const styl = renderer.styl
 const style = computed(() => styl(css`
-  .button {
-    border 1px solid grey
+  /* Base Styles */
+  .container {
+    max-width 70
+    margin 0 auto
+    padding 2
   }
-  .meow {
-    margin-top 1rem
-    color pink
+  /* Typography */
+  .title {
+    margin-bottom 0.5
+    font-size 2
+    font-weight 600
   }
 `))
+const f = style
 </script>

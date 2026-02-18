@@ -1,6 +1,6 @@
+import { AnyFunc, AnyObject } from 'pepka'
 import { Renderer, css } from './main'
-import { Options, AnyObject } from './types'
-import { AnyFunc } from 'pepka'
+import { Options } from './types'
 import { isFunction } from './utils'
 
 export class SvelteRenderer extends Renderer {

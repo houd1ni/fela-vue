@@ -1,12 +1,12 @@
-import { createRenderer, combineRules, IRenderer } from 'fela'
-import { render, rehydrate, renderToMarkup } from 'fela-dom'
+import { combineRules, createRenderer, IRenderer } from 'fela'
+import { rehydrate, render, renderToMarkup } from 'fela-dom'
 import embedded from 'fela-plugin-embedded'
 import fallback from 'fela-plugin-fallback-value'
 import unit from 'fela-plugin-unit'
-import { identity, compose, toPairs, type, fromPairs, map, mergeShallow, once, qfilter } from 'pepka'
-import { AnyObject, RenderClasses, Options, Modifiers } from './types'
-import {getRules, setClasses} from './fns'
-import { types, isBrowser, emptyObject, preparePlugins } from './utils'
+import { AnyObject, compose, fromPairs, identity, map, mergeShallow, once, qfilter, toPairs, type } from 'pepka'
+import { getRules, setClasses } from './fns'
+import { Modifiers, Options, RenderClasses } from './types'
+import { emptyObject, isBrowser, preparePlugins, types } from './utils'
 
 const mergeProps = (
   defaults: Partial<Options>,

@@ -1,8 +1,5 @@
-import { TPlugin, TEnhancer } from 'fela'
-
-export interface AnyObject {
-  [key: string]: any
-}
+import { TEnhancer, TPlugin } from 'fela'
+import { AnyObject } from 'pepka'
 
 export type ModifierCondition = (className: string, context: AnyObject) => boolean
 export interface Modifiers {[name: string]: ModifierCondition}

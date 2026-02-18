@@ -1,7 +1,7 @@
-import { camelify, emptyObject, re, types } from "../utils"
-import { always, identity, compose, split, qmap, qfilter, all, last, slice, length, head, tail, qassoc, when, eq } from "pepka"
-import { AnyObject, ModifierCondition } from "../types"
 import { TRule } from "fela"
+import { all, always, AnyObject, compose, eq, head, identity, last, length, qassoc, qfilter, qmap, slice, split, tail, when } from "pepka"
+import { ModifierCondition } from "../types"
+import { camelify, emptyObject, re, types } from "../utils"
 
 const classModRE = re.class_mod
 const notMark = '!'

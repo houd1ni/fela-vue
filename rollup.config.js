@@ -1,8 +1,8 @@
 import commonjs from '@rollup/plugin-commonjs'
 import resolve from '@rollup/plugin-node-resolve'
 import replace from '@rollup/plugin-replace'
-import typescript from 'typescript'
 import typescript2 from 'rollup-plugin-typescript2'
+import typescript from 'typescript'
 
 export default {
   input: process.env.NODE_ENV=='development' ? 'test/in-browser.ts' : 'src/main.ts',
@@ -18,6 +18,8 @@ export default {
     'fela-plugin-prefixer',
     'fela-plugin-fallback-value',
     'fela-plugin-unit',
+    '@vue/compiler-sfc',
+    'parse5',
     'pepka'
   ],
   plugins: [

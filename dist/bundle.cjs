@@ -6,6 +6,8 @@ var felaDom = require('fela-dom');
 var embedded = require('fela-plugin-embedded');
 var fallback = require('fela-plugin-fallback-value');
 var unit = require('fela-plugin-unit');
+var compilerSfc = require('@vue/compiler-sfc');
+var parse5 = require('parse5');
 
 const emptyObject = Object.freeze({});
 const types = Object.freeze({ f: 'function', o: 'object', s: 'string' });
@@ -67,6 +69,63 @@ const re = {
     eol: /[\n\r]/g,
     tliterals: /css\`((.|\s)*?)\`/g,
     interp: /\${(?:[^{}]|{(?:[^{}]|{[^{}]*})*})*}/g
+};
+
+const t=Symbol("Placeholder"),n=n=>{let r=0;for(const e of n)e!==t&&r++;return r},r=(n,r)=>{const e=n.length,o=n.slice(),s=r.length;let c=s,l=0;for(;c&&l<e;l++)o[l]===t&&(o[l]=r[s-c],c--);for(l=e;c;l++,c--)o[l]=r[s-c];return o},e=(t,o,s)=>{const c=t.length-o.length-n(s);if(c<1)return t(...r(o,s));{const n=(...n)=>e(t,r(o,s),n);return n.$args_left=c,n}},o=t=>(...r)=>t.length>n(r)?e(t,[],r):t(...r);function s(n){return function(r,e){const o=r===t,s=arguments.length;if(1===s&&o)throw new Error("Senseless placeholder usage.");return s>1?o?(n=>function(r){return r===t?n:n(r)})((t=>n(t,e))):n(r,e):t=>n(r,t)}}function c(t){return o(t)}const l=void 0,i=1/0,u=t=>typeof t,a=t=>null===t,f=t=>"number"==u(t),h={u:"U",b:"B",n:"N",s:"S",f:"F"},b=Symbol(),d=t=>{const n=u(t);return "object"===n?a(t)?"Null":t.constructor.name:h[n[0]]+n.slice(1)},p=t=>t.length,g=t=>a(t)||(t=>t===l)(t),m=s(((t,n)=>t===n)),w=s(((t,n)=>{const r=d(t);if(m(r,d(n))&&(m(r,"Object")||m(r,"Array"))){if(a(t)||a(n))return m(t,n);if(m(t,n))return  true;for(const r of [t,n])for(const e in r)if(!(m(r,n)&&e in t||m(r,t)&&e in n&&w(t[e],n[e])))return  false;return  true}return m(t,n)})),y=s(((t,n)=>(n.push(t),n))),z=c(((t,n,r)=>r.reduce(t,n))),A=o(((t,n,r,e)=>t(e)?n(e):r(e))),B=(...n)=>(...r)=>{let e,o=true;for(let s=p(n)-1;s>-1;s--)o?(o=false,e=n[s](...r)):e=e===t?n[s]():n[s](e);return e},S=s(((t,n)=>n[t])),j=c(((t,n,r)=>r.slice(t,f(n)?n:i))),C=S(0);j(1,i);const E=s(((t,n)=>n.find(t))),N=t=>()=>t,v=s(((t,n)=>n.split(t))),O=N(true),q=N(false),x=s(((t,n)=>z(((n,r)=>E((n=>t(r,n)),n)?n:y(r,n)),[],n)))(w),F=c(((t,n,r)=>p(n)?g(r)?t:B((e=>e in r?F(t,j(1,i,n),r[e]):t),C)(n):r));F(l),B(A(w(b),q,O),F(b));const I=s(((t,n)=>n.map(t))),{floor:M}=Math,P="0123456789abcdefghijklmnopqrstuvwxyz",U=B((t=>Object.fromEntries(t)),I(((t,n)=>[t,n])),v(""));class W{abc;abclen;c2pos;standard;setABC(t){if(!B(w(p(n=t)),p,x,v(""))(n))throw new Error("Not all chars are unique!");var n;this.abc=t,this.abclen=t.length,this.standard=P.startsWith(t),this.c2pos=U(t);}zip(t){const{abc:n,abclen:r}=this;let e="";for(;t>0;)e=n[t%r]+e,t=M(t/r);return e||"0"}unzip(t){const{standard:n,abclen:r,c2pos:e}=this;if(n)return parseInt(t,r);const o=t.length;let s=0;for(let n=0;n<o;n++)s+=e[t[n]]*r**(o-n-1);return s}constructor(t){this.setABC(t||P+"ABCDEFGHIJKLMNOPQRSTUVWXYZ");}}const k=new W;k.setABC.bind(k);k.zip.bind(k);k.unzip.bind(k);
+
+const rules = `
+top flex grid overflow transform transition-duration max-height 100%
+margin margin-top margin-left margin-bottom margin-right justify-content
+border width height left border-radius background bottom position align-items
+center bottom absolute relative float right opacity z-index min-width
+min-height border-top border-bottom border-left border-right filter
+font-family font-size font-weight none hidden auto display block inline inline-block
+padding padding-top padding-bottom padding-left padding-right text-align
+flex-direction gap column box-shadow rotate content text-decoration max-width
+fixed color space-between overflow-x overflow-y background-size
+`.replace(/\s+/g, ',').split(/[, ]/g).filter(Boolean);
+const zipnum = new W();
+const prepareCompressRule = () => { let i = 0; return () => `a${zipnum.zip(i++)}`; };
+const getDics = (pepka) => {
+    const compressRule = prepareCompressRule();
+    const { compose, fromPairs, qmap, qreverse, toPairs } = pepka;
+    const dic = compose(fromPairs, qmap((rule) => [rule, compressRule()]))(rules);
+    return { dic, dicRev: compose(fromPairs, qmap(qreverse), toPairs)(dic) };
+};
+
+const sc = ';';
+const sp = ' ';
+const prepareCompressRules = (dics, pepka) => {
+    const { compose, replace, trim } = pepka;
+    return compose(replace(re.trailingSeps, '$2'), replace(re.repeatingSeps, (s) => s.includes(sc) ? sc : sp), replace(re.trailing_ws, '$1'), replace(re.rule_free, (s, trailing, k, v) => v
+        ? trailing +
+            (k && v
+                ? `${trim(dics.dic[k] || k)}:${trim(dics.dic[v] || v)};`
+                : trim(k ? s.replace(k, dics.dic[k] || k)
+                    : v ? s.replace(k, dics.dic[v] || v)
+                        : s))
+        : ''), replace(re.comment, ''));
+};
+let dics$1 = null;
+const rollupCSSCompression = function () {
+    return {
+        name: 'fela-vue-compression',
+        async transform(code) {
+            const pepka = await import('pepka');
+            const { compose, take, replace } = pepka;
+            if (!dics$1)
+                dics$1 = getDics(pepka);
+            const compressRules = prepareCompressRules(dics$1, pepka);
+            let res = '';
+            try {
+                res = code.replace(re.tliterals, compose((a) => `css\`${compressRules(a)}\``, replace(re.interp, replace(re.eol, ' ')), take(1)));
+            }
+            catch (e) {
+                console.warn(e);
+            }
+            return { code: res || code, map: null };
+        }
+    };
 };
 
 class Selector {
@@ -180,31 +239,9 @@ class Levels {
     }
 }
 
-const t=Symbol("Placeholder"),n=n=>{let r=0;for(const e of n)e!==t&&r++;return r},r=(n,r)=>{const e=n.length,o=n.slice(),s=r.length;let c=s,l=0;for(;c&&l<e;l++)o[l]===t&&(o[l]=r[s-c],c--);for(l=e;c;l++,c--)o[l]=r[s-c];return o},e=(t,o,s)=>{const c=t.length-o.length-n(s);if(c<1)return t(...r(o,s));{const n=(...n)=>e(t,r(o,s),n);return n.$args_left=c,n}},o=t=>(...r)=>t.length>n(r)?e(t,[],r):t(...r);function s(n){return function(r,e){const o=r===t,s=arguments.length;if(1===s&&o)throw new Error("Senseless placeholder usage.");return s>1?o?(n=>function(r){return r===t?n:n(r)})((t=>n(t,e))):n(r,e):t=>n(r,t)}}function c(t){return o(t)}const l=void 0,i=1/0,u=t=>typeof t,a=t=>null===t,f=t=>"number"==u(t),h={u:"U",b:"B",n:"N",s:"S",f:"F"},b=Symbol(),d=t=>{const n=u(t);return "object"===n?a(t)?"Null":t.constructor.name:h[n[0]]+n.slice(1)},p=t=>t.length,g=t=>a(t)||(t=>t===l)(t),m=s(((t,n)=>t===n)),w=s(((t,n)=>{const r=d(t);if(m(r,d(n))&&(m(r,"Object")||m(r,"Array"))){if(a(t)||a(n))return m(t,n);if(m(t,n))return  true;for(const r of [t,n])for(const e in r)if(!(m(r,n)&&e in t||m(r,t)&&e in n&&w(t[e],n[e])))return  false;return  true}return m(t,n)})),y=s(((t,n)=>(n.push(t),n))),z=c(((t,n,r)=>r.reduce(t,n))),A=o(((t,n,r,e)=>t(e)?n(e):r(e))),B=(...n)=>(...r)=>{let e,o=true;for(let s=p(n)-1;s>-1;s--)o?(o=false,e=n[s](...r)):e=e===t?n[s]():n[s](e);return e},S=s(((t,n)=>n[t])),j=c(((t,n,r)=>r.slice(t,f(n)?n:i))),C=S(0);j(1,i);const E=s(((t,n)=>n.find(t))),N=t=>()=>t,v=s(((t,n)=>n.split(t))),O=N(true),q=N(false),x=s(((t,n)=>z(((n,r)=>E((n=>t(r,n)),n)?n:y(r,n)),[],n)))(w),F=c(((t,n,r)=>p(n)?g(r)?t:B((e=>e in r?F(t,j(1,i,n),r[e]):t),C)(n):r));F(l),B(A(w(b),q,O),F(b));const I=s(((t,n)=>n.map(t))),{floor:M}=Math,P="0123456789abcdefghijklmnopqrstuvwxyz",U=B((t=>Object.fromEntries(t)),I(((t,n)=>[t,n])),v(""));class W{abc;abclen;c2pos;standard;setABC(t){if(!B(w(p(n=t)),p,x,v(""))(n))throw new Error("Not all chars are unique!");var n;this.abc=t,this.abclen=t.length,this.standard=P.startsWith(t),this.c2pos=U(t);}zip(t){const{abc:n,abclen:r}=this;let e="";for(;t>0;)e=n[t%r]+e,t=M(t/r);return e||"0"}unzip(t){const{standard:n,abclen:r,c2pos:e}=this;if(n)return parseInt(t,r);const o=t.length;let s=0;for(let n=0;n<o;n++)s+=e[t[n]]*r**(o-n-1);return s}constructor(t){this.setABC(t||P+"ABCDEFGHIJKLMNOPQRSTUVWXYZ");}}const k=new W;k.setABC.bind(k);k.zip.bind(k);k.unzip.bind(k);
-
-const rules = `
-top flex grid overflow transform transition-duration max-height 100%
-margin margin-top margin-left margin-bottom margin-right justify-content
-border width height left border-radius background bottom position align-items
-center bottom absolute relative float right opacity z-index min-width
-min-height border-top border-bottom border-left border-right filter
-font-family font-size font-weight none hidden auto display block inline inline-block
-padding padding-top padding-bottom padding-left padding-right text-align
-flex-direction gap column box-shadow rotate content text-decoration max-width
-fixed color space-between overflow-x overflow-y background-size
-`.replace(/\s+/g, ',').split(/[, ]/g).filter(Boolean);
-const zipnum = new W();
-const prepareCompressRule = () => { let i = 0; return () => `a${zipnum.zip(i++)}`; };
-const getDics = (pepka) => {
-    const compressRule = prepareCompressRule();
-    const { compose, fromPairs, qmap, qreverse, toPairs } = pepka;
-    const dic = compose(fromPairs, qmap((rule) => [rule, compressRule()]))(rules);
-    return { dic, dicRev: compose(fromPairs, qmap(qreverse), toPairs)(dic) };
-};
-
 let compression = false;
 const setCompression = (to) => compression = to;
-const dics$1 = getDics({ compose: pepka.compose, fromPairs: pepka.fromPairs, qmap: pepka.qmap, qreverse: pepka.qreverse, toPairs: pepka.toPairs });
+const dics = getDics({ compose: pepka.compose, fromPairs: pepka.fromPairs, qmap: pepka.qmap, qreverse: pepka.qreverse, toPairs: pepka.toPairs });
 const analyseLine = (() => {
     const ruleRE = re.rule;
     const selectorRE = re.selector;
@@ -212,7 +249,7 @@ const analyseLine = (() => {
     const delimRE = re.delim;
     const mediaRE = re.media;
     const trailingColonRE = re.trailing_colon;
-    const decompress = pepka.when(() => compression, (s) => dics$1.dicRev[s] || s);
+    const decompress = pepka.when(() => compression, (s) => dics.dicRev[s] || s);
     const getValue = (value) => {
         switch (value) {
             case 'undefined':
@@ -556,41 +593,228 @@ class SvelteRenderer extends Renderer {
     }
 }
 
-const sc = ';';
-const sp = ' ';
-const prepareCompressRules = (dics, pepka) => {
-    const { compose, replace, trim } = pepka;
-    return compose(replace(re.trailingSeps, '$2'), replace(re.repeatingSeps, (s) => s.includes(sc) ? sc : sp), replace(re.trailing_ws, '$1'), replace(re.rule_free, (s, trailing, k, v) => v
-        ? trailing +
-            (k && v
-                ? `${trim(dics.dic[k] || k)}:${trim(dics.dic[v] || v)};`
-                : trim(k ? s.replace(k, dics.dic[k] || k)
-                    : v ? s.replace(k, dics.dic[v] || v)
-                        : s))
-        : ''), replace(re.comment, ''));
-};
-let dics = null;
-const rollupCSSCompression = function () {
-    return {
-        name: 'fela-vue-compression',
-        async transform(code) {
-            const pepka = await import('pepka');
-            const { compose, take, replace } = pepka;
-            if (!dics)
-                dics = getDics(pepka);
-            const compressRules = prepareCompressRules(dics, pepka);
-            let res = '';
-            try {
-                res = code.replace(re.tliterals, compose((a) => `css\`${compressRules(a)}\``, replace(re.interp, replace(re.eol, ' ')), take(1)));
-            }
-            catch (e) {
-                console.warn(e);
-            }
-            return { code: res || code, map: null };
+const is_class = pepka.propEq('name', 'class');
+const not_class = pepka.complement(is_class);
+const isArray = pepka.typeIs('Array');
+const zero = 0;
+const estr = '';
+const empty_attr_prefix = '__empty_attr__';
+const customTreeAdapter = (src) => ({
+    ...parse5.defaultTreeAdapter,
+    getTextNodeContent(textNode) {
+        if (textNode.sourceCodeLocation) {
+            return src.substring(textNode.sourceCodeLocation.startOffset, textNode.sourceCodeLocation.endOffset);
         }
+        return parse5.defaultTreeAdapter.getTextNodeContent(textNode);
+    },
+    getChildNodes(node) {
+        const loc = node.sourceCodeLocation;
+        if (loc && 'startTag' in loc) {
+            const tag = src.substring(loc.startTag.startOffset, loc.startTag.endOffset);
+            // console.log({tag, node})
+            if (tag.slice(-2) === '/>') {
+                const false_children = parse5.defaultTreeAdapter.getChildNodes(node);
+                const p = node.parentNode;
+                if (p)
+                    p.childNodes?.push(...false_children);
+                return [];
+            }
+        }
+        return parse5.defaultTreeAdapter.getChildNodes(node);
+    },
+    getTagName(e) {
+        const loc = e.sourceCodeLocation;
+        if (loc && 'startTag' in loc) {
+            const tag = src.substring(loc.startTag.startOffset, loc.startTag.endOffset);
+            return tag.match(tagname_re)[1];
+        }
+        // console.log({e})
+        return parse5.defaultTreeAdapter.getTagName(e);
+    },
+    //   /** The name of the attribute. */
+    // name: string;
+    // /** The namespace of the attribute. */
+    // namespace?: string;
+    // /** The namespace-related prefix of the attribute. */
+    // prefix?: string;
+    // /** The value of the attribute. */
+    // value: string;
+    getAttrList(e) {
+        const attrs = parse5.defaultTreeAdapter.getAttrList(e);
+        for (const i in attrs) {
+            const a = attrs[i];
+            if (a.name.startsWith('v-') && a.value === estr) {
+                const loc = e.sourceCodeLocation;
+                if (loc && 'startTag' in loc) {
+                    const { startOffset, endOffset } = loc.attrs[a.name];
+                    const str = src.substring(startOffset, endOffset);
+                    // console.dir({name: a.name, tag, loc: loc.attrs[a.name]}, {depth: 7})
+                    if (!str.includes('='))
+                        a.name = empty_attr_prefix + a.name;
+                }
+            }
+        }
+        return attrs;
+    }
+});
+const replace_prefixed = (tmpl) => tmpl.replace(new RegExp(`${empty_attr_prefix}(.*)=""`, 'g'), '$1');
+function walk(node, fn) {
+    fn(node);
+    if ('childNodes' in node && node.childNodes) {
+        for (const child of node.childNodes) {
+            walk(child, fn);
+        }
+    }
+}
+const lit_re = /\b(css`)([^`]*)`/g; // Does not ignore ` in ${...}
+const file_re = /\.vue$/;
+const classname_re = /[\b\s]\.([\w-]+) *?{/g;
+const classname_extended_re = /(?:^|\s+)(\!?(?:[\w-]+\.?)+)\b/g;
+const tagname_re = /<([\w-]+)\b/;
+const esc = '\\', ins_open = '${', ins_close = '}', term = '`';
+const is_escaped = (s, i) => {
+    let cnt = zero;
+    while (i > zero) {
+        if (s[i--] === esc)
+            cnt++;
+        else
+            break;
+    }
+    return cnt % 2;
+};
+const get_skip = (open, close, term) => {
+    const len_open = pepka.length(open);
+    const len_close = pepka.length(close);
+    const len_term = pepka.length(term);
+    let j = zero, k = zero, z = zero, balance = zero;
+    let c;
+    return (where, start) => {
+        const where_len = pepka.length(where);
+        for (let i = start; i < where_len; i++) {
+            c = where[i];
+            switch (true) {
+                case (c === open[j] && k === zero && z === zero && !is_escaped(where, i - 1)):
+                    j++;
+                    if (j === len_open) {
+                        balance++;
+                        j = zero;
+                    }
+                    break;
+                case (c === close[k] && j === zero && z === zero && !is_escaped(where, i - 1)):
+                    k++;
+                    if (k === len_close) {
+                        balance && balance--;
+                        k = zero;
+                    }
+                    break;
+                case (c === term[z] && j === zero && k === zero && !is_escaped(where, i - 1)):
+                    z++;
+                    if (z === len_term && balance === zero)
+                        return i;
+                    break;
+            }
+        }
+        return where_len - 1;
     };
 };
+function find_blocks(script) {
+    const lits = [];
+    let i = zero;
+    const skip = get_skip(ins_open, ins_close, term);
+    for (const g of script.matchAll(lit_re)) {
+        const index = g.index + pepka.length(g[1]) + 1;
+        if (i > index)
+            continue;
+        const end = skip(script, index);
+        lits.push(script.slice(index, end));
+        i = end;
+    }
+    return lits;
+}
+function get_classnames(block) {
+    const names = [];
+    for (const g of block.matchAll(classname_re))
+        names.push(g[1]);
+    return names;
+}
+function wrap_class(cls) { return `style('${cls}')`; }
+function compile_classnames(classnames, src) {
+    let out = [];
+    let to_fela = [];
+    for (const g of src.matchAll(classname_extended_re)) {
+        const cls = g[1];
+        if (classnames.includes(cls))
+            to_fela.push(cls);
+        else {
+            if (pepka.length(to_fela))
+                out.push(wrap_class(to_fela.join(' ')));
+            out.push(`"${cls}"`);
+            to_fela.splice(zero);
+        }
+    }
+    if (pepka.length(to_fela))
+        out.push(wrap_class(to_fela.join(' ')));
+    return pepka.length(out) ? `[${out.join(', ')}]` : pepka.head(out);
+}
+function fela_vue_classnames(vue) {
+    const script = (vue.scriptSetup === null ? vue.script : vue.scriptSetup)?.content;
+    if (script) {
+        return pepka.compose(pepka.flat, pepka.qmap(get_classnames), find_blocks)(script);
+    }
+    return [];
+}
+// TODO: Other options how to enable class parsing ?
+function FelaVueCSS(globals = {}) {
+    const global_keys = pepka.keys(globals);
+    return {
+        name: 'transform-fela-vue-css',
+        transform(src, id) {
+            if (file_re.test(id)) {
+                try {
+                    const vue = compilerSfc.parse(src).descriptor;
+                    if (vue.template) {
+                        const { template } = vue;
+                        const ast = parse5.parseFragment(template.content, { sourceCodeLocationInfo: true });
+                        const classnames = [...global_keys, ...fela_vue_classnames(vue)];
+                        if (!pepka.isEmpty(classnames))
+                            for (const child of ast.childNodes)
+                                walk(child, node => {
+                                    if (node.nodeName && 'attrs' in node && isArray(node.attrs)) {
+                                        const el = node;
+                                        const cls = el.attrs.find(is_class);
+                                        if (cls) {
+                                            el.attrs = el.attrs.filter(not_class);
+                                            const classes = cls.value.split(/ +/g);
+                                            const all = pepka.length(classes) === pepka.length(pepka.intersection(classes, classnames));
+                                            // console.log({classes, classnames})
+                                            el.attrs.push({
+                                                name: ':class',
+                                                value: all
+                                                    ? wrap_class(cls.value)
+                                                    : compile_classnames(classnames, cls.value)
+                                            });
+                                        }
+                                    }
+                                });
+                        // console.dir(ast, {depth: 12})
+                        // console.log('AAAAA', replace_prefixed(serialize(ast, {treeAdapter: customTreeAdapter(template.content)})))
+                        return {
+                            code: src.slice(zero, template.loc.start.offset) +
+                                replace_prefixed(parse5.serialize(ast, { treeAdapter: customTreeAdapter(template.content) })) +
+                                src.slice(template.loc.end.offset),
+                            map: null // provide source map if available
+                        };
+                    }
+                }
+                catch (error) {
+                    console.error('Error in v-class-transformer:', error);
+                }
+            }
+        }
+    };
+}
 
+exports.FelaVueCSS = FelaVueCSS;
 exports.Renderer = Renderer;
 exports.SvelteRenderer = SvelteRenderer;
 exports.__specialcss = __specialcss;
