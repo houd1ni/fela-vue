@@ -2,3 +2,7 @@ node_modules
 test-results
 dist/app*
 dist/index.html
+CONTRIBUTING.md
+TODO.md
+tslint.json
+vite.config.ts

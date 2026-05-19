@@ -1,4 +1,4 @@
-import { Zipnum } from 'zipnum'
+import { Zipnum } from 'zipnum';
 
 const rules = `
 top flex grid overflow transform transition-duration max-height 100%

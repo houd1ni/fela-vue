@@ -16,7 +16,7 @@ import { computed, ref } from 'vue'
 const label = ref('aaaaa')
 const renderer = new Renderer()
 const styl = renderer.styl
-const style = computed(() => styl(css`
+computed(() => styl(css`
   /* Base Styles */
   .container {
     max-width 70
@@ -30,5 +30,5 @@ const style = computed(() => styl(css`
     font-weight 600
   }
 `))
-const f = style
+const f = (s: string) => s
 </script>

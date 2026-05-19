@@ -13,11 +13,7 @@
     "experimentalDecorators": true,
     "noUnusedParameters": true,
     "noUnusedLocals": false,
-    "outDir": "./dist/",
-    "rootDir": ".",
-    "baseUrl": "."
+    "outDir": "./dist/"
   },
-  "include": [
-    "./src/main.ts"
-  ]
+  "include": [ "./src/main.ts", "./plugins/*" ]
 }

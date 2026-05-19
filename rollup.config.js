@@ -4,14 +4,22 @@ import replace from '@rollup/plugin-replace'
 import typescript2 from 'rollup-plugin-typescript2'
 import typescript from 'typescript'
 
+const env = process.env.NODE_ENV
+const build = process.env.BUILD
+const dev = env==='development'
+const plugins = env==='plugins'
+const cjs = build==='cjs'
+
 export default {
-  input: process.env.NODE_ENV=='development' ? 'test/in-browser.ts' : 'src/main.ts',
+  input: plugins
+    ? 'plugins/index.ts'
+    : dev ? 'test/in-browser.ts' : 'src/main.ts',
   output: {
-    file: process.env.BUILD == 'cjs' ? 'dist/bundle.cjs' : 'dist/bundle.mjs',
-    format: process.env.BUILD == 'cjs' ? 'cjs' : 'es',
+    file: plugins ? 'dist/plugins/plugins.mjs' : (cjs ? 'dist/bundle.cjs' : 'dist/bundle.mjs'),
+    format: cjs&&!plugins ? 'cjs' : 'es',
     name: 'fela-vue'
   },
-  external: process.env.NODE_ENV=='development' ? [] : [
+  external: dev ? [] : [
     'fela',
     'fela-dom',
     'fela-plugin-embedded',
@@ -19,7 +27,8 @@ export default {
     'fela-plugin-fallback-value',
     'fela-plugin-unit',
     '@vue/compiler-sfc',
-    'parse5',
+    'node-html-parser',
+    'vite',
     'pepka'
   ],
   plugins: [
@@ -31,7 +40,7 @@ export default {
       tsconfigOverride: {
         compilerOptions: {
           sourceMap: false,
-          inlineSourceMap: process.env.NODE_ENV=='development',
+          inlineSourceMap: dev,
           module: 'esnext'
         }
       }
@@ -39,7 +48,7 @@ export default {
     replace({
       preventAssignment: true,
       values: {
-        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+        'process.env.NODE_ENV': JSON.stringify(env)
       }
     })
   ]

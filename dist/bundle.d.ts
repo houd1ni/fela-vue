@@ -62,12 +62,5 @@ export declare class SvelteRenderer extends Renderer {
 	]) => (className: string | AnyObject | AnyFunc, attrs?: AnyObject) => any;
 	constructor(opts?: Partial<Options>);
 }
-export declare function FelaVueCSS(globals?: AnyObject): {
-	name: string;
-	transform(src: string, id: any): {
-		code: string;
-		map: any;
-	};
-};
 
 export {};

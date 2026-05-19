@@ -6,7 +6,7 @@ export default (options = {}) => {
   // const { } = options
   return {
     name: 'fela-vue-packer',
-    async transform(code, id) {
+    async transform(code) {
       for (const template of parseLiterals(code)) { 
         // Check if it's a css`` tagged literal
         if(template.tag.toLowerCase().includes('css')) {

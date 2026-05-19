@@ -3,4 +3,4 @@ export * from './css-lit'
 export { setCompression } from './fns/analyseLine'
 export * from './Renderer'
 export * from './SvelteRenderer'
-export { FelaVueCSS } from './vite-transformer'
+
